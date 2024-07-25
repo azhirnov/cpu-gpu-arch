@@ -42,3 +42,6 @@ With RTX:
 * Scheduler operate on threads instead of warps. So when things diverged, the scheduler serialised the divergent components. Do divergent block `A` till completion, then `B`. [?]
 * Added Uniform Data Path. This design is intended to accelerate numerical, array-based, computebound workloads that occupy the main datapaths almost completely with floating-point instructions, typically FFMA or HMMA, but also contain a few integer operations, typically updating array indices, loop indices or pointers; or performing array or loop boundary checks. These few integer instructions spoil the instruction mix, and prevent the main datapaths from ingesting a 100% pure stream of FFMA or HMMA. In these circumstances, even a small fraction of integer instructions can hurt the overall arithmetic throughput, lowering it significantly from its theoretical maximum. [4]
 * On NVIDIA GPUs, however, a small amount of information about the image is encoded into the page tables. Each combination of format, sample count, and compression node maps to an 8-bit PTE kind. On Turing (RTX 2000-series and GTX 1600-series) and later GPUs, there are three PTE kinds for all color images and two for each depth/stencil format. [6]
+
+* Hardware ray tracing.
+* Mesh shaders.

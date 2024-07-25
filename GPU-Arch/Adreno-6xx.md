@@ -1,4 +1,5 @@
 
+* Mesa driver details (https://docs.mesa3d.org/drivers/freedreno.html)
 * Snapdragon 888 (https://www.anandtech.com/show/16271/qualcomm-snapdragon-888-deep-dive)
 * 
 

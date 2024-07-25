@@ -21,7 +21,9 @@
 
 1. [Beyond the current gen](https://gpuopen.com/presentations/2023/RDNA3_Beyond-the-current-gen-v4.pdf)
 2. [Architecture Deep Dive](https://www.tomshardware.com/news/amd-rdna-3-gpu-architecture-deep-dive-the-ryzen-moment-for-gpus)
-3. [Instruction Set Architecture](https://gpuopen.com/rdna3-isa-guide-now-available/)
-4. [Micro Engine Scheduler Specification](https://gpuopen.com/download/documentation/micro_engine_scheduler.pdf)
+3. [Instruction Set Architecture](https://gpuopen.com/rdna3-isa-guide-now-available/), [pdf](../pdf/AMD_rdna3_isa.pdf)
+4. [Micro Engine Scheduler Specification](https://gpuopen.com/download/documentation/micro_engine_scheduler.pdf), [pdf](../pdf/AMD_rdna3_micro_engine_scheduler.pdf)
 
 ## Notes
+
+* Work graphs.

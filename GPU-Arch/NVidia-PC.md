@@ -1,6 +1,8 @@
 
-https://docs.nvidia.com/nsight-compute/ProfilingGuide/#metrics-decoder
-https://developer.nvidia.com/blog/migrating-from-range-profiler-to-gpu-trace-in-nsight-graphics/
+## References
+
+1. [Kernel Profiling Guide](https://docs.nvidia.com/nsight-compute/ProfilingGuide/#metrics-decoder)
+2. [Migrating from Range Profiler to GPU Trace in Nsight Graphics](https://developer.nvidia.com/blog/migrating-from-range-profiler-to-gpu-trace-in-nsight-graphics/)
 
 ## Units
 **dram** - Device (main) memory, where the GPUs global and local memory resides.

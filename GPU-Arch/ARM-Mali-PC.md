@@ -10,7 +10,7 @@
 **Task** - part of job, executed on core.
 **Fragment Task** - region of 32x32 (64x64 for Valhal 5gen) pixels
 **Iterator** - ?
-**MMU** - ?
+**MMU** - Memory management unit.
 **ALU** - arithmetic unit in the execution engine, contains pipes: FMA, CVT, SFU.
 **CS0** - ?
 **CEU** - ?

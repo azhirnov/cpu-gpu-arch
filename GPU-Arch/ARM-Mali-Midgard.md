@@ -6,6 +6,7 @@
 * Mali-T604
 * Mali-T658
 
+
 # Midgard Gen2
 
 ## Examples
@@ -15,12 +16,14 @@
 * Mali-T628
 * Mali-T678
 
+
 # Midgard Gen3
 
 ## Examples
 
 * Mali-T720
 * Mali-T760
+
 
 # Midgard Gen4
 
@@ -33,18 +36,19 @@
 
 ## References
 
-* [ARM Announces Mali 800 Series GPUs](https://www.anandtech.com/show/8649/arm-announces-mali-800-series-gpus-t860-t830-t820)
+4.1. [ARM Announces Mali 800 Series GPUs](https://www.anandtech.com/show/8649/arm-announces-mali-800-series-gpus-t860-t830-t820)<br/>
+4.2. [Arm Mali-T820 and Arm Mali-T830 Performance Counters Reference Guide](https://developer.arm.com/documentation/108059/latest/), [pdf](../pdf/arm_mali-t820_and_arm_mali-t830_performance_counters_reference_guide_108059_0102_en.pdf)<br/>
+4.3. [Arm Mali-T860 and Arm Mali-T880 Performance Counters Reference Guide](https://developer.arm.com/documentation/108061/0103), [pdf](../pdf/arm_mali-t860_and_arm_mali-t880_performance_counters_reference_guide_108061_0102_en.pdf)<br/>
 
 
 # Midgard (all gens)
 
 ## References
 
-* http://fileadmin.cs.lth.se/cs/Education/EDAN35/guestLectures/ARM-Mali.pdf
-* https://www.hotchips.org/wp-content/uploads/hc_archives/hc28/HC28.22-Monday-Epub/HC28.22.10-GPU-HPC-Epub/HC28.22.110-Bifrost-JemDavies-ARM-v04-9.pdf
-* http://malideveloper.arm.com/downloads/ARM_Game_Developer_Days/PDFs/2-Mali-GPU-architecture-overview-and-tile-local-storage.pdf
-* (https://www.anandtech.com/show/8234/arms-mali-midgard-architecture-explored)
-
+1. [Midgard Architecture](https://fileadmin.cs.lth.se/cs/Education/EDAN35/guestLectures/ARM-Mali.pdf), [pdf](../pdf/ARM-Mali.pdf)
+2. [ARM’s Mali Midgard Architecture Explored](https://www.anandtech.com/show/8234/arms-mali-midgard-architecture-explored)
+3. [The Midgard Shader Core](https://developer.arm.com/documentation/102560/latest/Midgard-GPU-Architecture), [pdf](../pdf/learn_the_basics_-_the_midgard_shader_core_102560_0100_02_en.pdf)
+4. [Mesa driver details](https://docs.mesa3d.org/drivers/panfrost.html)
 
 ## Notes
 

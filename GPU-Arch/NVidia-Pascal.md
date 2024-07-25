@@ -34,3 +34,6 @@ When a preemption request is received, the rasterizer, triangle shading and comm
 
 * Executing integer instructions blocked floating-point instructions from issuing. [?]
 * tile based [?]
+
+* Software ray tracing.
+

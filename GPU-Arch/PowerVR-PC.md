@@ -4,14 +4,16 @@
 **HSR** - Hidden Surface Removal.
 **ISP** - Image Synthesis Processor. ISP fetches the primitive data and performs Hidden Surface Removal (HSR), along with depth and stencil tests. The ISP only fetches screen-space position data for the geometry within the tile.
 **RTU** - Ray Tracing unit. Accelerate ray-triangle, ray-box intersections.
-**SHF** - (scene hierarchy f...) ?
-**SHG** - takes the output of the SHF and is responsible for generating a scene hierarchy acceleration structure for the provided components which can later be used by the RTU.
+**SHF** - (scene hierarchy fetch) ?
+**SHG** - Scene Hierarchy Generator. Takes the output of the SHF and is responsible for generating a scene hierarchy acceleration structure for the provided components which can later be used by the RTU.
 **TA** - Tile Accelerator, determines which tiles contain each transformed primitive.
 **2D** - 2D Core. Used for blit, post processing pass; (TLA) ?
 **3D** - TBDR pass ?
 **IMR** - Immediate Mode Renderer.
 **TSP** - Texture and Shading Processor. Applies colouring operations, like fragment shaders, to the visible pixels.
 **PB** - Parameter Buffer. Tile list and the transformed vertex data are both stored in an intermediate store PB.
+
+For more details see [PVRTune Counter List and Description (2018)](https://cdn.imgtec.com/sdk-documentation/PVRTune.Counter%20List%20and%20Description.pdf), [pdf](../../pdf/PVRTune_Counter_List_and_Description.pdf).
 
 
 ## BXM-8-256
