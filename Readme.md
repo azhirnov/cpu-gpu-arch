@@ -1,21 +1,27 @@
+Collection of best practices, optimization guides, architecture overview, performance counters for all popular CPU and GPU.<br/>
+Can be used for low-level optimizations.
+
 
 # GPU
+
+* [Notes for all mobile GPUs](gpu/Mobile.md)
+* [Notes for all desktop GPUs](gpu/Desktop.md)
 
 ## AMD
 
 ### Architecture
 
 **GCN**<br/>
-* GCN 1
+* [GCN 1](gpu/AMD-GCN1.md)
 * GCN 2
-* [GCN 3](GPU-Arch/AMD-GCN3.md)
+* [GCN 3](gpu/AMD-GCN3.md)
 * GCN 4
 * GCN 5
 
 **RDNA**<br/>
-* [RDNA 1](GPU-Arch/AMD-RDNA1.md)
-* [RDNA 2](GPU-Arch/AMD-RDNA2.md)
-* [RDNA 3](GPU-Arch/AMD-RDNA3.md)
+* [RDNA 1](gpu/AMD-RDNA1.md)
+* [RDNA 2](gpu/AMD-RDNA2.md)
+* [RDNA 3](gpu/AMD-RDNA3.md)
 
 
 ## Apple
@@ -26,10 +32,10 @@
 * Apple4: A11
 * Apple5: A12
 * Apple6: A13
-* [Apple7: A14, M1](GPU-Arch/Apple-M1.md)
-* [Apple8: A15, M2](GPU-Arch/Apple-M2.md)
+* [Apple7: A14, M1](gpu/Apple-M1.md)
+* [Apple8: A15, M2](gpu/Apple-M2.md)
 * Apple8: A16
-* [Apple9: A17, M3](GPU-Arch/Apple-M3.md)
+* [Apple9: A17, M3](gpu/Apple-M3.md)
 
 ### Specs & Guide
 
@@ -41,15 +47,14 @@
 ### Architecture
 
 * Utgard
-* [Midgard](ARM-Mali-Midgard.md)
-* [Bifrost](ARM-Mali-Bifrost.md)
-* [Valhall](ARM-Mali-Valhall.md)
+* [Midgard](gpu/ARM-Mali-Midgard.md)
+* [Bifrost](gpu/ARM-Mali-Bifrost.md)
+* [Valhall](gpu/ARM-Mali-Valhall.md)
 
 ### Specs & Guide
 
-* [Arm GPU Best Practices Developer Guide](https://developer.arm.com/documentation/101897/latest/), [pdf](pdf/arm_gpu_best_practices_developer_guide_101897_0302_04_en.pdf)
-* [Arm GPU Datasheet](https://developer.arm.com/documentation/102849/latest/), [pdf](pdf/Arm_GPU_Data_Sheet.pdf)
-* [Performance counters](GPU-Arch/ARM-Mali-PC.md)
+* [Performance counters](gpu/ARM-Mali_PC.md)
+* [Best practices, Optimization guide](gpu/ARM-Mali_Guide.md)
 
 
 ## NVidia
@@ -57,72 +62,99 @@
 ### Architecture
 
 * Kepler
-* [Maxwell](GPU-Arch/NVidia-Maxwell.md)
-* [Pascal](GPU-Arch/NVidia-Pascal.md)
+* [Maxwell](gpu/NVidia-Maxwell.md)
+* [Pascal](gpu/NVidia-Pascal.md)
 * Volta
-* [Turing](GPU-Arch/NVidia-Turing.md)
-* [Ampere](GPU-Arch/NVidia-Ampere.md)
-* [Ada](GPU-Arch/NVidia-Ada.md)
+* [Turing](gpu/NVidia-Turing.md)
+* [Ampere](gpu/NVidia-Ampere.md)
+* [Ada](gpu/NVidia-Ada.md)
 
 ### Specs & Guide
 
-* [Performance counters](GPU-Arch/NVidia-PC.md)
+* [Performance counters](gpu/NVidia_PC.md)
+* [Best practices, Optimization guide](gpu/NVidia_Guide.md)
 
 
 ## Intel
 
 ### Architecture
 
+* [Ivy Bridge, Gen 7](gpu/Intel-Gen7.md)
 * HD500 (Gen 9)
 * HD600 (Gen 9)
-* [UHD600 (Gen9)](GPU-Arch/Intel-Gen9-UHD600.md)
+* [UHD600 (Gen9)](gpu/Intel-Gen9.md)
 * Iris Plus (Gen 11)
 * UHD 700 (Gen 12)
 * Arc (Gen 12.7)
 
+### Specs & Guide
 
-## PowerVR
+* [Performance counters](gpu/Intel_PC.md)
+* [Best practices, Optimization guide](gpu/Intel_Guide.md)
+
+
+## Imagination Technologies PowerVR
 
 ### Architecture
 
-* [Series-6](GPU-Arch/PowerVR-Series6.md)
-* [Series-7](GPU-Arch/PowerVR-Series7.md)
-* [Series-8](GPU-Arch/PowerVR-Series8.md)
-* [Series-9](GPU-Arch/PowerVR-Series9.md)
-* [A-Series](GPU-Arch/PowerVR-SeriesA.md)
-* [B-Series](GPU-Arch/PowerVR-SeriesB.md)
+* [Series-6](gpu/PowerVR-Series6.md)
+* [Series-7](gpu/PowerVR-Series7.md)
+* [Series-8](gpu/PowerVR-Series8.md)
+* [Series-9](gpu/PowerVR-Series9.md)
+* [A-Series](gpu/PowerVR-SeriesA.md)
+* [B-Series](gpu/PowerVR-SeriesB.md)
 
 ### Specs & Guide
 
-* [Performance counters](GPU-Arch/PowerVR-PC.md)
-* [PVRTune Counter List and Description (2018)](https://cdn.imgtec.com/sdk-documentation/PVRTune.Counter%20List%20and%20Description.pdf), [pdf](pdf/PVRTune_Counter_List_and_Description.pdf)
-* [PowerVR Performance Recommendations (2015)](https://powervr-graphics.github.io/WebGL_SDK/WebGL_SDK/Documentation/Architecture%20Guides/PowerVR.Performance%20Recommendations.pdf), [pdf](pdf/PowerVR.Performance_Recommendations.pdf)
-* [PowerVR Hardware Architecture Overview for Developers (2015)](https://powervr-graphics.github.io/WebGL_SDK/WebGL_SDK/Documentation/Architecture%20Guides/PowerVR%20Hardware.Architecture%20Overview%20for%20Developers.pdf)
-* [Introduction to PowerVR for Developers (2021)](https://imagination-technologies-cloudfront-assets.s3.eu-west-1.amazonaws.com/website-files/documents/Introduction_to_PowerVR_for_Developers.pdf?dlm-dp-dl-force=1&dlm-dp-dl-nonce=5021498b5e), [pdf](pdf/Introduction_to_PowerVR_for_Developers.pdf)
-* [Native SDK](https://github.com/powervr-graphics/Native_SDK) - to get access to the performance counters.
+* [Performance counters](gpu/PowerVR_PC.md)
+* [Best practices, Optimization guide](gpu/PowerVR_Guide.md)
+
 
 ## Qualcomm Adreno
 
 ### Architecture
 
-* [5xx](GPU-Arch/Adreno-5xx.md)
-* [6xx](GPU-Arch/Adreno-6xx.md)
-* 7xx
+* [5xx](gpu/Adreno-5xx.md)
+* [6xx](gpu/Adreno-6xx.md)
+* [7xx, X](gpu/Adreno-7xx.md)
 
 ### Specs & Guide
 
-* [Performance counters](GPU-Arch/Adreno-PC.md)
-* [Qualcomm Snapdragon Mobile Platform OpenCL General Programming and Optimization](https://developer.qualcomm.com/qfile/33472/80-nb295-11_c.pdf)
+* [Performance counters](gpu/Adreno_PC.md)
+* [Best practices, Optimization guide](gpu/Adreno_Guide.md)
 
 
 # CPU
 
+* [Notes for all mobile CPUs](cpu/Mobile.md)
+* [Notes for all desktop CPUs](cpu/Desktop.md)
+
 ## AMD
+
+* [CPU Architectures](cpu/AMD-Arch.md)
+* [Best practices, Optimization guide](cpu/AMD-Guide.md)
 
 ## Apple
 
+* [CPU Architectures](cpu/Apple-Arch.md)
+* [Best practices, Optimization guide](cpu/Apple-Guide.md)
+
 ## ARM
+
+* [CPU Architectures](cpu/ARM-Arch.md)
+* [Best practices, Optimization guide](cpu/ARM-Guide.md)
 
 ## Intel
 
+* [CPU Architectures](cpu/Intel-Arch.md)
+* [Best practices, Optimization guide](cpu/Intel-Guide.md)
+
 ## Qualcomm Snapdragon
+
+* [CPU Architectures](cpu/Qualcomm-Arch.md)
+* [Best practices, Optimization guide](cpu/Qualcomm-Guide.md)
+
+## Loongson
+
+* [CPU Architectures](cpu/Loongson-Arch.md)
+
