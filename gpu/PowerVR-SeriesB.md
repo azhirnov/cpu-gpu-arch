@@ -22,6 +22,8 @@
 	- IMG BXT: This is focused on high performance for real-world applications, scaling from the device in your hand to the datacenter. The flagship B-Series GPU is a four-core part generating 6.0 teraflops of performance, 192 gigapixels per second, and 24 trillion operations per second (TOPS) for AI.
 	- IMG BXS: These automotive GPUs are ISO 26262-capable. They range from entry to premium, delivering solutions for next-generation HMI, UI display, infotainment, digital cockpit, and surround view to multi-teraflop compute-focused configurations for autonomy and advanced driver assistance systems (ADAS).
 
+## Specs
+
 * BXM-8-256 Performance:
 	- F16 GFlops: 460  | 512 FP16 FLOPs/Clock
 	- F32 GFlops: 230  | 256 FP32 FLOPs/Clock

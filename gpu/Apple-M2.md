@@ -11,3 +11,6 @@
 3. [A Brief Look at Apple’s M2 Pro iGPU](https://chipsandcheese.com/2023/10/31/a-brief-look-at-apples-m2-pro-igpu/)
 
 ## Notes
+
+
+## Features

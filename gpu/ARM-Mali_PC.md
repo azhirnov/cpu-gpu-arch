@@ -30,6 +30,9 @@
 **Front-end** - queue which placed before Execution core, can be NonFragFrontend / FragFrontend.<br/>
 **Back-end** - queue which placed after Execution core, only fragment queue has backend.<br/>
 **Varying unit (V)** - The varying pipeline is a dedicated pipeline which implements the varying interpolator.<br/>
+**TLB** -  Translation Look-aside Buffer ?<br/>
+**EC** - Execution Core.<br/>
+**PE** - Processing Engine.<br/>
 
 Execution core / Processing unit (ALU ?):<br/>
 **FMA pipe** - Arithmetic fused multiply accumulate unit (FMA). The FMA pipelines are the main arithmetic pipelines, implementing the floating-point multipliers that are widely used in shader code. Each FMA pipeline implements a 16-wide warp, and can issue a single 32-bit operation or two 16-bit operations per thread and per clock cycle. Most programs that are arithmetic-limited are limited by the performance of the FMA pipeline.<br/>

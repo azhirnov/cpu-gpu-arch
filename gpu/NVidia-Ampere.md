@@ -11,7 +11,7 @@
 1. [Tuning CUDA Applications for NVIDIA Ampere GPU Architecture](https://docs.nvidia.com/cuda/ampere-tuning-guide/)
 2. [Ampere Architecture In-Depth](https://developer.nvidia.com/blog/nvidia-ampere-architecture-in-depth/)
 3. [Architecture Whitepaper](https://www.nvidia.com/content/PDF/nvidia-ampere-ga-102-gpu-architecture-whitepaper-v2.pdf)
-
+4. [Compute Capability 8.x](https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#compute-capability-8-x)
 
 ## Notes
 
@@ -24,3 +24,10 @@
 * GeForce RTX 3080 L1 bandwidth: 219 GB/sec
 
 * Work graphs.
+
+
+## Specs
+
+* ops/clock per SM: [4]
+	- TODO
+

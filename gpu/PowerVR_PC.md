@@ -2,7 +2,7 @@
 ## References
 
 * [Native SDK](https://github.com/powervr-graphics/Native_SDK) - to get access to the performance counters.
-* [PVRTune Counter List and Description (2018)](https://cdn.imgtec.com/sdk-documentation/PVRTune.Counter%20List%20and%20Description.pdf), [pdf](../../pdf/PVRTune_Counter_List_and_Description.pdf).
+* [PVRTune Counter List and Description (2018)](https://cdn.imgtec.com/sdk-documentation/PVRTune.Counter%20List%20and%20Description.pdf), [pdf](../pdf/PVRTune_Counter_List_and_Description.pdf).
 
 ## Notes
 

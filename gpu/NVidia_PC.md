@@ -25,6 +25,7 @@
 **smsp** - Each SM is partitioned into four processing blocks, called SM sub partitions. The SM sub partitions are the primary processing elements on the SM. A sub partition manages a fixed size pool of warps.<br/>
 **sys** - Logical grouping of several units.<br/>
 **tpc** - Thread Processing Clusters are units in the GPC. They contain one or more SM, Texture and L1 units, the Instruction Cache (ICC) and the Indexed Constant Cache (IDC).<br/>
+**TLB** -  Translation Look-aside Buffer<br/>
 
 ### Subunits
 **aperture_device** - Memory interface to local device memory (dram)<br/>

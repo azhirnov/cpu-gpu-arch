@@ -1,3 +1,18 @@
+Content:
+* [Desktop](#Desktop)
+* [Mobile](#Mobile)
+
+
+# Desktop
+
+## References
+
+1. [PerfTest](https://github.com/sebbbi/perftest)
+
+## Notes
+
+
+# Mobile
 
 ## References
 
@@ -6,21 +21,20 @@
 
 ## Notes
 
-* Min spec 2023: 95% of our users have Vulkan 1.0 + Android 9, 2GB memory (1.4GB usable). [1]
-```
-	**Android**
-	OS: Android 9
-	CPU: 32 bit + 64 bit
-	ARM: Mali-G series (Bifrost)
-	Qualcomm: Adreno 500 series
-	PowerVR: 8000 series (Rogue)
-	6 years old hardware
-	**Apple**
-	OS: iOS 13
-	CPU: 64 bit
-	iPhone 6s (A9) / iPad Air 2 (A8X)
-	7 years old hardware
-```
+* Min spec 2023: 95% of our users have Vulkan 1.0 + Android 9, 2GB memory (1.4GB usable). [1]<br/>
+	**Android**<br/>
+	OS: Android 9<br/>
+	CPU: 32 bit + 64 bit<br/>
+	ARM: Mali-G series (Bifrost)<br/>
+	Qualcomm: Adreno 500 series<br/>
+	PowerVR: 8000 series (Rogue)<br/>
+	6 years old hardware<br/>
+	**Apple**<br/>
+	OS: iOS 13<br/>
+	CPU: 64 bit<br/>
+	iPhone 6s (A9) / iPad Air 2 (A8X)<br/>
+	7 years old hardware<br/>
+
 
 * Some operation performance: [1]
 	- Fast generic memory load/store - Mobile: 16KB uniform buffers! SSBOs are slow!

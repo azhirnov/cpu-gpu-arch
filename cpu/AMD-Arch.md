@@ -1,20 +1,39 @@
 
-
 # Zen 2
+
+## Examples
+
+* Ryzen 3000 series (Matisse)
+* Ryzen 4000U/H series (Renoir)
+* Ryzen 5000U series (Lucienne)
+* Threadripper 3000 series
+* Ryzen 5 7520U, Ryzen 3 7320U
+* Xbox Series X and Series S
+* PlayStation 5
+* Steam Deck
 
 ## References
 
-[Van Gogh, AMD’s Steam Deck APU](https://chipsandcheese.com/2023/03/05/van-gogh-amds-steam-deck-apu/)
+1. [Zen 2 wiki](https://en.wikipedia.org/wiki/Zen_2)
+2. [Van Gogh, AMD’s Steam Deck APU](https://chipsandcheese.com/2023/03/05/van-gogh-amds-steam-deck-apu/)
 
 
 
 # Zen 3
 
+## Examples
+
+* Ryzen 9 5950X
+* Ryzen 7 6800U
+* Threadripper PRO 5995WX
+
 ## References
 
-
+1. [wikichip](https://en.wikichip.org/wiki/amd/microarchitectures/zen_3)
 
 # Zen 4
+
+## Examples
 
 ## References
 

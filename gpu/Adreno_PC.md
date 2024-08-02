@@ -1,4 +1,11 @@
 
+## References
+
+* [A5xx enums](https://github.com/freedreno/envytools/blob/master/registers/adreno/a5xx.xml)
+* [A6xx enums](https://github.com/freedreno/envytools/blob/master/registers/adreno/a6xx.xml)
+
+## Notes
+
 **RBBM** - Render backend ***(bus/busy?) manager ?<br/>
 **PFP** - Prefetch Parser<br/>
 **ME** - Microcode Engine, handles most **PM4** commands.<br/>

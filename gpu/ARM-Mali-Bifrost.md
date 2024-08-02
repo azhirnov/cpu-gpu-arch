@@ -1,3 +1,10 @@
+Bifrost is a 4th generation of Mali GPU architecture.
+
+Content:
+* [Gen1](#Bifrost-Gen1)
+* [Gen2](#Bifrost-Gen2)
+* [Gen3](#Bifrost-Gen3)
+* [All gens](#Bifrost-(all-gens))
 
 # Bifrost Gen1
 
@@ -10,7 +17,7 @@
 ## References
 
 1.1. [ARM Unveils Next Generation Bifrost GPU Architecture & Mali-G71](https://www.anandtech.com/show/10375/arm-unveils-bifrost-and-mali-g71)<br/>
-1.2. [Arm Mali-G71 Performance Counters Reference Guide](https://developer.arm.com/documentation/102641/0106), [pdf](../pdf/arm_mali-g71_performance_counters_reference_guide_102641_0105_en.pdf)<br/>
+1.2. [Arm Mali-G71 Performance Counters Reference Guide](https://developer.arm.com/documentation/102641/0106), [backup](../pdf/arm_mali-g71_performance_counters_reference_guide_102641_0105_en.pdf)<br/>
 
 ## Notes
 
@@ -28,7 +35,8 @@
 ## References
 
 2.1. [ARM Announces Mali-G72](https://www.anandtech.com/show/11459/arm-announces-malig72-bifrost-refined-for-the-highend-soc)<br/>
-2.2. [Arm Mali-G72 Performance Counters Reference Guide](https://developer.arm.com/documentation/102642/0106/), [pdf](../pdf/arm_mali-g72_performance_counters_reference_guide_102642_0106_en.pdf)<br/>
+2.2. [Arm Mali-G72 Performance Counters Reference Guide](https://developer.arm.com/documentation/102642/0106/), [backup](../pdf/arm_mali-g72_performance_counters_reference_guide_102642_0106_en.pdf)<br/>
+2.3. [Mali-G52](https://developer.arm.com/Processors/Mali-G52)<br/>
 
 ## Notes
 
@@ -42,7 +50,7 @@
 
 ## References
 
-3.1. [Arm Mali-G76 Performance Counters Reference Guide](https://developer.arm.com/documentation/102697/latest/), [pdf](../pdf/arm_mali-g76_performance_counters_reference_guide_102697_0106_en.pdf)<br/>
+3.1. [Arm Mali-G76 Performance Counters Reference Guide](https://developer.arm.com/documentation/102697/latest/), [backup](../pdf/arm_mali-g76_performance_counters_reference_guide_102697_0106_en.pdf)<br/>
 
 ## Notes
 
@@ -54,7 +62,7 @@
 
 ## References
 
-1. [The Bifrost Shader Core](https://community.arm.com/developer/tools-software/graphics/b/blog/posts/the-mali-gpu-an-abstract-machine-part-4---the-bifrost-shader-core), [pdf](../pdf/the_bifrost_shader_core_102546_0100_02_en.pdf)
+1. [The Bifrost Shader Core](https://community.arm.com/developer/tools-software/graphics/b/blog/posts/the-mali-gpu-an-abstract-machine-part-4---the-bifrost-shader-core), [backup](../pdf/the_bifrost_shader_core_102546_0100_02_en.pdf)
 2. [The Bifrost GPU architecture](https://old.hotchips.org/wp-content/uploads/hc_archives/hc28/HC28.22-Monday-Epub/HC28.22.10-GPU-HPC-Epub/HC28.22.110-Bifrost-JemDavies-ARM-v04-9.pdf)
 3. [Mesa driver details](https://docs.mesa3d.org/drivers/panfrost.html)
 4. [Everything we learnt from hacking Arm Mali GPUs](https://github.com/fxlin/mali)
@@ -67,3 +75,6 @@
 	- One to three arithmetic pipelines or execution engines.
 	- One load-store pipeline.
 	- One texture pipeline.
+
+* AFBC (v1.2) with 4x4 block.
+* Transaction Elimination with 16x16 pixel block size.
