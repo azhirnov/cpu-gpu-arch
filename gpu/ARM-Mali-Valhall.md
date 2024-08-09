@@ -118,3 +118,18 @@ Content:
 	- FMA pipeline with is used for complex maths operations
 	- CVT pipeline which is used for simple maths operations
 	- SFU pipeline which is used for special functions
+
+
+
+### Subgroup threads order
+
+Result of `Rainbow( gl_SubgroupInvocationID / gl_SubgroupSize )` in fragment shader, gl_SubgroupSize = 16, tile size: 32x32.
+
+![](../img/graphics-subgroups/valhall-1.png)
+
+The quad position may vary:<br/>
+![](../img/graphics-subgroups/valhall-1-v2.png)
+
+Result of `Rainbow( gl_SubgroupInvocationID / gl_SubgroupSize )` in compute shader, gl_SubgroupSize = 16, workgroup size: 8x8.
+
+![](../img/compute-subgroups/valhall-1.png)

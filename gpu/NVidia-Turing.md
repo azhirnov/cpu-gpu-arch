@@ -183,11 +183,11 @@ With RTX:
 
 Result of `Rainbow( gl_SubgroupInvocationID / gl_SubgroupSize )` in fragment shader, gl_SubgroupSize = 32.
 
-![](../img/nv-turing-graphics-subgroups.png)
+![](../img/graphics-subgroups/nv-turing.png)
 
 Result of `Rainbow( gl_SubgroupInvocationID / gl_SubgroupSize )` in compute shader, gl_SubgroupSize = 32, workgroup size: 8x8.
 
-![](../img/nv-turing-compute-subgroups.png)
+![](../img/compute-subgroups/nv-turing.png)
 
 
 ### SM order
@@ -195,10 +195,10 @@ Result of `Rainbow( gl_SubgroupInvocationID / gl_SubgroupSize )` in compute shad
 Result of `Rainbow( gl_SMIDNV / gl_SMCountNV )` in fragment shader.<br/>
 Tile size is 16x16, image size: 102x53, gl_SMCountNV = 46, gl_SMIDNV = 0 and 1 are bound to the first tile and changed every frame, same for other tiles.
 
-![](../img/nv-turing-graphics-smid.png)
+![](../img/graphics-subgroups/nv-turing-smid.png)
 
 Result of `Rainbow( gl_SMIDNV / gl_SMCountNV )` in compute shader.<br/>
 Workgroup size is 8x8, image size: 102x53, gl_SMCountNV = 46, first set (from red to violet) has gl_SMIDNV = 0,2,4..., next set has gl_SMIDNV=1,3,5... and next - again 0,2,4...
 
-![](../img/nv-turing-compute-smid.png)
+![](../img/compute-subgroups/nv-turing-smid.png)
 

@@ -41,12 +41,12 @@ On hardware with structured control flow instructions such as Intel, the loop br
 * Each Subslice contains 8 EUs (two of which are disabled in GT1) and a sampler (4 tex/clk), and has 64 KB shared memory.
 
 
-### Subgroup threads order for Intel UHD 620
+### Subgroup threads order for Gen9.5
 
 Result of `Rainbow( gl_SubgroupInvocationID / gl_SubgroupSize )` in fragment shader, gl_SubgroupSize = 16.
 
-![](../img/Intel-gen9-graphics-subgroups.png)
+![](../img/graphics-subgroups/intel-gen9_5.png)
 
 Result of `Rainbow( gl_SubgroupInvocationID / gl_SubgroupSize )` in compute shader, gl_SubgroupSize = 16, workgroup size: 8x8.
 
-![](../img/Intel-gen9-compute-subgroups.png)
+![](../img/compute-subgroups/intel-gen9_5.png)

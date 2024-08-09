@@ -18,9 +18,9 @@
 
 Result of `Rainbow( gl_SubgroupInvocationID / gl_SubgroupSize )` in fragment shader, gl_SubgroupSize = 64.
 
-![](../img/amd-gcn4-graphics-subgroups.png)
+![](../img/graphics-subgroups/amd-gcn4.png)
 
 Result of `Rainbow( gl_SubgroupInvocationID / gl_SubgroupSize )` in compute shader, gl_SubgroupSize = 64, workgroup size: 8x8.
 
-![](../img/amd-gcn4-compute-subgroups.png)
+![](../img/compute-subgroups/amd-gcn4.png)
 

@@ -30,3 +30,18 @@
 	- 8 texels / clock
 
 * MADD = 2 FLOPs, MUL = 1 FLOP [1]
+
+
+### Subgroup threads order
+
+Result of `Rainbow( gl_SubgroupInvocationID / gl_SubgroupSize )` in fragment shader, gl_SubgroupSize = 16, tile size: 32x32.
+
+![](../img/graphics-subgroups/powervr-bxm.png)
+
+Result of `Rainbow( gl_SubgroupInvocationID / gl_SubgroupSize )` in compute shader, gl_SubgroupSize = 128, workgroup size: 8x8.
+
+![](../img/compute-subgroups/powervr-bxm-8x8.png)
+
+Result of `Rainbow( gl_SubgroupInvocationID / gl_SubgroupSize )` in compute shader, gl_SubgroupSize = 128, workgroup size: 16x16.
+
+![](../img/compute-subgroups/powervr-bxm-16x16.png)
