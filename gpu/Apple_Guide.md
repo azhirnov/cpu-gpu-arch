@@ -8,5 +8,7 @@
 5. [WWDC2018: Metal Game Performance Optimization](https://developer.apple.com/videos/play/wwdc2018/612/) - TODO: check
 6. [Metal Feature Set Tables](https://developer.apple.com/metal/Metal-Feature-Set-Tables.pdf)
 
+* [Discover new Metal profiling tools for M3 and A17 Pro](https://developer-rno.apple.com/videos/play/tech-talks/111374/)
+
 ## Notes
 

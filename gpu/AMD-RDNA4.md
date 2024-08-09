@@ -1,3 +1,4 @@
+4th generation of AMD RDNA architecture.
 
 ## Examples
 

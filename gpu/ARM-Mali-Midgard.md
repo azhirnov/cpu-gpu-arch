@@ -1,4 +1,4 @@
-Bifrost is a 3rd generation of Mali GPU architecture.
+Midgard is a 2nd generation of Mali GPU architecture.
 
 Content:
 * [Gen1](#Midgard-Gen1)
@@ -45,16 +45,16 @@ Content:
 ## References
 
 4.1. [ARM Announces Mali 800 Series GPUs](https://www.anandtech.com/show/8649/arm-announces-mali-800-series-gpus-t860-t830-t820)<br/>
-4.2. [Arm Mali-T820 and Arm Mali-T830 Performance Counters Reference Guide](https://developer.arm.com/documentation/108059/latest/), [backup](../pdf/arm_mali-t820_and_arm_mali-t830_performance_counters_reference_guide_108059_0102_en.pdf)<br/>
+4.2. [Arm Mali-T820 and Arm Mali-T830 Performance Counters Reference Guide](https://developer.arm.com/documentation/108059/latest/), [[backup](../pdf/arm_mali-t820_and_arm_mali-t830_performance_counters_reference_guide_108059_0102_en.pdf)]<br/>
 4.3. [Arm Mali-T860 and Arm Mali-T880 Performance Counters Reference Guide](https://developer.arm.com/documentation/108061/0103)<br/>
 
 # Midgard (all gens)
 
 ## References
 
-1. [Midgard Architecture](https://fileadmin.cs.lth.se/cs/Education/EDAN35/guestLectures/ARM-Mali.pdf), [backup](../pdf/ARM-Mali-Midgard.pdf)
+1. [Midgard Architecture](https://fileadmin.cs.lth.se/cs/Education/EDAN35/guestLectures/ARM-Mali.pdf), [[backup](../pdf/ARM-Mali-Midgard.pdf)]
 2. [ARM’s Mali Midgard Architecture Explored](https://www.anandtech.com/show/8234/arms-mali-midgard-architecture-explored)
-3. [The Midgard Shader Core](https://developer.arm.com/documentation/102560/latest/Midgard-GPU-Architecture), [backup](../pdf/learn_the_basics_-_the_midgard_shader_core_102560_0100_02_en.pdf)
+3. [The Midgard Shader Core](https://developer.arm.com/documentation/102560/latest/Midgard-GPU-Architecture), [[backup](../pdf/learn_the_basics_-_the_midgard_shader_core_102560_0100_02_en.pdf)]
 4. [Mesa driver details](https://docs.mesa3d.org/drivers/panfrost.html)
 
 ## Notes

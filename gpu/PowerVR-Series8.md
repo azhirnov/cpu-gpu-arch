@@ -9,3 +9,9 @@
 4. [Imagination Announces PowerVR Furian GPU Architecture](https://www.anandtech.com/show/11186/imagination-announces-powervr-furian-gpu-architecture)
 
 ## Notes
+
+* PVRIC Frame buffer compression.
+* GE8430 Performance:
+	- 128 FP32 FLOPs/Clock
+	- 256 FP16 FLOPs/Clock
+	- 8 pixels per clock

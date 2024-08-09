@@ -1,8 +1,8 @@
 
 ## References
 
-1. [Arm GPU Best Practices Developer Guide](https://developer.arm.com/documentation/101897/latest/), [backup](../pdf/arm_gpu_best_practices_developer_guide_101897_0302_04_en.pdf)
-2. [Arm GPU Datasheet](https://developer.arm.com/documentation/102849/latest/), [backup](../pdf/Arm_GPU_Data_Sheet.pdf)
+1. [Arm GPU Best Practices Developer Guide](https://developer.arm.com/documentation/101897/latest/), [[backup](../pdf/arm_gpu_best_practices_developer_guide_101897_0302_04_en.pdf)]
+2. [Arm GPU Datasheet](https://developer.arm.com/documentation/102849/latest/), [[backup](../pdf/Arm_GPU_Data_Sheet.pdf)]
 3. [AFBC](https://developer.arm.com/Architectures/Arm%20Frame%20Buffer%20Compression)
 
 **Guide**<br/>
@@ -10,7 +10,7 @@
 1.2. [Tile-Based Rendering](https://developer.arm.com/documentation/102662/0100/Overview)<br/>
 1.3. [Principles of High Performance guide](https://developer.arm.com/documentation/102544/0100/Overview)<br/>
 1.4. [Workload Pipelining](https://developer.arm.com/documentation/102521/0100/Overview)<br/>
-1.5. [GPU Processing Budget Approach to Game Development](https://community.arm.com/arm-community-blogs/b/graphics-gaming-and-vr-blog/posts/gpu-processing-budget-approach-to-game-development), [webarchive](https://web.archive.org/web/20220810172906/https://community.arm.com/arm-community-blogs/b/graphics-gaming-and-vr-blog/posts/gpu-processing-budget-approach-to-game-development)
+1.5. [GPU Processing Budget Approach to Game Development](https://community.arm.com/arm-community-blogs/b/graphics-gaming-and-vr-blog/posts/gpu-processing-budget-approach-to-game-development), [[webarchive](https://web.archive.org/web/20220810172906/https://community.arm.com/arm-community-blogs/b/graphics-gaming-and-vr-blog/posts/gpu-processing-budget-approach-to-game-development)]
 
 **Real-time 3D Art Best Practices**<br/>
 2.1. [Geometry Guide](https://developer.arm.com/documentation/102448/0200/Overview)<br/>

@@ -1,12 +1,17 @@
 
 # Intel Xe
 
+code name: Tiger Lake, Rocket Lake, Alder Lake, Raptor Lake.
+
 ## Examples
 
 * Intel UHD Graphics 730
 * Iris Xe Graphics G7
 
 ## References
+
+1. [Intel Processor Graphics Architecture](https://cdrdv2-public.intel.com/686065/the-architecture-of-intel-processor-graphics-gen11-r1new.pdf), [[backup](../pdf/the-architecture-of-intel-processor-graphics-gen11-r1new.pdf)]
+2. [Intel Processor Graphics Xᵉ-LP API Developer and Optimization Guide](https://www.intel.com/content/www/us/en/developer/articles/guide/lp-api-developer-optimization-guide.html), [[webarchive](https://web.archive.org/web/20230623012301/https://www.intel.com/content/www/us/en/developer/articles/guide/lp-api-developer-optimization-guide.html)]
 
 ## Notes
 

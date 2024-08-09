@@ -18,11 +18,11 @@ Content:
 ## References
 
 1.1. [Arm's New Mali-G77 & Valhall GPU Architecture](https://www.anandtech.com/show/14385/arm-announces-malig77-gpu)<br/>
-1.2. [Arm Mali-G77 Performance Counters Reference Guide](https://developer.arm.com/documentation/102730/latest/), [backup](../pdf/arm_mali-g77_performance_counters_reference_guide_102730_0106_en.pdf)<br/>
+1.2. [Arm Mali-G77 Performance Counters Reference Guide](https://developer.arm.com/documentation/102730/latest/), [[backup](../pdf/arm_mali-g77_performance_counters_reference_guide_102730_0106_en.pdf)]<br/>
 
 ## Notes
 
-* Static branching or early termination is not supported. [my]
+* Static branching or early termination is not supported. [[az](https://github.com/azhirnov)]
 * 2 work queues: non-fragment, fragment. [1.2]
 
 
@@ -36,7 +36,7 @@ Content:
 ## References
 
 2.1. [Arm Announces The Mali-G78 GPU](https://www.anandtech.com/show/15816/arm-announces-the-malig78-evolution-to-24-cores)<br/>
-2.2. [Mali-G78 Performance Counters Reference Guide](https://developer.arm.com/documentation/102626/0100), [backup](../pdf/arm_mali-g78_performance_counters_reference_guide_102626_0106_en.pdf)<br/>
+2.2. [Mali-G78 Performance Counters Reference Guide](https://developer.arm.com/documentation/102626/0100), [[backup](../pdf/arm_mali-g78_performance_counters_reference_guide_102626_0106_en.pdf)]<br/>
 
 
 # Valhall Gen3
@@ -50,7 +50,7 @@ Content:
 
 ## References
 
-3.1. [Arm Mali-G610 Performance Counters Reference Guide](https://developer.arm.com/documentation/102812/0108/), [backup](../pdf/arm_mali-g610_performance_counters_reference_guide_102812_0107_en.pdf)<br/>
+3.1. [Arm Mali-G610 Performance Counters Reference Guide](https://developer.arm.com/documentation/102812/0108/), [[backup](../pdf/arm_mali-g610_performance_counters_reference_guide_102812_0107_en.pdf)]<br/>
 3.2. [Arm Announces New Mali-G710, G610, G510 & G310 Mobile GPU Families](https://www.anandtech.com/show/16694/arm-announces-new-malig710-g610-g510-g310-mobile-gpu-families)<br/>
 3.3. [Mali-G510](https://developer.arm.com/Processors/Mali-G510)<br/>
 
@@ -73,8 +73,8 @@ Content:
 
 ## References
 
-4.1. [Arm Mali-G615 Performance Counters Reference Guide](https://developer.arm.com/documentation/107775/0106), [backup](../pdf/arm_mali-g615_performance_counters_reference_guide_107775_0105_en.pdf)<br/>
-4.2. [The Valhall Shader Core](https://developer.arm.com/documentation/102203/0100/Fourth-generation-Mali-GPU-architecture), [backup](../pdf/the_valhall_gen4_shader_core_guide_102203_0100_03_en.pdf)<br/>
+4.1. [Arm Mali-G615 Performance Counters Reference Guide](https://developer.arm.com/documentation/107775/0106), [[backup](../pdf/arm_mali-g615_performance_counters_reference_guide_107775_0105_en.pdf)]<br/>
+4.2. [The Valhall Shader Core](https://developer.arm.com/documentation/102203/0100/Fourth-generation-Mali-GPU-architecture), [[backup](../pdf/the_valhall_gen4_shader_core_guide_102203_0100_03_en.pdf)]<br/>
 
 ## Notes
 
@@ -94,7 +94,7 @@ Content:
 
 ## References
 
-1. [Instruction Set Architecture](https://rosenzweig.io/Valhall-Documentation.pdf), [backup](../pdf/Valhall-Documentation.pdf) 
+1. [Instruction Set Architecture](https://rosenzweig.io/Valhall-Documentation.pdf), [[backup](../pdf/Valhall-Documentation.pdf)]
 2. [Mesa driver details](https://docs.mesa3d.org/drivers/panfrost.html)
 
 

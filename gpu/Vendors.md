@@ -7,24 +7,30 @@ Content:
 * [Intel](#intel)
 * [NVidia](#nvidia)
 * [PowerVR](#imagination-technologies-powervr)
+* [Samsung](#Samsung)
 
 
 ## AMD
 
 ### Architecture
 
-**GCN**<br/>
-* [GCN 1](AMD-GCN1.md)
-* GCN 2
-* [GCN 3](AMD-GCN3.md)
-* GCN 4
-* GCN 5
+**GCN**
+* [GCN 1 (Southern Islands)](AMD-GCN1.md)
+* [GCN 2 (Sea Islands)](AMD-GCN2.md)
+* [GCN 3 (Volcanic Islands)](AMD-GCN3.md)
+* [GCN 4 (Arctic Islands, Polaris)](AMD-GCN4.md)
+* [GCN 5 (Vega)](AMD-GCN5.md)
 
-**RDNA**<br/>
-* [RDNA 1](AMD-RDNA1.md)
-* [RDNA 2](AMD-RDNA2.md)
-* [RDNA 3](AMD-RDNA3.md)
-* [RDNA 4](AMD-RDNA4.md)
+**CDNA**
+* [CDNA 1](AMD-CDNA1.md)
+* [CDNA 2](AMD-CDNA2.md)
+* [CDNA 3](AMD-CDNA3.md)
+
+**RDNA**
+* [RDNA 1 (Navi)](AMD-RDNA1.md)
+* [RDNA 2 (Navi 2X)](AMD-RDNA2.md)
+* [RDNA 3 (Navi 3X)](AMD-RDNA3.md)
+* [RDNA 4 (Navi 4X)](AMD-RDNA4.md)
 
 ### Specs & Guide
 
@@ -72,13 +78,13 @@ Content:
 ### Architecture
 
 * Kepler
-* [Maxwell](NVidia-Maxwell.md)
-* [Pascal](NVidia-Pascal.md)
+* [Maxwell (GTX 900)](NVidia-Maxwell.md)
+* [Pascal (GTX 1000)](NVidia-Pascal.md)
 * [Volta](NVidia-Volta.md)
-* [Turing](NVidia-Turing.md)
-* [Ampere](NVidia-Ampere.md)
-* [Ada](NVidia-Ada.md)
-* Blackwell
+* [Turing (RTX 2000)](NVidia-Turing.md)
+* [Ampere (RTX 3000](NVidia-Ampere.md)
+* [Ada (RTX 4000)](NVidia-Ada.md)
+* Blackwell (RTX 5000)
 
 ### Specs & Guide
 
@@ -138,3 +144,7 @@ Content:
 
 TODO
 
+
+## Samsung
+
+TODO

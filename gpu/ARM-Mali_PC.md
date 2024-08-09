@@ -2,44 +2,50 @@
 ## References
 
 * [libGPUCounters](https://github.com/ARM-software/libGPUCounters) - to get access to the performance counters.
+* [5th Gen Performance Counters](https://developer.arm.com/documentation/108081/0104), [[backup](../pdf/arm_immortalis-g720_and_arm_mali-g720_performance_counters_reference_guide_108081_0103_en.pdf)]
+* [Valhall (4th Gen) Performance Counters Reference Guide](https://developer.arm.com/documentation/107775/0106), [[backup](../pdf/arm_mali-g615_performance_counters_reference_guide_107775_0105_en.pdf)]
+* [Bifrost (3rd Gen) Performance Counters Reference Guide](https://developer.arm.com/documentation/102697/latest/), [[backup](../pdf/arm_mali-g76_performance_counters_reference_guide_102697_0106_en.pdf)]
+* [Midgard (2nd Gen) Performance Counters Reference Guide](https://developer.arm.com/documentation/108059/latest/), [[backup](../pdf/arm_mali-t820_and_arm_mali-t830_performance_counters_reference_guide_108059_0102_en.pdf)]
+* [Mesa driver details](https://docs.mesa3d.org/drivers/panfrost.html)
 
 ## Notes
 
+**ALU** - arithmetic unit in the execution engine, contains pipes: **FMA**, **CVT**, **SFU**, **MSG**.<br/>
+**Binning phase** - includes vertex position shading, culling, and primitive binning.<br/>
+**Back-end** - queue which placed after Execution core, only fragment queue has backend.<br/>
 **CSF** - Command Stream Front-end.<br/>
-**MCU** - Microcontroller Unit / Multi-level Memory Cache Unit ?<br/>
-**IRQ** - Interrupt Queue ?<br/>
-**RTU** - Ray Tracing Unit.<br/>
-**FPK** - Forward Pixel Kill.<br/>
-**E/L ZS** - early/late depth stencil test.<br/>
-**DVFS** - Dynamic Voltage and Frequency Scaling.<br/>
-**Job** - GPU command, executed on Job Manager, it tracks inter-job dependencies, distributes jobs across shader cores, splits jobs into per-core tasks.<br/>
-**Task** - part of job, executed on core.<br/>
-**Fragment Task** - region of 32x32 (64x64 for Valhal 5gen) pixels.<br/>
-**Iterator** - ?<br/>
-**MMU** - Memory management unit.<br/>
-**ALU** - arithmetic unit in the execution engine, contains pipes: FMA, CVT, SFU.<br/>
 **CS0** - ?<br/>
 **CEU** - ?<br/>
-**Warp** - group of 4-16 threads.<br/>
-**Vertex position shading** - part of vertex shader which outputs only vertex position.<br/>
-**Binning phase** - includes vertex position shading, culling, and primitive binning.<br/>
-**Main phase** - includes any deferred vertex processing and all fragment shading.<br/>
-**Tiler** - responsible for coordinating geometry processing and providing the fixed-function tiling needed for the tile-based rendering pipeline. It can run in parallel to vertex shading and fragment shading.<br/>
-**Quad** - 2x2 pixels<br/>
-**Load/store unit (LS, LSU)** - used for general-purpose memory accesses, and includes vertex attribute access, buffer access, work group shared memory access, and stack access, also implements imageLoad/Store and atomic access functionality. (The load/store pipeline handles all non-texture memory access, including buffer access, image access, and atomic operations.)<br/>
-**Front-end** - queue which placed before Execution core, can be NonFragFrontend / FragFrontend.<br/>
-**Back-end** - queue which placed after Execution core, only fragment queue has backend.<br/>
-**Varying unit (V)** - The varying pipeline is a dedicated pipeline which implements the varying interpolator.<br/>
-**TLB** -  Translation Look-aside Buffer ?<br/>
-**EC** - Execution Core.<br/>
-**PE** - Processing Engine.<br/>
-
-Execution core / Processing unit (ALU ?):<br/>
-**FMA pipe** - Arithmetic fused multiply accumulate unit (FMA). The FMA pipelines are the main arithmetic pipelines, implementing the floating-point multipliers that are widely used in shader code. Each FMA pipeline implements a 16-wide warp, and can issue a single 32-bit operation or two 16-bit operations per thread and per clock cycle. Most programs that are arithmetic-limited are limited by the performance of the FMA pipeline.<br/>
-**CVT pipe** - Arithmetic convert unit (CVT). The CVT pipelines implement simple operations, such as format conversion and integer addition. Each CVT pipeline implements a 16-wide warp, and can issue a single 32-bit operation or two 16-bit operations per thread and per clock cycle.<br/>
-**SFU pipe** - Arithmetic special functions unit (SFU). The SFU pipelines implement a special functions unit for computation of complex functions such as reciprocals and transcendental functions. Each SFU pipeline implements a 4-wide issue path, executing a 16-wide warp over 4 clock cycles.<br/>
-**MSG pipe** - memory access ?<br/>
+**DVFS** - Dynamic Voltage and Frequency Scaling.<br/>
 **Diverged instructions** - in 'false' branch.<br/>
+**E/L ZS** - early/late depth stencil test.<br/>
+**EC** - Execution Core.<br/>
+**FPK** - Forward Pixel Kill.<br/>
+**Front-end** - queue which placed before Execution core, can be NonFragFrontend / FragFrontend.<br/>
+**Fragment Task** - region of 32x32 (64x64 for Valhal 5gen) pixels.<br/>
+**IRQ** - Interrupt Queue ?<br/>
+**Iterator** - ?<br/>
+**Job** - GPU command, executed on Job Manager, it tracks inter-job dependencies, distributes jobs across shader cores, splits jobs into per-core tasks.<br/>
+**Load/store unit (LS, LSU)** - used for general-purpose memory accesses, and includes vertex attribute access, buffer access, work group shared memory access, and stack access, also implements imageLoad/Store and atomic access functionality. (The load/store pipeline handles all non-texture memory access, including buffer access, image access, and atomic operations.)<br/>
+**MCU** - Microcontroller Unit / Multi-level Memory Cache Unit ?<br/>
+**MMU** - Memory management unit.<br/>
+**Main phase** - includes any deferred vertex processing and all fragment shading.<br/>
+**PE** - Processing Engine.<br/>
+**Quad** - 2x2 pixels<br/>
+**RTU** - Ray Tracing Unit.<br/>
+**Task** - part of job, executed on core.<br/>
+**Tiler** - responsible for coordinating geometry processing and providing the fixed-function tiling needed for the tile-based rendering pipeline. It can run in parallel to vertex shading and fragment shading.<br/>
+**TLB** -  Translation Look-aside Buffer ?<br/>
+**Varying unit (V)** - The varying pipeline is a dedicated pipeline which implements the varying interpolator.<br/>
+**Vertex position shading** - part of vertex shader which outputs only vertex position.<br/>
+**Warp** - group of 4-16 threads.<br/>
+
+
+Execution core / Processing unit / ALU:<br/>
+- **FMA pipe** - Arithmetic fused multiply accumulate unit (FMA). The FMA pipelines are the main arithmetic pipelines, implementing the floating-point multipliers that are widely used in shader code. Each FMA pipeline implements a 16-wide warp, and can issue a single 32-bit operation or two 16-bit operations per thread and per clock cycle. Most programs that are arithmetic-limited are limited by the performance of the FMA pipeline.<br/>
+- **CVT pipe** - Arithmetic convert unit (CVT). The CVT pipelines implement simple operations, such as format conversion and integer addition. Each CVT pipeline implements a 16-wide warp, and can issue a single 32-bit operation or two 16-bit operations per thread and per clock cycle.<br/>
+- **SFU pipe** - Arithmetic special functions unit (SFU). The SFU pipelines implement a special functions unit for computation of complex functions such as reciprocals and transcendental functions. Each SFU pipeline implements a 4-wide issue path, executing a 16-wide warp over 4 clock cycles.<br/>
+- **MSG pipe** - memory access ?<br/>
 
 
 ## Mali G57

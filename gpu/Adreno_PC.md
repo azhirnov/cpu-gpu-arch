@@ -1,48 +1,57 @@
+**Qualcomm Adreno Performance Counters**
 
 ## References
 
-* [A5xx enums](https://github.com/freedreno/envytools/blob/master/registers/adreno/a5xx.xml)
-* [A6xx enums](https://github.com/freedreno/envytools/blob/master/registers/adreno/a6xx.xml)
+* [A5xx enums](https://github.com/freedreno/envytools/blob/master/registers/adreno/a5xx.xml) - `a5xx_***_perfcounter_select` - counter id
+* [A6xx enums](https://github.com/freedreno/envytools/blob/master/registers/adreno/a6xx.xml) - `a6xx_***_perfcounter_select` - counter id
+* [HardwarePerfCounter](https://github.com/google/hardware-perfcounter/) - to get access to the performance counters.
+* [Mesa driver details](https://docs.mesa3d.org/drivers/freedreno.html)
 
 ## Notes
 
-**RBBM** - Render backend ***(bus/busy?) manager ?<br/>
-**PFP** - Prefetch Parser<br/>
-**ME** - Microcode Engine, handles most **PM4** commands.<br/>
-**SQE** - a6xx+ replacement for **PFP**/**ME**. This is the microcontroller that runs the microcode which actually processes the command stream and writes to the hardware registers.<br/>
-**ROQ** - **DMA** engine used by the **SQE** for reading memory, with some prefetch buffering.<br/>
+**CCU** - Color Cache Unit. Separate cache used by 2D blits and sysmem render target access (and also for resolves to system memory when in **GMEM** mode).<br/>
+**CMP** - ?<br/>
 **DMA** - Direct memory access.<br/>
-**TSE** - Triangle Setup Engine<br/>
-**RAS** - Rasterizer. Responsible for generating PS invocations from primitives, also does **LRZ**.<br/>
-**vsd** - ?<br/>
+**draw 2D** - blit, fullscreen post process without TBDR ?<br/>
+**draw 3D** - TBDR pass ?<br/>
+**EU** - ?<br/>
+**EFU** - Elementary Function Unit ?. The EFU will have all the necessary instructions to speed up calculations and 3D rendering. (sin, cos, arctan, dot, rasterization, Min / Max, Clip, Culling , Sorting etc etc).<br/>
+**FE** - Front End. Index buffer and vertex attribute fetch cluster. Includes **PC**, **VFD**, **VPC**.<br/>
+**GMEM** - on-chip memory, used to store attachments during tiled rendering<br/>
+**GM** - gmem ?<br/>
+**GPR** - (mem/cache/General Purpose Registers) ?<br/>
 **HLSQ** - High Level Sequencer. Manages state for the **SP**s, batches up PS invocations between primitives, is involved in preemption.<br/>
+**ICL** - ?<br/>
+**LRZ** - Low resolution Z. A low resolution area of the depth buffer that can be initialized during the binning pass to contain the worst-case (farthest) Z values in a block, and then used to early reject fragments during rasterization.<br/>
+**LM** - load manager (load/store/atomic) ?<br/>
+**ME** - Microcode Engine, handles most **PM4** commands.<br/>
+**maskgen** - ?<br/>
+**PC** - ?<br/>
+**PFP** - Prefetch Parser<br/>
+**PM4** - AMD Radeon’s command packet format.<br/>
+**ROQ** - **DMA** engine used by the **SQE** for reading memory, with some prefetch buffering.<br/>
+**RAS** - Rasterizer. Responsible for generating PS invocations from primitives, also does **LRZ**.<br/>
+**RBBM** - Render backend ***(bus/busy?) manager ?<br/>
+**RBuffer** - render buffer?<br/>
+**RB** - Render Backend. Performs both early and late Z testing, blending, and attachment stores of output of the PS.<br/>
+**SQE** - a6xx+ replacement for **PFP**/**ME**. This is the microcontroller that runs the microcode which actually processes the command stream and writes to the hardware registers.<br/>
+**SP** - shader processor<br/>
+**TSE** - Triangle Setup Engine<br/>
+**TP** - Texture Processor.<br/>
+**PVS** - Primitive Visibility Stream.<br/>
+**PC_VS** - Cluster where varyings are read from **VPC** and assembled into primitives to feed **RAS**.<br/>
+**UCHE** - Unified L2 cache. Cache behind the vertex fetch, **VSC** writes, texture L1, **LRZ**, and storage image accesses. Misses and flushes access system memory.<br/>
+**VSD** - ?<br/>
 **VBIF** - ?<br/>
 **VFD** - Vertex Fetch and Decode.<br/>
 **VPC** - Varying/Position Cache. Hardware block that stores shaded vertex data for primitive assembly.<br/>
-**UCHE** - Unified L2 cache. Cache behind the vertex fetch, **VSC** writes, texture L1, **LRZ**, and storage image accesses. Misses and flushes access system memory.<br/>
-**RBuffer** - ?<br/>
-**PC** - ?<br/>
-**LRZ** - Low resolution Z. A low resolution area of the depth buffer that can be initialized during the binning pass to contain the worst-case (farthest) Z values in a block, and then used to early reject fragments during rasterization.<br/>
-**maskgen** - ?<br/>
-**SP** - shader processor<br/>
-**GMEM** - on-chip memory, used to store attachments during tiled rendering<br/>
 **VSC** - Visibility Stream Compressor<br/>
-**EFU** - Elementary Function Unit ?. The EFU will have all the necessary instructions to speed up calculations and 3D rendering. (sin, cos, arctan, dot, rasterization, Min / Max, Clip, Culling , Sorting etc etc).<br/>
-**wave** - warp, 32/64<br/>
-**GM** - gmem ?<br/>
-**GPR** - (mem/cache) ?<br/>
-**LM** - load manager (load/store/atomic) ?<br/>
-**PM4** - AMD Radeon’s command packet format.<br/>
-**TP** - Texture Processor.<br/>
-**CCU** - Color Cache Unit. Separate cache used by 2D blits and sysmem render target access (and also for resolves to system memory when in **GMEM** mode).<br/>
-**PVS** - Primitive Visibility Stream.<br/>
-**FE** - Front End. Index buffer and vertex attribute fetch cluster. Includes **PC**, **VFD**, **VPC**.<br/>
-**PC_VS** - Cluster where varyings are read from VPC and assembled into primitives to feed **RAS**.<br/>
 **VS** - Vertex Shader. Responsible for generating VS/GS/tess invocations.<br/>
-**RB** - Render Backend. Performs both early and late Z testing, blending, and attachment stores of output of the PS.<br/>
-**draw 2D** - blit, fullscreen post process without TBDR ?<br/>
-**draw 3D** - TBDR pass ?<br/>
+**VFDP** - ?<br/>
+**wave** - warp, 32/64<br/>
 
+
+Warning: some devices requires root to access performance counters.
 
 ## A5xx
 
@@ -229,7 +238,7 @@ RAS: 8x4 tiles
 RAS: maskgen active
 RAS: fully covered super tiles
 RAS: fully covered 8x4 tiles
-RAS: prim killed invisilbe
+RAS: prim killed invisible
 
 Unified L2 Cache: busy cycles
 Unified L2 Cache: stall cycles VBIF
@@ -574,7 +583,8 @@ CMP: cmpdecmp 2D WR data
 <details>
 
 ```
-group | counter, packed GC, name
+| group / counter | name | desc |
+|---|---|---|
 0|0, 0		Command Parser: always count
 0|1, 1		Command Parser: busy gfx core idle
 0|2, 2		Command Parser: busy cycles
@@ -912,7 +922,7 @@ RAS: 8x4 tiles
 RAS: maskgen active
 RAS: fully covered super tiles
 RAS: fully covered 8x4 tiles
-RAS: prim killed invisilbe
+RAS: prim killed invisible
 RAS: supertile gen active cycles
 RAS: LRZ intf working cycles
 RAS: blocks

@@ -1,3 +1,5 @@
+code name: Sandy Bridge.
+
 
 ## Examples
 * HD Graphics 2000

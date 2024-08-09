@@ -1,9 +1,11 @@
+**NVidia GPU Performance Counters**
 
 ## References
 
 1. [Kernel Profiling Guide](https://docs.nvidia.com/nsight-compute/ProfilingGuide/#metrics-decoder)
 2. [Migrating from Range Profiler to GPU Trace in Nsight Graphics](https://developer.nvidia.com/blog/migrating-from-range-profiler-to-gpu-trace-in-nsight-graphics/)
 3. [NVIDIA Nsight Perf SDK](https://developer.nvidia.com/nsight-perf-sdk) - to get access to the performance counters.
+4. [NVIDIA Management Library (NVML)](https://developer.nvidia.com/management-library-nvml), [[header](https://github.com/nvpro-samples/nvpro_core/blob/master/third_party/binaries/nvml/nvml.h)]
 
 ## Notes
 

@@ -15,7 +15,7 @@
 ## References
 
 1. [Architecture Whitepaper (Tesla P100)](https://images.nvidia.com/content/pdf/tesla/whitepaper/pascal-architecture-whitepaper.pdf)
-2. [GTX 1080 Whitepaper](https://www.es.ele.tue.nl/~heco/courses/ECA/GPU-papers/GeForce_GTX_1080_Whitepaper_FINAL.pdf), [backup](../pdf/GeForce_GTX_1080_Whitepaper_FINAL.pdf)
+2. [GTX 1080 Whitepaper](https://www.es.ele.tue.nl/~heco/courses/ECA/GPU-papers/GeForce_GTX_1080_Whitepaper_FINAL.pdf), [[backup](../pdf/GeForce_GTX_1080_Whitepaper_FINAL.pdf)]
 3. [Tuning CUDA Applications for Pascal](https://docs.nvidia.com/cuda/pascal-tuning-guide/index.html)
 4. [Compute Capability 6.x](https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#compute-capability-6-x)
 5. [Tile-based Rasterization in Nvidia GPUs](https://www.realworldtech.com/tile-based-rasterization-nvidia-gpus/)
@@ -36,7 +36,7 @@
 * Executing integer instructions blocked floating-point instructions from issuing. [?]
 
 * [ref](https://arxiv.org/pdf/1903.07486):
-	- instructions IMAD and IMUL have a long latency because they are emulated. 
+	- instructions IMAD and IMUL have a long latency because they are emulated.
 	- most integer and single-precision instructions have a latency of 6 cycles; double-precision instructions have a latency of 8 cycles; more complex instructions, some of which run on the SFU, require 14 cycles.
 
 
@@ -52,7 +52,7 @@
 	- 128 fp16 FMA
 	- 64 fp32 FMA
 	- 32 fp64 FMA
-	- 16 fp32 div, rsqrt, log2, exp2, sin, cos
+	- 16 fp32 rcp, rsqrt, log2, exp2, sin, cos
 	- 64 i32 add/sub
 	- 32 i32 shift
 	- 32 cmp, min, max
@@ -60,7 +60,7 @@
 	- 32 i32 bit extract, insert
 	- 64 i32 and, or, xor
 	- 16 MSB
-	- 16 bitcount
+	- 16 pop count
 	- 16 i8/i16 to i32
 	- 16 to/from i64/fp64
 	- 16 type conversions

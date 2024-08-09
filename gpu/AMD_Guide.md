@@ -5,9 +5,10 @@
 1.1. [Understanding GPU context rolls (2018)](https://gpuopen.com/learn/understanding-gpu-context-rolls/)<br/>
 1.2. [Optimizing GPU occupancy and resource usage with large thread groups (2017)](https://gpuopen.com/learn/optimizing-gpu-occupancy-resource-usage-large-thread-groups/)<br/>
 1.3. [Getting the Most Out of Delta Color Compression (2016)](https://gpuopen.com/learn/dcc-overview/)<br/>
-1.4. [Life of triangle (2020)](https://gpuopen.com/wp-content/uploads/2021/01/AMD_Graphics_pipeline_GIC2020.pdf), [video](https://youtu.be/Y2KG_4OxDBg), [backup](../pdf/AMD_Graphics_pipeline_GIC2020.pdf)<br/>
+1.4. [Life of triangle (2020)](https://gpuopen.com/wp-content/uploads/2021/01/AMD_Graphics_pipeline_GIC2020.pdf), [[video](https://youtu.be/Y2KG_4OxDBg)], [[backup](../pdf/AMD_Graphics_pipeline_GIC2020.pdf)]<br/>
 
 ### GCN
+2.1. [ADVANCED SHADER PROGRAMMING ON GCN](https://gpuopen.com/wp-content/uploads/2017/03/GDC2017-Advanced-Shader-Programming-On-GCN.pdf)
 
 ### RDNA
 3.1. [RDNA Performance guide](https://gpuopen.com/performance/)<br/>
@@ -20,6 +21,7 @@
 
 ### Performance
 
+* In AMD GPUs, a high number of concurrent wavefronts running on the same Compute Unit (CU) enables the GPU to hide the time spent in accessing global memory, which is higher than the time needed to perform a compute operation, with operations performed by other wavefronts.
 
 ### GCN
 

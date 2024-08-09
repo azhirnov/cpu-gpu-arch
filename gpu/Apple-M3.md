@@ -15,7 +15,7 @@
 	- Flexible on-chip memory - 3 cache types now is dynamically allocated, if one type is not used - it will not be allocated.
 	- fp32, fp16, int can execute in parallel.
 	- Optimized for fp16.
-	- Shader execution reordering. 
+	- Shader execution reordering.
 	- In mesh shading: intermediate data from task shader now stored in the on-chip memory and accessed by mesh shader.
 
 

@@ -1,25 +1,29 @@
+**Intel GPU Performance Counters**
 
 ## References
+
+* [Intel Metrics Library for MDAPI](https://github.com/intel/metrics-library)
+* [Intel Metrics Discovery Application Programming Interface](https://github.com/intel/metrics-discovery)
 
 
 ## Notes
 
-**Subslice** -<br/>
+**3D Pipe** - Contains: Input Assembler, VS, HS, DS, GS, Clipper, Rasterizer, PS, Output Merger.<br/>
+**Color Cache** - <br/>
+**Command Streamer** - <br/>
+**Depth Cache** - <br/>
 **EU** -<br/>
 **FPU** -<br/>
 **FPU0 pipe** -<br/>
 **FPU1 pipe** -<br/>
-**Send pipe** -<br/>
 **GTI** -<br/>
-**3D Pipe** - Contains: Input Assembler, VS, HS, DS, GS, Clipper, Rasterizer, PS, Output Merger.<br/>
-**Output Merger** - blending?<br/>
-**Command Streamer** - <br/>
-**Resource Streamer** - <br/>
-**Stream Output** - <br/>
-**Color Cache** - <br/>
-**Depth Cache** - <br/>
-**Stencil Cache** - <br/>
 **IC** - <br/>
+**Output Merger** - blending?<br/>
+**Resource Streamer** - <br/>
+**Subslice** -<br/>
+**Send pipe** -<br/>
+**Stream Output** - <br/>
+**Stencil Cache** - <br/>
 **Thread Dispatcher** - <br/>
 
 ## UHD 620 (VK_KHR_performance_query)
