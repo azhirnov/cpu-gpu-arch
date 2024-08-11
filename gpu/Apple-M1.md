@@ -27,10 +27,10 @@
 
 ### Subgroup threads order
 
-Result of `Rainbow( gl_SubgroupInvocationID / gl_SubgroupSize )` in fragment shader, gl_SubgroupSize = 32.
+Result of `Rainbow( gl_SubgroupInvocationID / gl_SubgroupSize )` in fragment shader, gl_SubgroupSize: 32.
 
 ![](../img/graphics-subgroups/mac-m1.png)
 
-Result of `Rainbow( gl_SubgroupInvocationID / gl_SubgroupSize )` in compute shader, gl_SubgroupSize = 32, workgroup size: 8x8.
+Result of `Rainbow( gl_SubgroupInvocationID / gl_SubgroupSize )` in compute shader, gl_SubgroupSize: 32, workgroup size: 8x8.
 
 ![](../img/compute-subgroups/mac-m1.png)

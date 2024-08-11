@@ -43,10 +43,10 @@ On hardware with structured control flow instructions such as Intel, the loop br
 
 ### Subgroup threads order for Gen9.5
 
-Result of `Rainbow( gl_SubgroupInvocationID / gl_SubgroupSize )` in fragment shader, gl_SubgroupSize = 16.
+Result of `Rainbow( gl_SubgroupInvocationID / gl_SubgroupSize )` in fragment shader, gl_SubgroupSize: 16.
 
 ![](../img/graphics-subgroups/intel-gen9_5.png)
 
-Result of `Rainbow( gl_SubgroupInvocationID / gl_SubgroupSize )` in compute shader, gl_SubgroupSize = 16, workgroup size: 8x8.
+Result of `Rainbow( gl_SubgroupInvocationID / gl_SubgroupSize )` in compute shader, gl_SubgroupSize: 16, workgroup size: 8x8.
 
 ![](../img/compute-subgroups/intel-gen9_5.png)

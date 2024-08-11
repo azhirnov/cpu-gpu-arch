@@ -123,13 +123,13 @@ Content:
 
 ### Subgroup threads order
 
-Result of `Rainbow( gl_SubgroupInvocationID / gl_SubgroupSize )` in fragment shader, gl_SubgroupSize = 16, tile size: 32x32.
+Result of `Rainbow( gl_SubgroupInvocationID / gl_SubgroupSize )` in fragment shader, gl_SubgroupSize: 16, tile size: 32x32.
 
 ![](../img/graphics-subgroups/valhall-1.png)
 
-The quad position may vary:<br/>
-![](../img/graphics-subgroups/valhall-1-v2.png)
+Unique subgroups, image size: 32x32, gl_SubgroupSize: 16. Each subgroup in tile scheduled by quads (2x2 pixels), each quad may have any position inside 32x32 pixel tile, but often they are placed inside 8x8 region.<br/>
+![](../img/valhall-1-unique-subgroups.png)
 
-Result of `Rainbow( gl_SubgroupInvocationID / gl_SubgroupSize )` in compute shader, gl_SubgroupSize = 16, workgroup size: 8x8.
+Result of `Rainbow( gl_SubgroupInvocationID / gl_SubgroupSize )` in compute shader, gl_SubgroupSize: 16, workgroup size: 8x8.
 
 ![](../img/compute-subgroups/valhall-1.png)
