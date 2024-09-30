@@ -17,7 +17,8 @@ Content:
 1.1. [ARM Reveals Cortex-A72 Architecture Details](https://www.anandtech.com/show/9184/arm-reveals-cortex-a72-architecture-details)<br/>
 1.2. [Cortex A57, Nintendo Switch’s CPU](https://chipsandcheese.com/2023/12/12/cortex-a57-nintendo-switchs-cpu/)<br/>
 1.3. [ARM’s Cortex A72: aarch64 for the Masses](https://chipsandcheese.com/2023/11/10/arms-cortex-a72-aarch64-for-the-masses/)<br/>
-1.4. [ARM’s Cortex A53: Tiny But Important](https://chipsandcheese.com/2023/05/28/arms-cortex-a53-tiny-but-important/)
+1.4. [ARM’s Cortex A53: Tiny But Important](https://chipsandcheese.com/2023/05/28/arms-cortex-a53-tiny-but-important/)<br/>
+1.5. [Cortex A73’s Not-So-Infinite Reordering Capacity](https://chipsandcheese.com/2024/08/04/cortex-a73s-not-so-infinite-reordering-capacity/)<br/>
 
 ## Notes
 

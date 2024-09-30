@@ -3,6 +3,7 @@
 
 * A15
 * M2
+* Apple Vision Pro
 
 ## References
 

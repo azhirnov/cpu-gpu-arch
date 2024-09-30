@@ -1,5 +1,23 @@
+Rogue architecture.
 
 ## Examples
+
+**Series7XE**
+* GE7400
+* GE7800
+
+**Series7XT**
+* GT7200
+* GT7400
+* GT7600
+* GT7800
+* GT7900
+
+**Series7XT Plus**
+* GT7200 Plus
+* GT7400 Plus
+* GT7600 Plus
+
 
 ## References
 

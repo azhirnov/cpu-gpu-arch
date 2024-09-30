@@ -119,6 +119,7 @@ Content:
 * [Series-9](PowerVR-Series9.md)
 * [Series-A](PowerVR-SeriesA.md)
 * [Series-B](PowerVR-SeriesB.md)
+* [Series-C](PowerVR-SeriesC.md)
 
 ### Specs & Guide
 
@@ -142,9 +143,16 @@ Content:
 
 ## Huawei
 
-TODO
+TODO:
+Maleoon-910
 
 
 ## Samsung
 
 TODO
+
+## Broadcom
+
+* VideoCore 4 (Raspberry Pi 1, 2, 3)
+* VideoCore 6 (Raspberry Pi 4)
+* VideoCore 7 (Raspberry Pi 5)

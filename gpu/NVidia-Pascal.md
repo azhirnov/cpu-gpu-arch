@@ -19,6 +19,8 @@
 3. [Tuning CUDA Applications for Pascal](https://docs.nvidia.com/cuda/pascal-tuning-guide/index.html)
 4. [Compute Capability 6.x](https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#compute-capability-6-x)
 5. [Tile-based Rasterization in Nvidia GPUs](https://www.realworldtech.com/tile-based-rasterization-nvidia-gpus/)
+6. [Vulkan features for GTX 1080](https://vulkan.gpuinfo.org/listreports.php?devicename=NVIDIA%20GeForce%20GTX%201080)
+
 
 ## Notes
 

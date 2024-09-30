@@ -11,10 +11,14 @@
 
 1. [Imagination Announces B-Series GPU IP](https://www.anandtech.com/show/16155/imagination-announces-bseries-gpu-ip-scaling-up-with-multigpu)
 2. [Imagination Launches IMG B-Series](https://www.techpowerup.com/273334/imagination-launches-img-b-series-doing-more-with-multi-core-up-to-6-teraflops-of-compute)
+3. [Vulkan features for BXM-8-256](https://vulkan.gpuinfo.org/listreports.php?devicename=PowerVR%20BXM-8-256)
+4. [BXM-8-256 Benchmarks](https://github.com/azhirnov/as-en/blob/dev/AE/docs/papers/bench/PowerVR_BXM.md)
 
 ## Notes
 
-* B-Series now offers a 35% reduction in bandwidth compared to the A-Series and previous generation Imagination GPU architectures. [1]
+* Bandwidth reduction:
+	- B-Series now offers a 35% reduction in bandwidth compared to the A-Series and previous generation Imagination GPU architectures. [1]
+
 * IMG B-Series also includes IMGIC, the most advanced image compression technology in the market to provide new bandwidth saving options for our customers. It offers up to four levels of compression, from pixel-perfect lossless modes to an extreme bandwidth-saving mode, which offers a guaranteed 4:1 or better compression rate. [2]
 * Variants: [2]
 	- IMG BXE: It can drive 1-16 pixels per clock (PPC) and scales from 720p resolution to 8K with a range of GPUs specifically designed for user-interface rendering and entry-level gaming. BXE offers up to 25% area saving compared to previous generation cores and up to 2.5 times the fill rate density compared to the competition.
@@ -31,17 +35,3 @@
 
 * MADD = 2 FLOPs, MUL = 1 FLOP [1]
 
-
-### Subgroup threads order
-
-Result of `Rainbow( gl_SubgroupInvocationID / gl_SubgroupSize )` in fragment shader, gl_SubgroupSize: 128, tile size: 32x32.
-
-![](../img/graphics-subgroups/powervr-bxm.png)
-
-Result of `Rainbow( gl_SubgroupInvocationID / gl_SubgroupSize )` in compute shader, gl_SubgroupSize: 128, workgroup size: 8x8.
-
-![](../img/compute-subgroups/powervr-bxm-8x8.png)
-
-Result of `Rainbow( gl_SubgroupInvocationID / gl_SubgroupSize )` in compute shader, gl_SubgroupSize: 128, workgroup size: 16x16.
-
-![](../img/compute-subgroups/powervr-bxm-16x16.png)

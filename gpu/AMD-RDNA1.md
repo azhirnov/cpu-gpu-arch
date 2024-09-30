@@ -13,6 +13,7 @@
 4. [Optimization](https://gpuopen.com/wp-content/uploads/slides/GPUOpen_Let%E2%80%99sBuild2020_Optimizing%20for%20the%20Radeon%20RDNA%20Architecture.pdf)
 5. [(video) Optimizing for the Radeon RDNA Architecture](https://www.youtube.com/watch?v=7eEKLUhoTQs)
 6. [AMD Announces Radeon RX 5700 XT & RX 5700](https://www.anandtech.com/show/14528/amd-announces-radeon-rx-5700-xt-rx-5700-series)
+7. [Vulkan features for RX 5700 XT](https://vulkan.gpuinfo.org/listreports.php?devicename=AMD%20Radeon%20RX%205700%20XT%20(RADV%20NAVI10))
 
 ## Notes
 
@@ -181,7 +182,7 @@
 	- Natively support packed data including two half-precision (16-bit) FP values, four 8-bit integers, or eight 4-bit integers.
 
 * LDS: [2]
-	- 2x 64KB arrays with 32 banks per array. Each bank includes 512 entries that are 32-bits wide and can sustain a read and write every cycle. 
+	- 2x 64KB arrays with 32 banks per array. Each bank includes 512 entries that are 32-bits wide and can sustain a read and write every cycle.
 
 * Radeon RX 5700 XT: [2]
 	- Triangles rasterized ∆/s: 7620

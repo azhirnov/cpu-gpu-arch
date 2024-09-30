@@ -70,7 +70,7 @@
 **TCA** - Texture Cache Arbiter, part of Texture Cache Blocks.<br/>
 **TCP** - Texture Cache per Pipe, known as vector L1 Cache, part of Texture Cache Blocks.<br/>
 **TA** - Texture Addressing Unit.<br/>
-**TMU** - texture mapping unit.<br/>
+**TMU** - Texture Mapping Unit.<br/>
 **UC** - Uncached.<br/>
 **UTCL1**, **UTCL2** - Unified Translation Cache - Level X<br/>
 **VGT** - ?<br/>

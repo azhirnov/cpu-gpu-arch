@@ -35,3 +35,8 @@ Content:
 ## Loongson
 
 * [CPU Architectures](Loongson-Arch.md)
+
+## HiSilicon
+
+TODO:
+TaiShan V120

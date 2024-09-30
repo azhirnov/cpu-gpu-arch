@@ -11,9 +11,11 @@
 ## Notes
 
 **ALU** - arithmetic unit in the execution engine, contains pipes: **FMA**, **CVT**, **SFU**, **MSG**.<br/>
+**AXI bus**, **ExtBus** - interface between L2 slice and external memory (RAM).<br/>
 **Binning phase** - includes vertex position shading, culling, and primitive binning.<br/>
 **Back-end** - queue which placed after Execution core, only fragment queue has backend.<br/>
-**CSF** - Command Stream Front-end.<br/>
+**JM** - frontend type before Valhall gen2<br/>
+**CSF** - Command Stream Front-end, added to Valhall gen3.<br/>
 **CS0** - ?<br/>
 **CEU** - ?<br/>
 **DVFS** - Dynamic Voltage and Frequency Scaling.<br/>
@@ -22,17 +24,17 @@
 **EC** - Execution Core.<br/>
 **FPK** - Forward Pixel Kill.<br/>
 **Front-end** - queue which placed before Execution core, can be NonFragFrontend / FragFrontend.<br/>
-**Fragment Task** - region of 32x32 (64x64 for Valhal 5gen) pixels.<br/>
-**IRQ** - Interrupt Queue ?<br/>
-**Iterator** - ?<br/>
+**Fragment Task** - region of 32x32 for Valhall, 64x64 for 5th Gen.<br/>
+**IRQ** - Interrupt Queue.<br/>
 **Job** - GPU command, executed on Job Manager, it tracks inter-job dependencies, distributes jobs across shader cores, splits jobs into per-core tasks.<br/>
 **Load/store unit (LS, LSU)** - used for general-purpose memory accesses, and includes vertex attribute access, buffer access, work group shared memory access, and stack access, also implements imageLoad/Store and atomic access functionality. (The load/store pipeline handles all non-texture memory access, including buffer access, image access, and atomic operations.)<br/>
-**MCU** - Microcontroller Unit / Multi-level Memory Cache Unit ?<br/>
+**MCU** - GPU command stream microcontroller.<br/>
 **MMU** - Memory management unit.<br/>
 **Main phase** - includes any deferred vertex processing and all fragment shading.<br/>
 **PE** - Processing Engine.<br/>
 **Quad** - 2x2 pixels<br/>
 **RTU** - Ray Tracing Unit.<br/>
+**SCBus** - Bus between L2 cache and LSU, texture unit, front-end unit, tile unit.<br/>
 **Task** - part of job, executed on core.<br/>
 **Tiler** - responsible for coordinating geometry processing and providing the fixed-function tiling needed for the tile-based rendering pipeline. It can run in parallel to vertex shading and fragment shading.<br/>
 **TLB** -  Translation Look-aside Buffer ?<br/>
@@ -53,244 +55,316 @@ Execution core / Processing unit / ALU:<br/>
 <details>
 
 ```
-Average cycles per pixel (76)
-Pixels (75)
-Tile unit write bytes (233)
-Load/store unit bytes written to L2 per access cycle (232)
-Load/store unit write bytes (231)
-Load/store unit write beats to L2 memory system (230)
-Texture unit bytes read from external memory per texture cycle (229)
-Texture unit read bytes from external memory (228)
-Texture unit bytes read from L2 per texture cycle (227)
-Texture unit read bytes from L2 cache (226)
-Load/store unit bytes read from external memory per access cycle (225)
-Load/store unit read bytes from external memory (224)
-Load/store unit bytes read from L2 per access cycle (223)
-Load/store unit read bytes from L2 cache (222)
-Front-end unit read bytes from external memory (221)
-Front-end unit read bytes from L2 cache (220)
-Varying unit utilization (219)
-Varying unit issue cycles (218)
-16-bit interpolation active cycles (217)
-32-bit interpolation active cycles (216)
-Load/store unit utilization (74)
-Load/store unit issue cycles (30)
-Load/store unit write issues (97)
-Load/store unit read issues (96)
-Texture full speed filtering percentage (271)
-Texture output bus utilization (270)
-Texture input bus utilization (269)
-Texture unit issue cycles (73)
-Texture quads (128)
-Texture unit utilization (72)
-Texture filtering cycles per instruction (71)
-Texture samples (70)
-Arithmetic unit utilization (69)
-Shader blend percentage (268)
-Warp divergence percentage (211)
-Arithmetic instruction issue cycles (267)
-SFU pipe utilization (266)
-CVT pipe utilization (265)
-FMA pipe utilization (264)
-Full quad warp rate (237)
-All registers warp rate (236)
-Fragment threads (17)
-Non-fragment threads (27)
-Execution core utilization (68)
-Unchanged tile kill rate (67)
-Fragments per pixel (66)
-Partial coverage rate (263)
-Fragment FPK buffer utilization (101)
-Tiler utilization (51)
-Output external outstanding writes 75-100% (196)
-Output external outstanding reads 75-100% (195)
-Output external read latency 384+ cycles (194)
-Output external write stall rate (50)
-Output external read stall rate (49)
-Output external write bytes (48)
-Output external read bytes (47)
-L2 cache write miss rate (193)
-L2 cache read miss rate (192)
-Non-fragment queue utilization (46)
-Fragment queue utilization (45)
-Interrupt pending utilization (44)
-Tiler varying shading stall cycles (115)
-Tiler varying shading requests (114)
-Varying cache misses (113)
-Varying cache hits (112)
-Position cache miss requests (100)
-Position cache hit requests (99)
-Tiler position FIFO full cycles (111)
-Tiler position shading stall cycles (110)
-Tiler position shading requests (109)
-Output internal read beats (107)
-Sample test culled primitives (106)
-Z plane culled primitives (42)
-Facing or XY plane test culled primitives (41)
-Visible primitives (40)
-Visible back-facing primitives (39)
-Point primitives (36)
-Triangle primitives (35)
-Tiler active cycles (43)
-Load/store unit write-back write beats (151)
-Tile unit write beats to L2 memory system (152)
-Load/store unit other write beats (153)
-Miscellaneous read beats from L2 cache (150)
-Texture unit read beats from external memory (149)
-Texture unit read beats from L2 cache (148)
-Load/store unit read beats from external memory (147)
-Load/store unit read beats from L2 cache (146)
-Fragment front-end read beats from external memory (145)
-Fragment front-end read beats from L2 cache (144)
-Attribute instructions (143)
-16-bit interpolation slots (142)
-32-bit interpolation slots (141)
-Varying unit instructions (140)
-Load/store unit atomic issues (98)
-Load/store unit partial write issues (139)
-Load/store unit full write issues (138)
-Load/store unit partial read issues (137)
-Load/store unit full read issues (136)
-Late ZS killed thread percentage (65)
-Texture message write beats (262)
-Late ZS tested thread percentage (64)
-Texture messages (261)
-Early ZS killed quad percentage (63)
-Texture filtering cycles using full trilinear (260)
-Early ZS tested quad percentage (62)
-Texture filtering cycles using full bilinear (259)
-Texture filtering cycles (32)
-Texture filtering stall cycles (258)
-Average cycles per fragment thread (60)
-Texture fetch stall cycles (257)
-Fragment utilization (59)
-Texture descriptor stall cycles (256)
-Average cycles per non-fragment thread (58)
-Texture message read beats (255)
-Non-fragment utilization (57)
-Blend shader instructions (254)
-Execution engine starvation cycles (127)
-Z plane test cull rate (56)
-Instruction cache misses (253)
-Diverged instructions (126)
-Facing or XY plane test cull rate (55)
-Arithmetic SFU instructions (252)
-Culled primitives (54)
-Arithmetic CVT instructions (251)
-Visible primitives rate (53)
-Arithmetic FMA instructions (250)
-Execution core active cycles (28)
-Non-fragment warps (124)
-Non-fragment core tasks (123)
-Non-fragment active cycles (26)
-Visible front-facing primitives (38)
-Full quad warps (235)
-Occluding quads (122)
-Killed unchanged tiles (25)
-Line primitives (37)
-Warps using more than 32 registers (234)
-Tiles (24)
-Late ZS killed quads (121)
-Late ZS tested quads (120)
-Early ZS killed quads (21)
-Early ZS updated quads (119)
-Total input primitives (52)
-Partial rasterized fine quads (249)
-Early ZS tested quads (20)
-Fragment warps (117)
-Forward pixel kill buffer active cycles (95)
-Rasterized fine quads (19)
-Rasterized primitives (116)
-Fragment primitives loaded (16)
-Fragment active cycles (15)
-Output external write stall cycles (14)
-Early ZS updated quad percentage (208)
-Output external write beats (11)
-FPK killed quad percentage (210)
-Output external read stall cycles (13)
-FPK killed quads (209)
-Output external read beats (12)
-Output external ReadUnique transactions (173)
-Output external ReadNoSnoop transactions (172)
-Output external read transactions (171)
-Input external snoop lookup requests (170)
-Input external snoop stall cycles (191)
-Write lookup requests (94)
-Input external snoop transactions (190)
-Read lookup requests (93)
-Output external outstanding writes 50-75% (189)
-Any lookup requests (92)
-Output internal write requests (169)
-Output internal read stall cycles (168)
-Output internal read requests (167)
-Input internal snoop stall cycles (166)
-Input internal snoop requests (165)
-Input internal write stall cycles (164)
-Input internal write requests (163)
-Input internal read stall cycles (162)
-Input internal read requests (161)
-MMU stage 2 L2 lookup TLB hits (160)
-MMU stage 2 L3 lookup TLB hits (159)
-MMU stage 2 L2 lookup requests (158)
-MMU stage 2 L3 lookup requests (157)
-MMU stage 2 lookup requests (156)
-Output external WriteSnoopPartial transactions (186)
-MMU L2 lookup TLB hits (89)
-MMU L3 lookup TLB hits (155)
-Output external outstanding writes 0-25% (187)
-MMU L2 table read requests (90)
-MMU L3 table read requests (154)
-Output external outstanding writes 25-50% (188)
-MMU lookup requests (91)
-Non-occluding quads (205)
-Reserved queue jobs (8)
-L2 cache flush requests (105)
-Output external WriteSnoopFull transactions (185)
-Reserved queue job finish wait cycles (88)
-Output external WriteNoSnoopPartial transactions (184)
-Reserved queue job dependency wait cycles (87)
-Output external WriteNoSnoopFull transactions (183)
-Reserved queue job issue wait cycles (86)
-Output external write transactions (182)
-Reserved queue job descriptor read wait cycles (85)
-Output external read latency 320-383 cycles (181)
-Non-fragment queue job finish wait cycles (84)
-Output external read latency 256-319 cycles (180)
-Non-fragment queue job dependency wait cycles (83)
-Output external read latency 192-255 cycles (179)
-Non-fragment queue job issue wait cycles (82)
-Reserved active cycles (10)
-Occluding quad percentage (204)
-Non-fragment queue active cycles (7)
-Reserved queue cache flush wait cycles (104)
-Output external read latency 128-191 cycles (178)
-Non-fragment queue job descriptor read wait cycles (81)
-Non-fragment queue cache flush wait cycles (103)
-Varying cache hit rate (203)
-Non-fragment tasks (6)
-Fragment queue cache flush wait cycles (102)
-Varying threads per input primitive (202)
-Non-fragment jobs (5)
-Varying shader thread invocations (201)
-Fragment queue active cycles (4)
-Shaded coarse quads (206)
-Reserved queue tasks (9)
-Output external read latency 0-127 cycles (177)
-Fragment queue job finish wait cycles (80)
-Output external outstanding reads 50-75% (176)
-Fragment queue job dependency wait cycles (79)
-Position cache hit rate (200)
-Fragment tasks (3)
-Position threads per input primitive (199)
-Fragment jobs (2)
-Output external outstanding reads 25-50% (175)
-Fragment queue job issue wait cycles (78)
-Position shader thread invocations (198)
-GPU interrupt pending cycles (1)
-Output external outstanding reads 0-25% (174)
-Fragment queue job descriptor read wait cycles (77)
-Sample test cull rate (197)
-GPU active cycles (0)
+GPU family:       Valhall
+Product Id:       G57-2
+AXI bus width:    256 bits
+Num cores:        2
+Exec engines:     1
+L2 slices * size: 512 Kb (1 * 512 Kb)
+Tile size:        16x16 px
+Warp width:       16 threads
 ```
+
+| counter |description | units |  comments |
+|---|---|--------|--------|
+| GPUCyPerPix | Average cycles per pixel | cycles |
+| GPUPix | Pixels | pixels |
+| SCBusTileWrBy | Tile unit write bytes | bytes |
+| SCBusLSWrByPerWr | Load/store unit bytes written to L2 per access cycle | bytes |
+| SCBusLSWrBy | Load/store unit write bytes | bytes |
+| SCBusLSWrBt | Load/store unit write beats to L2 memory system | beats |
+| SCBusTexExtRdByPerRd | Texture unit bytes read from external memory per texture cycle | bytes |
+| SCBusTexExtRdBy | Texture unit read bytes from external memory | bytes |
+| SCBusTexL2RdByPerRd | Texture unit bytes read from L2 per texture cycle | bytes |
+| SCBusTexL2RdBy | Texture unit read bytes from L2 cache | bytes |
+| SCBusLSExtRdByPerRd | Load/store unit bytes read from external memory per access cycle | bytes |
+| SCBusLSExtRdBy | Load/store unit read bytes from external memory | bytes |
+| SCBusLSL2RdByPerRd | Load/store unit bytes read from L2 per access cycle | bytes |
+| SCBusLSL2RdBy | Load/store unit read bytes from L2 cache | bytes |
+| SCBusFFEExtRdBy | Front-end unit read bytes from external memory | bytes |
+| SCBusFFEL2RdBy | Front-end unit read bytes from L2 cache | bytes |
+| VarUtil | Varying unit utilization | percent |
+| VarIssueCy | Varying unit issue cycles | cycles |
+| Var16IssueCy | 16-bit interpolation active cycles | cycles |
+| Var32IssueCy | 32-bit interpolation active cycles | cycles |
+| LSUtil | Load/store unit utilization | percent |
+| LSIssueCy | Load/store unit issue cycles | cycles |
+| LSWrCy | Load/store unit write issues | cycles |
+| LSRdCy | Load/store unit read issues | cycles |
+| TexFiltFullRate | Texture full speed filtering percentage | percent |
+| TexOutBusUtil | Texture output bus utilization | percent |
+| TexInBusUtil | Texture input bus utilization | percent |
+| TexIssueCy | Texture unit issue cycles | cycles |
+| TexQuads | Texture quads | quads |
+| TexUtil | Texture unit utilization | percent |
+| TexCPI | Texture filtering cycles per instruction | cycles |
+| TexSample | Texture samples | requests |
+| ALUUtil | Arithmetic unit utilization | percent |
+| EngSWBlendRate | Shader blend percentage | percent |
+| EngDivergedInstrRate | Warp divergence percentage | percent |
+| EngArithInstr | Arithmetic instruction issue cycles | instructions |
+| EngSFUPipeUtil | SFU pipe utilization | percent |
+| EngCVTPipeUtil | CVT pipe utilization | percent |
+| EngFMAPipeUtil | FMA pipe utilization | percent |
+| CoreFullWarpRate | Full warp percentage | percent |
+| CoreAllRegsWarpRate | All registers warp percentage | percent |
+| FragThread | Fragment threads | threads |
+| NonFragThread | Non-fragment threads | threads |
+| CoreUtil | Execution core utilization | percent |
+| FragTileKillRate | Unchanged tile kill percentage | percent |
+| FragOverdraw | Fragments per pixel | threads | Number of fragments shaded per output pixel. GPU processing cost per pixel accumulates with the layer count. High overdraw can build up to a significant processing cost, especially when rendering to a high-resolution framebuffer. Minimize overdraw by rendering opaque objects front-to-back and minimizing use of blended transparent layers. *Note: 32 primitives per pixel equal to 2.0* |
+| FragRastPartQdRate | Partial coverage percentage | percent |
+| FragFPKBUtil | Fragment FPK buffer utilization | percent |
+| TilerUtil | Tiler utilization | percent |
+| ExtBusWrOTQ4 | Output external outstanding writes 75-100% | transactions |
+| ExtBusRdOTQ4 | Output external outstanding reads 75-100% | transactions |
+| ExtBusRdLat384 | Output external read latency 384+ cycles | beats |
+| ExtBusWrStallRate | Output external write stall percentage | percent |
+| ExtBusRdStallRate | Output external read stall percentage | percent |
+| ExtBusWrBy | Output external write bytes | bytes |
+| ExtBusRdBy | Output external read bytes | bytes |
+| L2CacheWrMissRate | L2 cache write miss percentage | percent |
+| L2CacheRdMissRate | L2 cache read miss percentage | percent |
+| NonFragQueueUtil | Non-fragment queue utilization | percent |
+| FragQueueUtil | Fragment queue utilization | percent |
+| GPUIRQUtil | Interrupt pending utilization | percent |
+| TilerVarShadStallCy | Tiler varying shading stall cycles | cycles |
+| GeomVarShadTask | Tiler varying shading requests | requests |
+| TilerVarCacheMiss | Varying cache misses | requests |
+| TilerVarCacheHit | Varying cache hits | requests |
+| TilerPosCacheMiss | Position cache miss requests | requests |
+| TilerPosCacheHit | Position cache hit requests | requests |
+| TilerPosShadFIFOFullCy | Tiler position FIFO full cycles | cycles |
+| TilerPosShadStallCy | Tiler position shading stall cycles | cycles |
+| GeomPosShadTask | Tiler position shading requests | requests |
+| TilerRdBt | Output internal read beats | beats |
+| GeomSampleCullPrim | Sample test culled primitives | primitives |
+| GeomZPlaneCullPrim | Z plane culled primitives | primitives |
+| GeomFaceXYPlaneCullPrim | Facing or XY plane test culled primitives | primitives |
+| GeomVisiblePrim | Visible primitives | primitives |
+| GeomBackFacePrim | Visible back-facing primitives | primitives |
+| GeomPointPrim | Point primitives | primitives |
+| GeomTrianglePrim | Triangle primitives | primitives |
+| TilerActiveCy | Tiler active cycles | cycles |
+| SCBusLSWBWrBt | Load/store unit write-back write beats | beats |
+| SCBusTileWrBt | Tile unit write beats to L2 memory system | beats |
+| SCBusLSOtherWrBt | Load/store unit other write beats | beats |
+| SCBusOtherL2RdBt | Miscellaneous read beats from L2 cache | beats |
+| SCBusTexExtRdBt | Texture unit read beats from external memory | beats |
+| SCBusTexL2RdBt | Texture unit read beats from L2 cache | beats |
+| SCBusLSExtRdBt | Load/store unit read beats from external memory | beats |
+| SCBusLSL2RdBt | Load/store unit read beats from L2 cache | beats |
+| SCBusFFEExtRdBt | Fragment front-end read beats from external memory | beats |
+| SCBusFFEL2RdBt | Fragment front-end read beats from L2 cache | beats |
+| AttrInstr | Attribute instructions | instructions |
+| Var16IssueSlot | 16-bit interpolation slots | issues |
+| Var32IssueSlot | 32-bit interpolation slots | issues |
+| VarInstr | Varying unit instructions | requests |
+| LSAtomic | Load/store unit atomic issues | cycles |
+| LSPartWr | Load/store unit partial write issues | cycles |
+| LSFullWr | Load/store unit full write issues | cycles |
+| LSPartRd | Load/store unit partial read issues | cycles |
+| LSFullRd | Load/store unit full read issues | cycles |
+| FragLZSKillRate | Late ZS killed thread percentage | percent |
+| TexOutBt | Texture message write beats | beats |
+| FragLZSTestRate | Late ZS tested thread percentage | percent |
+| TexOutMsg | Texture messages | issues |
+| FragEZSKillRate | Early ZS killed quad percentage | percent |
+| TexFullTriFiltCy | Texture filtering cycles using full trilinear | cycles |
+| FragEZSTestRate | Early ZS tested quad percentage | percent |
+| TexFullBiFiltCy | Texture filtering cycles using full bilinear | cycles |
+| TexFiltIssueCy | Texture filtering cycles | cycles |
+| TexFiltStallCy | Texture filtering stall cycles | cycles |
+| FragThroughputCy | Average cycles per fragment thread | cycles |
+| TexDataFetchStallCy | Texture fetch stall cycles | cycles |
+| FragUtil | Fragment utilization | percent |
+| TexDescStallCy | Texture descriptor stall cycles | cycles |
+| NonFragThroughputCy | Average cycles per non-fragment thread | cycles |
+| TexInBt | Texture message read beats | beats |
+| NonFragUtil | Non-fragment utilization | percent |
+| EngSWBlendInstr | Blend shader instructions | instructions |
+| EngStarveCy | Execution engine starvation cycles | cycles |
+| GeomZPlaneCullRate | Z plane test cull percentage | percent |
+| EngICacheMiss | Instruction cache misses | requests |
+| EngDivergedInstr | Diverged instructions | instructions |
+| GeomFaceXYPlaneCullRate | Facing or XY plane test cull percentage | percent |
+| EngSFUInstr | Arithmetic SFU pipe instructions | instructions |
+| GeomTotalCullPrim | Culled primitives | primitives |
+| EngCVTInstr | Arithmetic CVT pipe instructions | instructions |
+| GeomVisibleRate | Visible primitive percentage | percent |
+| EngFMAInstr | Arithmetic FMA pipe instructions | instructions |
+| CoreActiveCy | Execution core active cycles | cycles |
+| NonFragWarp | Non-fragment warps | warps |
+| NonFragTask | Non-fragment core tasks | tasks |
+| NonFragActiveCy | Non-fragment active cycles | cycles |
+| GeomFrontFacePrim | Visible front-facing primitives | primitives |
+| CoreFullWarp | Full warps | warps |
+| FragOpaqueQd | Occluding quads | quads |
+| FragTileKill | Killed unchanged tiles | tiles |
+| GeomLinePrim | Line primitives | primitives |
+| CoreAllRegsWarp | Warps using more than 32 registers | warps |
+| FragTile | Tiles | tiles |
+| FragLZSKillQd | Late ZS killed quads | quads |
+| FragLZSTestQd | Late ZS tested quads | quads |
+| FragEZSKillQd | Early ZS killed quads | quads |
+| FragEZSUpdateQd | Early ZS updated quads | quads |
+| GeomTotalPrim | Total input primitives | primitives |
+| FragRastPartQd | Partial rasterized fine quads | quads |
+| FragEZSTestQd | Early ZS tested quads | quads |
+| FragWarp | Fragment warps | warps |
+| FragFPKActiveCy | Forward pixel kill buffer active cycles | cycles |
+| FragRastQd | Rasterized fine quads | quads |
+| FragRastPrim | Rasterized primitives | primitives |
+| FragRdPrim | Fragment primitives loaded | primitives |
+| FragActiveCy | Fragment active cycles | cycles |
+| ExtBusWrStallCy | Output external write stall cycles | cycles |
+| FragEZSUpdateRate | Early ZS updated quad percentage | percent |
+| ExtBusWrBt | Output external write beats | beats |
+| FragFPKKillRate | FPK killed quad percentage | percent |
+| ExtBusRdStallCy | Output external read stall cycles | cycles |
+| FragFPKKillQd | FPK killed quads | quads |
+| ExtBusRdBt | Output external read beats | beats |
+| ExtBusRdUnique | Output external ReadUnique transactions | transactions |
+| ExtBusRdNoSnoop | Output external ReadNoSnoop transactions | transactions |
+| ExtBusRd | Output external read transactions | transactions |
+| L2CacheSnpLookup | Input external snoop lookup requests | requests |
+| L2CacheIncSnpStallCy | Input external snoop stall cycles | cycles |
+| L2CacheWrLookup | Write lookup requests | requests |
+| L2CacheIncSnp | Input external snoop transactions | transactions |
+| L2CacheRdLookup | Read lookup requests | requests |
+| ExtBusWrOTQ3 | Output external outstanding writes 50-75% | transactions |
+| L2CacheLookup | Any lookup requests | requests |
+| L2CacheL1Wr | Output internal write requests | requests |
+| L2CacheL1RdStallCy | Output internal read stall cycles | cycles |
+| L2CacheL1Rd | Output internal read requests | requests |
+| L2CacheSnpStallCy | Input internal snoop stall cycles | cycles |
+| L2CacheSnp | Input internal snoop requests | requests |
+| L2CacheWrStallCy | Input internal write stall cycles | cycles |
+| L2CacheWr | Input internal write requests | requests |
+| L2CacheRdStallCy | Input internal read stall cycles | cycles |
+| L2CacheRd | Input internal read requests | requests |
+| MMUS2L2Hit | MMU stage 2 L2 lookup TLB hits | requests |
+| MMUS2L3Hit | MMU stage 2 L3 lookup TLB hits | requests |
+| MMUS2L2Rd | MMU stage 2 L2 lookup requests | requests |
+| MMUS2L3Rd | MMU stage 2 L3 lookup requests | requests |
+| MMUS2Lookup | MMU stage 2 lookup requests | requests |
+| ExtBusWrSnoopPart | Output external WriteSnoopPartial transactions | transactions |
+| MMUL2Hit | MMU L2 lookup TLB hits | requests |
+| MMUL3Hit | MMU L3 lookup TLB hits | requests |
+| ExtBusWrOTQ1 | Output external outstanding writes 0-25% | transactions |
+| MMUL2Rd | MMU L2 table read requests | requests |
+| MMUL3Rd | MMU L3 table read requests | requests |
+| ExtBusWrOTQ2 | Output external outstanding writes 25-50% | transactions |
+| MMULookup | MMU lookup requests | requests |
+| FragTransparentQd | Non-occluding quads | quads |
+| ResQueueJob | Reserved queue jobs | jobs |
+| L2CacheFlush | L2 cache flush requests | requests |
+| ExtBusWrSnoopFull | Output external WriteSnoopFull transactions | transactions |
+| ResQueueWaitFinishCy | Reserved queue job finish wait cycles | cycles |
+| ExtBusWrNoSnoopPart | Output external WriteNoSnoopPartial transactions | transactions |
+| ResQueueWaitDepCy | Reserved queue job dependency wait cycles | cycles |
+| ExtBusWrNoSnoopFull | Output external WriteNoSnoopFull transactions | transactions |
+| ResQueueWaitIssueCy | Reserved queue job issue wait cycles | cycles |
+| ExtBusWr | Output external write transactions | transactions |
+| ResQueueWaitRdCy | Reserved queue job descriptor read wait cycles | cycles |
+| ExtBusRdLat320 | Output external read latency 320-383 cycles | beats |
+| NonFragQueueWaitFinishCy | Non-fragment queue job finish wait cycles | cycles |
+| ExtBusRdLat256 | Output external read latency 256-319 cycles | beats |
+| NonFragQueueWaitDepCy | Non-fragment queue job dependency wait cycles | cycles |
+| ExtBusRdLat192 | Output external read latency 192-255 cycles | beats |
+| NonFragQueueWaitIssueCy | Non-fragment queue job issue wait cycles | cycles |
+| ResQueueActiveCy | Reserved active cycles | cycles |
+| FragOpaqueQdRate | Occluding quad percentage | percent |
+| NonFragQueueActiveCy | Non-fragment queue active cycles | cycles |
+| ResQueueWaitFlushCy | Reserved queue cache flush wait cycles | cycles |
+| ExtBusRdLat128 | Output external read latency 128-191 cycles | beats |
+| NonFragQueueWaitRdCy | Non-fragment queue job descriptor read wait cycles | cycles |
+| NonFragQueueWaitFlushCy | Non-fragment queue cache flush wait cycles | cycles |
+| TilerVarCacheHitRate | Varying cache hit percentage | percent |
+| NonFragQueueTask | Non-fragment tasks | tasks |
+| FragQueueWaitFlushCy | Fragment queue cache flush wait cycles | cycles |
+| GeomVarShadThreadPerPrim | Varying threads per input primitive | threads |
+| NonFragQueueJob | Non-fragment jobs | jobs |
+| GeomVarShadThread | Varying shader thread invocations | threads |
+| FragQueueActiveCy | Fragment queue active cycles | cycles |
+| FragShadedQd | Shaded coarse quads | quads |
+| ResQueueTask | Reserved queue tasks | tasks |
+| ExtBusRdLat0 | Output external read latency 0-127 cycles | beats |
+| FragQueueWaitFinishCy | Fragment queue job finish wait cycles | cycles |
+| ExtBusRdOTQ3 | Output external outstanding reads 50-75% | transactions |
+| FragQueueWaitDepCy | Fragment queue job dependency wait cycles | cycles |
+| TilerPosCacheHitRate | Position cache hit percentage | percent |
+| FragQueueTask | Fragment tasks | tasks |
+| GeomPosShadThreadPerPrim | Position threads per input primitive | threads |
+| FragQueueJob | Fragment jobs | jobs |
+| ExtBusRdOTQ2 | Output external outstanding reads 25-50% | transactions |
+| FragQueueWaitIssueCy | Fragment queue job issue wait cycles | cycles |
+| GeomPosShadThread | Position shader thread invocations | threads |
+| GPUIRQActiveCy | GPU interrupt pending cycles | cycles |
+| ExtBusRdOTQ1 | Output external outstanding reads 0-25% | transactions |
+| FragQueueWaitRdCy | Fragment queue job descriptor read wait cycles | cycles |
+| GeomSampleCullRate | Sample test cull percentage | percent |
+| GPUActiveCy | GPU active cycles | cycles |
+
+
+from libGPUCounters prop_decoder:
+```
+product_id:						37011
+version_status:					0
+minor_revision:					1
+major_revision:					0
+gpu_freq_khz_max:				5000 ???
+log2_program_counter_size:		24
+texture_features_0:				4160619518
+texture_features_1:				3288332287
+texture_features_2:				3219259295
+texture_features_3:				4294
+gpu_available_memory_size:		3867762688
+num_exec_engines:				0
+l2_log2_line_size:				6 -> 64
+l2_log2_cache_size:				19 -> 512 Kb
+l2_num_l2_slices:				1
+tiler_bin_size_bytes:			512 b
+tiler_max_active_levels:		8
+max_threads:					1024
+max_workgroup_size:				512
+max_barrier_size:				512
+max_registers:					32768 -> 32K
+max_task_queue:					4
+max_thread_group_split:			0
+impl_tech:						0
+tls_alloc:						1024
+raw_shader_present:				5
+raw_tiler_present:				1
+raw_l2_present:					1
+raw_stack_present:				5
+raw_l2_features:				135463430 | x08'13'02'06 |		top 8 bits - log2 bus width = 256
+raw_core_features:				0
+raw_mem_features:				1
+raw_mmu_features:				10288
+raw_as_present:					255
+raw_js_present:					7
+raw_js_features_0:				526
+raw_js_features_1:				7326
+raw_js_features_2:				30
+raw_tiler_features:				2057
+raw_texture_features_0:			4160619518
+raw_texture_features_1:			3288332287
+raw_texture_features_2:			3219259295
+raw_texture_features_3:			4294
+raw_gpu_id:						2425552912
+raw_thread_max_threads:			1024
+raw_thread_max_workgroup_size:	512
+raw_thread_max_barrier_size:	512
+raw_thread_features:			294912
+raw_coherency_mode:				0
+raw_coherency_mode:				31
+raw_gpu_features:				0
+coherency_num_groups:			1
+coherency_num_core_groups:		1 - count of coherency_group_*
+coherency_coherency:			1
+coherency_group_0:				5 -> 0101 -- shader core bit mask
+```
+
 </details>
 

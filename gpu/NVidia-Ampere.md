@@ -11,7 +11,10 @@
 1. [Tuning CUDA Applications for NVIDIA Ampere GPU Architecture](https://docs.nvidia.com/cuda/ampere-tuning-guide/)
 2. [Ampere Architecture In-Depth](https://developer.nvidia.com/blog/nvidia-ampere-architecture-in-depth/)
 3. [Architecture Whitepaper](https://www.nvidia.com/content/PDF/nvidia-ampere-ga-102-gpu-architecture-whitepaper-v2.pdf)
-4. [Compute Capability 8.x](https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#compute-capability-8-x)
+4. [Compute Capability 8.7](https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#compute-capability-8-x)
+5. [Vulkan features for RTX 3090](https://vulkan.gpuinfo.org/listreports.php?devicename=NVIDIA%20GeForce%20RTX%203090)
+6. [Demystifying the Nvidia Ampere Architecture through Microbenchmarking and Instruction-level Analysis](https://arxiv.org/pdf/2208.11174), [[backup](../pdf/NV_ampere_microbench.pdf)]
+7. [Dissecting the Ampere GPU Architecture through Microbenchmarking](https://www.nvidia.com/en-us/on-demand/session/gtcspring21-s33322/), [[backup](../pdf/NV_ampere_microbench2.pdf)]
 
 ## Notes
 

@@ -20,7 +20,9 @@ With RTX:
 5. [Re-converging control flow on NVIDIA GPUs](https://www.collabora.com/news-and-blog/blog/2024/04/25/re-converging-control-flow-on-nvidia-gpus/)
 6. [Implementing DRM format modifiers in NVK](https://www.collabora.com/news-and-blog/news-and-events/implementing-drm-format-modifiers-in-nvk.html)
 7. [Dissecting the Turing GPU Architecture through Microbenchmarking](https://developer.download.nvidia.com/video/gputechconf/gtc/2019/presentation/s9839-discovering-the-turing-t4-gpu-architecture-with-microbenchmarks.pdf)
-8. [Compute Capability 7.x](https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#compute-capability-7-x)
+8. [Compute Capability 7.5](https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#compute-capability-7-x)
+9. [Vulkan features for RTX 2080](https://vulkan.gpuinfo.org/listreports.php?devicename=NVIDIA%20GeForce%20RTX%202080)
+10. [RTX 2080 Benchmarks](https://github.com/azhirnov/as-en/blob/dev/AE/docs/papers/bench/NVidia_RTX2080.md)
 
 ## Notes
 
@@ -39,7 +41,7 @@ With RTX:
 	- Applications can interleave pointer arithmetic with floating-point computations. [1]
 	- Index math and pointer math instructions can run in parallel with FP instructions. [7]
 	- Profiling many workloads shows an average of 36 integer operations for every 100 floating point operations. [2]
-	- fp32:i32 rate:  1:1 - not supported, 2:1 - supported, only IADD. [[az](https://github.com/azhirnov)]
+	- fp32:i32 rate:  1:1 - not supported, 2:1 - supported, only IADD. [10]
 
 * Warp mapping: [4]
 	- Warps are mapped to schedulers (and processing blocks) according to the same, simple rule: `scheduler_id = warp_id%4`.
@@ -49,8 +51,8 @@ With RTX:
 
 * Uniform Data Path. This design is intended to accelerate numerical, array-based, computebound workloads that occupy the main datapaths almost completely with floating-point instructions, typically FFMA or HMMA, but also contain a few integer operations, typically updating array indices, loop indices or pointers; or performing array or loop boundary checks. These few integer instructions spoil the instruction mix, and prevent the main datapaths from ingesting a 100% pure stream of FFMA or HMMA. In these circumstances, even a small fraction of integer instructions can hurt the overall arithmetic throughput, lowering it significantly from its theoretical maximum. [4]
 
-* fp16 performance: HADD2, HMUL2, HFMA2 has same performance, MAD has 2 instructions, so HFMA2 should be used instead. [[az](https://github.com/azhirnov)]
-* SM bound to one or multiple render target regions with tile size 16x16 (or lower on high register usage) [[see SM order](#SM-order)]
+* fp16 performance: HADD2, HMUL2, HFMA2 has same performance, MAD has 2 instructions, so HFMA2 should be used instead. [10]
+* SM bound to one or multiple render target regions with tile size 16x16 (or lower on high register usage) [10]
 
 
 ### Memory
@@ -89,30 +91,29 @@ With RTX:
 * [7]
 	- 4 Load/Store Units (LSU) per scheduler
 	- 1024 threads per SM
-	- 64 uniform registers per thread
-	- upper limit of total registers is 256, including both regular and uniform registers
-	- integer and single precision instructions have 4-cycle latency
-* SM: [4]
-	- 64 KiB registers;  16 KiB L0 instruction cache
-	- 96 KiB L1 data cache / shared memory;  2 KiB L1 constant cache;  ~46 KiB L1.5 constant cache / L1 instruction cache
-	- 4096 KiB L2 data cache / L2 constant cache / L2 instruction cache
-	- is partitioned into four processing blocks, each containing a dedicated warp scheduler and dispatch unit
-* registers: [4]
-	- use a physical register file of 16 384, 32-bit elements in each processing block
+	- upper limit of total registers is 256, including both regular and uniform registers 
+* registers:
+	- use a physical register file of 16 384, 32-bit elements in each processing block [4]
+	- 64 uniform registers per thread [7]
+	- 64 KiB registers, 16 KiB L0 instruction cache - per SM [4]
 * L1 data cache: [4]
-	- 32 B line
+	- 96 KiB L1 data cache / shared memory - per SM
+	- 32B line
 	- 32 cycles hit latency
-	- 32 B load granularity
-	- 128 B update granularity
+	- 32B load granularity
+	- 128B update granularity
 	- 58.83 bytes/cycle/SM actual bandwidth
 	- 116 GiB/s bandwidth (RTX 2080) [1]
 * L1 const cache: [4]
-	- 64 B line
+	- 64B line
+	- 2 KiB L1 constant cache per SM
 * L1.5 const cache: [4]
-	- 256 B line
+	- 256B line
+	- ~46 KiB L1.5 constant cache / L1 instruction cache - per SM
 * L2 cache: [4]
-	- 64 B line
+	- 64B line
 	- 188 cycles hit latency
+	- 4096 KiB L2 data cache / L2 constant cache / L2 instruction cache - per SM
 * VRAM [4]
 	- 320 GiB/s theoretical bandwidth
 	- 220 GiB/s actual bandwidth
@@ -121,9 +122,10 @@ With RTX:
 	- 4: IADD3, SHF, LOP3, SEL, MOV, FADD, FFMA, FMUL, ISETP, FSET, FSETP
 	- 5: IMAD, FMNMX, DSET, DSETP
 	- 6: HADD2, HMUL2, HFMA2
-	- ∼15: POPC, FLO, BREV, MUFU
-	- ∼48: DADD, DMUL
-	- ∼54: DFMA, DSET, DSETP
+	- ~15: POPC, FLO, BREV, MUFU
+	- ~48: DADD, DMUL
+	- ~54: DFMA, DSET, DSETP
+	- integer and single precision instructions have 4-cycle latency [7]
 
 * Atomics: [4]
 	- 1.5 GiB/s global memory throughput when 1024 threads accessing the same address
@@ -156,8 +158,8 @@ With RTX:
 		* 16 FP32 Cores
 		* 16 INT32 Cores
 		* 2 Tensor Cores
-		* 1 warp scheduler
-		* 1 dispatch unit
+		* 1 warp scheduler [2,4]
+		* 1 dispatch unit [2,4]
 		* includes a new L0 instruction cache and a 64 KB register file.
 	- Traditional graphics workloads partition the 96 KB L1/shared memory as 64 KB of dedicated graphics shader RAM and 32 KB for texture cache and register file spill area.
 	- Compute workloads can divide the 96 KB into 32 KB shared memory and 64 KB L1 cache, or 64 KB shared memory and 32 KB L1 cache.
@@ -178,27 +180,5 @@ With RTX:
 	- 16 to/from i64/fp64
 	- 16 type conversions
 
-	
-### Subgroup threads order
-
-Result of `Rainbow( gl_SubgroupInvocationID / gl_SubgroupSize )` in fragment shader, gl_SubgroupSize: 32.
-
-![](../img/graphics-subgroups/nv-turing.png)
-
-Result of `Rainbow( gl_SubgroupInvocationID / gl_SubgroupSize )` in compute shader, gl_SubgroupSize: 32, workgroup size: 8x8.
-
-![](../img/compute-subgroups/nv-turing.png)
-
-
-### SM order
-
-Result of `Rainbow( gl_SMIDNV / gl_SMCountNV )` in fragment shader.<br/>
-Tile size is 16x16, image size: 102x53, gl_SMCountNV: 46, gl_SMIDNV: 0 and 1 are bound to the first tile and changed every frame, same for other tiles.
-
-![](../img/nv-turing-smid-graphics.png)
-
-Result of `Rainbow( gl_SMIDNV / gl_SMCountNV )` in compute shader.<br/>
-Workgroup size is 8x8, image size: 102x53, gl_SMCountNV: 46. First set (from red to violet) has gl_SMIDNV = 0,2,4..., next set has gl_SMIDNV = 1,3,5... and next - again 0,2,4...
-
-![](../img/nv-turing-smdi-compute.png)
-
+* Render target compression:
+	- block size: 4x4 pix [10]

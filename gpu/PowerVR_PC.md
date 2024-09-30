@@ -8,7 +8,7 @@
 
 ## Notes
 
-**2D** - 2D Core (TLA). The purpose of the 2D core is to perform efficient blitting operations. For example, OS composition may utilize the 2D core so that the rest of the GPU pipeline can be dedicated to application rendering. <br/>
+**2D** - 2D Core (TLA). The purpose of the 2D core is to perform efficient blitting operations. For example, OS composition may utilize the 2D core so that the rest of the GPU pipeline can be dedicated to application rendering. Used for: buffer copy, image copy, image blit.<br/>
 **3D** - TBDR pass ?<br/>
 **FBA** - Frame Buffer Accumulate unit.<br/>
 **HSR** - Hidden Surface Removal.<br/>

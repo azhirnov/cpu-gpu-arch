@@ -14,5 +14,6 @@
 ## References
 
 1. [Sea Islands Series Instruction Set Architecture](https://www.amd.com/content/dam/amd/en/documents/radeon-tech-docs/instruction-set-architectures/sea-islands-instruction-set-architecture_0.pdf)
+2. [Vulkan features for R7 200 series](https://vulkan.gpuinfo.org/listreports.php?devicename=AMD%20Radeon%20R7%20200%20Series)
 
 ## Notes

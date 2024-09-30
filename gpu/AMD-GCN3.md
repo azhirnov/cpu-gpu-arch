@@ -14,6 +14,7 @@
 
 1. [Instruction Set Architecture](https://www.amd.com/system/files/TechDocs/gcn3-instruction-set-architecture.pdf), [[backup](../pdf/AMD_gcn3_isa.pdf)]
 2. [AMD GPU Hardware Basics](https://www.olcf.ornl.gov/wp-content/uploads/2019/10/ORNL_Application_Readiness_Workshop-AMD_GPU_Basics.pdf)
+3. [Vulkan features for R9 Fury](https://vulkan.gpuinfo.org/listreports.php?devicename=AMD%20Radeon%20(TM)%20R9%20Fury%20Series)
 
 ## Notes
 

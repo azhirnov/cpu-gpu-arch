@@ -19,6 +19,7 @@
 6. [Nintendo Switch’s iGPU: Maxwell Nerfed Edition](https://chipsandcheese.com/2023/12/23/nintendo-switchs-igpu-maxwell-nerfed-edition/)
 7. [Compute Capability 5.x](https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#compute-capability-5-x)
 8. [Tegra X1 Whitepaper](https://international.download.nvidia.com/pdf/tegra/Tegra-X1-whitepaper-v1.0.pdf)
+9. [Vulkan features for GTX 980](https://vulkan.gpuinfo.org/listreports.php?devicename=NVIDIA%20GeForce%20GTX%20980)
 
 ## Notes
 

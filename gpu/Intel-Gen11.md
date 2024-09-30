@@ -10,6 +10,7 @@ code name: Ice Lake.
 ## References
 
 1. [Developer and Optimization Guide for Intel Processor Graphics Gen11 API](https://www.intel.com/content/www/us/en/developer/articles/guide/developer-and-optimization-guide-for-intel-processor-graphics-gen11-api.html), [[webarchive](https://web.archive.org/web/20230319150934/https://www.intel.com/content/www/us/en/developer/articles/guide/developer-and-optimization-guide-for-intel-processor-graphics-gen11-api.html)]
+2. [Vulkan features for UHD Graphics](https://vulkan.gpuinfo.org/listreports.php?devicename=Intel(R)%20UHD%20Graphics)
 
 
 ## Notes
