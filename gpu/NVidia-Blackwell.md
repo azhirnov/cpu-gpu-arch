@@ -45,13 +45,25 @@ Codename: GB100 (datacenter), GB20x (consumer)
 
 ## Specs
 
-* ops/clock per SM: [1]
-	- ? fp16 FMA
-	- 128 fp32 FMA
+* ops/clock per SM: [1,3]
+	- 128 fp16 FMA (2xFP16 on 1 datapath)
+	- 128 fp32 FMA (2 datapaths)
 	- 2 fp64 FMA
-	- 64 i32
+	- 64 i32 (on 1 datapath)
 	- 16 SFU
 	- 4 warp schedulers
 
 * Tensor core formats: INT4, INT8, FP4, FP8, FP16, FP32, BF16, TF32
 
+* RTX 5090 performance: [3]
+	- clock: 2407 MHz
+	- SM: 170
+	- fp32 FLOPS: 104.8T
+	- fp16 FLOPS: 104.8T
+	- bf16 FLOPS: 104.8T
+	- i32 OPS: 104.8T
+	- RT ops: 317.5T
+	- fp4 Tensor FLOPS: 1676
+	- Memory Bandwidth: 1792 GB/s
+	- Pixel Fill-rate: 423.6 GigaPixels/s
+	- Texel Fill-rate: 1636.8 GigaTexels/s

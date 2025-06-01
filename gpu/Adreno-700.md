@@ -7,7 +7,6 @@
 * Snapdragon XR2 Gen 2 (with Adreno 740)
 
 
-
 ## References
 
 1. [The Snapdragon X Elite’s Adreno iGPU](https://chipsandcheese.com/2024/07/04/the-snapdragon-x-elites-adreno-igpu/)

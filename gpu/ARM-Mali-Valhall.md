@@ -40,6 +40,11 @@ Content:
 	- 2 frag/cy
 	- 2 pix/cy
 	- 4 tex/cy
+	
+* Tile size: [1.4]
+	- 16x16 if <= 256 bits per pixel
+	- 16x8  if <= 512 bpp
+	- 8x8   if > 512 bpp
 
 
 # Valhall Gen2
@@ -61,6 +66,7 @@ Content:
 
 ## Notes
 
+* VK_ARM_rasterization_order_attachment_access
 * core config [4]:
 	- 2 ALU
 	- 128 fp16/cy (64 per ALU)
@@ -186,7 +192,7 @@ Content:
 
 1. [Instruction Set Architecture](https://rosenzweig.io/Valhall-Documentation.pdf), [[backup](../pdf/ARM-Valhall-Documentation.pdf)]
 2. [Mesa driver details](https://docs.mesa3d.org/drivers/panfrost.html)
-3. [Arm GPU Best Practices Developer Guide](https://developer.arm.com/documentation/101897/latest/), [[backup](../pdf/arm-arm-gpu_best_practices_developer_guide_3_3.pdf)]
+3. [Arm GPU Best Practices Developer Guide](https://developer.arm.com/documentation/101897/latest/), [[backup](../pdf/arm-gpu_best_practices_developer_guide_3_3.pdf)]
 4. [Arm GPU Datasheet](https://developer.arm.com/documentation/102849/0700/), [[backup](../pdf/Arm-GPU_datasheet_v7.pdf)]
 5. [PanCSF: A new DRM driver for Mali CSF-based GPUs](https://www.collabora.com/news-and-blog/news-and-events/pancsf-a-new-drm-driver-for-mali-csf-based-gpus.html)
 6. [Writing an open source GPU driver - without the hardware](https://www.collabora.com/news-and-blog/blog/2022/01/27/writing-an-open-source-gpu-driver-without-the-hardware/)

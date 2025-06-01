@@ -61,6 +61,7 @@ Content:
 ## Features
 
 * Fragment Pre-pass - hardware depth pre-pass.
+* VK_ARM_pipeline_opacity_micromap
 
 ## Notes
 
@@ -87,6 +88,7 @@ Content:
 
 1. Deferred Vertex Shading: [slide 1](../img/arm-dvs-1.jpg), [slide 2](../img/arm-dvs-2.jpg)
 2. [Arm GPU Datasheet](https://developer.arm.com/documentation/102849/0700/), [[backup](../pdf/Arm-GPU_datasheet_v7.pdf)]
+3. [Vulkanised 2025: Vulkan Best Practices for Mobile Development ](https://youtu.be/fWeR4ECVcW8) 
 
 
 ## Notes
@@ -97,6 +99,7 @@ Content:
 	- Larger tiles mean each triangle spans fewer tiles, so less re-shading and more triangles can be deferred (DVS). [1]
 	- During the tiling phase, Arm GPUs do not write out position data for small triangles. [2.4]
 	- During the fragment phase, Arm GPUs will execute a full vertex shader for small triangles. [2.4]
+	- Vertex dependencies now released later. [3]
 
 * Added a 2x MSAA module, as previously when a developer would request 2x MSAA from the GPU, it would automatically jump to 4x MSAA.
 * Fragment Task with 64x64 pixels region.
@@ -104,9 +107,12 @@ Content:
 * Fragment Pre-pass.
 	- Is a Hidden Surface Removal (HSR) technique that does a first pass over the fragments to find out which fragments are going to be visible in the result.
 	  When that is done, it loops back and renders only the visible ones. [2.4]
+	- Same as depth prepass but without double draw (double fill rate). [3]
 
 * Tile size:
 	- 64x64 if <= 128 bits per pixel
 	- 64x32 if <= 256 bpp
 	- 32x32 if > 256 bpp
+
+* Dedicated transfer stream. [3]
 

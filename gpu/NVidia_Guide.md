@@ -55,6 +55,13 @@
 8.1. [List of Nvidia graphics processing units](https://en.wikipedia.org/wiki/List_of_Nvidia_graphics_processing_units)
 8.2. [Namu wiki](https://en.namu.wiki/w/NVIDIA/GPU)
 
+
+**Profiling/Performance**<br/>
+9.1. [NSight graphics user guide](https://docs.nvidia.com/nsight-graphics/UserGuide/)<br/>
+9.2. [CUDA: Maximize Instruction Throughput](https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#maximize-instruction-throughput)<br/>
+9.3. [CUDA: Maximize Utilization: Multiprocessor Level](https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#multiprocessor-level)<br/>
+
+
 ## Notes
 
 * Only use signed integers (if possible), this can be faster. The compiler can optimize more aggressively with signed arithmetic than it can with unsigned arithmetic. [7.1]

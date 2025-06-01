@@ -46,6 +46,10 @@ Content:
 ## Notes
 
 * Optional FP16, BF16 support
+* NEON: [2.3]
+	- X1: 4x128b NEON bandwidth
+	- A78: 2x128b NEON bandwidth
+	- Arm's current ISA doesn't allow for individual vectors to be larger than 128b
 
 # ARMv9.0-A
 
@@ -73,6 +77,15 @@ Content:
 
 ## Notes
 
+* X3:
+	- 11 cycle mispredict penalty
+	
+* A715:
+	- 12 cycle mispredict penalty
+	- 10 cycle latency to access L2
+	
+* A520:
+	- 3x ALU pipelines
 
 
 # ARMv9.2-A
@@ -101,4 +114,20 @@ Content:
 
 ## Notes
 
-TODO
+* Optional support for fp8 (E5M2, E4M3).
+
+* X4: [4.1]
+	- 10 cycle mispredict penalty
+	- branch mispredict penalty is down from 11 cycles to 10.
+	- increased the number of ALUs from 6 to 8.
+
+* A720: [4.1]
+	- 11 cycle mispredict penalty
+	- Pipelined FDIV/FSQRT - concurrent executions of both FDI and FSQRT can improve instruction throughput.
+	- 9 cycle latency to access L2
+	- 2x memset bandwidth in L2
+
+* A520: [4.1]
+	- can be merged in pairs to share pipelines and improve efficiency.
+	- allow to share single SVE between two cores.
+	- removed third ALU

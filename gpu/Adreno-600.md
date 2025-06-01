@@ -1,6 +1,7 @@
 
 ## Examples
 
+* 610
 * 640, 660
 
 * Oculus Quest 2, Meta Quest Pro, Pico 4 (Adreno 650)
@@ -18,6 +19,10 @@
 6. [Qualcomm Announces Snapdragon 865 and 765(G)](https://www.anandtech.com/show/15178/qualcomm-announces-snapdragon-865-and-765-5g-for-all-in-2020-all-the-details)
 7. [Adreno 660 Benchmarks](https://github.com/azhirnov/as-en/blob/dev/AE/docs/papers/bench-gpu/Adreno_660.md)
 
+
+## Features
+
+* VK_ARM_rasterization_order_attachment_access
 
 ## Notes
 

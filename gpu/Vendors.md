@@ -44,8 +44,8 @@ Content:
 
 * Apple3: A9, A10
 * Apple4: A11
-* Apple5: A12
-* Apple6: A13
+* [Apple5: A12](Apple-A12.md)
+* [Apple6: A13](Apple-A13.md)
 * [Apple7: A14, M1](Apple-M1.md)
 * [Apple8: A15, A16, M2](Apple-M2.md)
 * [Apple9: A17, M3, M4](Apple-M3.md)
@@ -100,7 +100,8 @@ Content:
 * [Gen 8 (Broadwell/Braswell)](Intel-Gen8.md)
 * [Gen 9](Intel-Gen9.md)
 * [Gen 11 (Ice Lake)](Intel-Gen11.md)
-* [Gen 12, Arc](Intel-Gen12.md)
+* [Gen12, Xe, Arc](Intel-Xe1.md)
+* [Xe2, Arc Battlemage](Intel-Xe2.md)
 
 ### Specs & Guide
 
@@ -119,6 +120,7 @@ Content:
 * [Series-A](PowerVR-SeriesA.md)
 * [Series-B](PowerVR-SeriesB.md)
 * [Series-C](PowerVR-SeriesC.md)
+* [Series-D](PowerVR-SeriesD.md)
 
 ### Specs & Guide
 

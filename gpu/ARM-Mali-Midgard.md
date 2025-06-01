@@ -50,6 +50,7 @@ Content:
 
 ## Notes
 
+* supports GL_EXT_shader_pixel_local_storage
 * core config: [5]
 	- 1 fragment per cycle
 	- 1 pixel per cycle

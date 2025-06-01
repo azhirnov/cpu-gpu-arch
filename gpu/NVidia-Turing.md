@@ -25,7 +25,31 @@ With RTX:
 9. [Vulkan features for RTX 2080](https://vulkan.gpuinfo.org/listreports.php?devicename=NVIDIA%20GeForce%20RTX%202080)
 10. [RTX 2080 Benchmarks](https://github.com/azhirnov/as-en/blob/dev/AE/docs/papers/bench-gpu/NVidia_RTX2080.md)
 
+
+## Features
+
+* Hardware ray tracing (RT core). [2]
+* Mesh shaders. [2]
+* Variable Rate Shading. [2]
+* Texture-Space Shading. [2]
+* Multi-View Rendering. [2]
+* higher L1/L2 cache and global memory bandwidth. [7]
+* higher arithmetic throughput for matrix math. [7]
+* new L0 instruction cache. [7]
+* DLSS
+* Tensor core (NPU) with FP16, INT8, INT4 formats. [3]
+* Async compute queue.
+
+
 ## Notes
+
+* Graphics and compute scheduler: [ref](https://t.me/cg_cpp_dev/44)<br/>
+  ![](../img/nv-turing-scheduler.jpg)<br/>
+  green - fragment shader, orange - async compute.
+	- Graphics workload occupy 100% SM, then have stalls for memory access which allows to run async compute.
+	- Async compute can occupy less than 30% if graphics workload is active.
+	- Long stall in graphics can allow async compute to take 100% of SM (5 on image).
+	- Async compute may not overlap with stall on pipeline barrier on graphics queue (on image it's between 3 and 4).
 
 ### SM
 
@@ -55,6 +79,9 @@ With RTX:
 
 * fp16 performance: HADD2, HMUL2, HFMA2 has same performance, MAD has 2 instructions, so HFMA2 should be used instead. [10]
 * SM bound to one or multiple render target regions with tile size 16x16 (or lower on high register usage) [10]
+* Minimal workgroup size 32x2, because FMA perform over 2 cycles (like a SIMD16 with dual issue). [10]
+
+* Each Tensor Core can perform up to 64 floating point fused multiply-add (FMA) operations per clock using FP16 inputs. [2]
 
 
 ### Memory
@@ -64,28 +91,15 @@ With RTX:
 * The combination of raw bandwidth increases, and traffic reduction translates to a 50% increase in effective bandwidth on Turing compared to Pascal. [3]
 
 
-## Features
-
-* Hardware ray tracing (RT core). [2]
-* Mesh shaders. [2]
-* Variable Rate Shading. [2]
-* Texture-Space Shading. [2]
-* Multi-View Rendering. [2]
-* Tensor core. [2]
-* higher L1/L2 cache and global memory bandwidth. [7]
-* higher arithmetic throughput for matrix math. [7]
-* new L0 instruction cache. [7]
-* DLSS
-* Tensor core with FP16 format.
-
-
 ## Specs
 
 * Occupancy: [1]
 	- The maximum number of concurrent warps per SM is 32.
+		* max 64 registers per warp. [calc]
 	- The register file size is 64k 32-bit registers per SM.
 	- The maximum registers per thread is 255.
-	- The maximum number of thread blocks (workgroups?) per SM is 16.
+	- The maximum number of thread blocks (workgroups) per SM is 16.
+		* max 4KB shared memory per workgroup. [calc]
 	- Shared memory capacity per SM is 64KB.
 * SM: [1]
 	- 64 FP32 cores
@@ -93,6 +107,7 @@ With RTX:
 	- 2 FP64 cores
 	- 8 improved mixed-precision Tensor Cores
 	- 4 warp-scheduler units
+		* 16 FP32 cores per scheduler ?
 * [7]
 	- 4 Load/Store Units (LSU) per scheduler
 	- 1024 threads per SM
@@ -130,7 +145,7 @@ With RTX:
 	- ~15: POPC, FLO, BREV, MUFU
 	- ~48: DADD, DMUL
 	- ~54: DFMA, DSET, DSETP
-	- integer and single precision instructions have 4-cycle latency [1,7]
+	- integer and single precision instructions have 4-cycle latency [1, 7]
 
 * Atomics: [4]
 	- 1.5 GiB/s global memory throughput when 1024 threads accessing the same address
@@ -143,7 +158,6 @@ With RTX:
 	- 14.2 TIPS concurrent with FP, through independent integer execution units
 	- 113.8 Tensor TFLOPS
 	- 10 Giga Rays/sec
-	- 78 Tera RTX-OPS
 	- 20 GTris/s
 
 * TU102 GPU (RTX 2080 Ti / Quadro RTX 6000): [2]
@@ -185,6 +199,7 @@ With RTX:
 	- 64 i8/i16 to i32
 	- 16 to/from i64/fp64
 	- 16 type conversions
+	- 512 fp16 FMA on tensor core
 
 * Render target compression:
 	- block size: 4x4 pix [10]

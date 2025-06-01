@@ -1,4 +1,4 @@
-code name: Broadwell, Braswell.
+CPU code name: Broadwell, Braswell.
 
 
 ## Examples

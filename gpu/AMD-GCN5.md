@@ -23,10 +23,21 @@
 3. [The AMD Radeon VII Review](https://www.anandtech.com/show/13923/the-amd-radeon-vii-review)
 4. [Vega Whitepaper](https://en.wikichip.org/w/images/a/a1/vega-whitepaper.pdf), [[backup](../pdf/AMD-vega-whitepaper.pdf)]
 5. [Vega 7nm ISA](https://www.amd.com/content/dam/amd/en/documents/radeon-tech-docs/instruction-set-architectures/vega-7nm-shader-instruction-set-architecture.pdf), [[backup](../pdf/AMD-vega-shader-instruction-set-architecture.pdf)]
-6. [Vulkan features for Radeon VII](https://vulkan.gpuinfo.org/listreports.php?devicename=AMD%20Radeon%20VII)
+6. [Vulkan features for Radeon VII](https://vulkan.gpuinfo.org/listreports.php?devicename=AMD%20Radeon%20VII), [RX Vega](https://vulkan.gpuinfo.org/listreports.php?devicename=Radeon%20RX%20Vega)
+7. [The AMD Vega GPU Architecture Teaser: Higher IPC, Tiling, & More, Coming in H1’2017](https://www.anandtech.com/show/11002/the-amd-vega-gpu-architecture-teaser/3)
 
 ## Notes
 
+* Draw-Stream Binning Rasterizer (DSBR): [4]
+	- The DSBR works by first dividing the image to be rendered into a grid of bins or tiles in screen space and then collecting a batch of primitives to be rasterized in the scan converter. The bin and batch sizes can be adjusted dynamically to optimize for the content being rendered. 
+	The DSBR then traverses the batched primitives one bin at a time, determining which ones are fully or partially covered by the bin. Geometry is processed once, requiring one clock cycle per primitive in the pipeline.
+	There are no restrictions on when binning can be enabled, and it is fully compatible with tessellation and geometry shading.
+	- This design economizes on-chip memory bandwidth by keeping all the data necessary to rasterize geometry for a bin in fast on-chip memory (i.e., the L2 cache).
+	The data in on-chip memory only needs to be accessed once and can then re-used before moving on to the next bin.
+
+* Deferred pixel processing works by using a scoreboard for color samples prior to executing pixel shaders on them.
+  If a later sample occludes or overwrites an earlier sample, the earlier sample can be discarded before any pixel shading is done on it.
+  The scoreboard has limited depth, so it is most powerful when used in conjunction with binning. [4]
 
 ## Specs
 

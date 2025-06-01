@@ -6,6 +6,7 @@ Content:
 * [Qualcomm](#Qualcomm)
 * [Loongson](#Loongson)
 * [HiSilicon](#HiSilicon)
+* [MCST](#mcst)
 
 
 ## AMD
@@ -41,3 +42,7 @@ Content:
 
 TODO:
 TaiShan V120
+
+## MCST
+
+* [CPU Architecture and Best practices](MCST-Elbrus.md)

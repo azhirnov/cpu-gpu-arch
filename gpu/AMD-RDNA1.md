@@ -15,9 +15,15 @@
 6. [AMD Announces Radeon RX 5700 XT & RX 5700](https://www.anandtech.com/show/14528/amd-announces-radeon-rx-5700-xt-rx-5700-series)
 7. [Vulkan features for RX 5700 XT](https://vulkan.gpuinfo.org/listreports.php?devicename=AMD%20Radeon%20RX%205700%20XT)
 
-## Notes
+## Features
 
-* Supports DCC when writing to image in compute shader.
+* Next Generation Geometry (NGG) - primitive shader.
+* Asynchronous Compute Tunneling.
+* AMDVLK support (Linux driver).
+* Tile based rasterization (TBR).
+* Supports Delta Color Compression (DCC) when writing to image in compute shader.
+
+## Notes
 
 * The RDNA processor consists of: [3]
 	- A scalar ALU, which operates on one value per wavefront (common to all work items).
@@ -42,6 +48,9 @@
 	- Previous generations used a wavefront size of 64 threads (work items). This generation supports both wavefront sizes of 32 and 64 threads. [3]
 	- Wave64 via dual-issue. [1]
 	- Compute and vertex shaders usually as Wave32, pixel shaders usually as Wave64. [1]
+	- Either half of the execution of a wave64 may be skipped if there is no work to do for that half. [3]
+	- Wave64 memory instructions: can skip one half but never entire instruction. [3]
+	- Wave32 memory instructions: never skip. [3]
 * Workgroup Processors [3]<br/>
 	Previously the shader hardware was grouped into "compute units" ("CUs") which contained ALU, LDS and memory access. Now the "workgroup processor" ("WGP") replaces the compute unit as the basic unit of computing. This allows significantly more compute power and memory bandwidth to be directed at a single workgroup.
 
@@ -132,11 +141,7 @@
 	- allow to combine fp32 and fp16, fp16_lo and fp16_hi.
 	- V_FMA_MIX_F32, V_FMA_MIXLO_F16, V_FMA_MIXHI_F16.
 
-## Features
-
-* Next Generation Geometry (NGG) - primitive shader.
-* Asynchronous Compute Tunneling.
-
+* more than doubling the cull rate for triangles that are not visible in a scene, reducing bottlenecks in the geometry portion of the pipeline. [2]
 
 ## Specs
 

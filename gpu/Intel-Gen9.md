@@ -1,4 +1,4 @@
-code names: Skylake, Apollo Lake, Kaby Lake, Kaby Lake Refresh, Amber Lake, Coffee Lake, Coffee Lake Refresh, Whiskey Lake, Comet Lake, Gemini Lake, Gemini Lake Refresh.
+CPU code names: Skylake, Apollo Lake, Kaby Lake, Kaby Lake Refresh, Amber Lake, Coffee Lake, Coffee Lake Refresh, Whiskey Lake, Comet Lake, Gemini Lake, Gemini Lake Refresh.
 
 ## Examples
 

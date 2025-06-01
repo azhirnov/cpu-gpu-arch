@@ -21,13 +21,18 @@ Codename: GM10x, GM20x
 7. [Compute Capability 5.x](https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#compute-capability-5-x)
 8. [Tegra X1 Whitepaper](https://international.download.nvidia.com/pdf/tegra/Tegra-X1-whitepaper-v1.0.pdf), [[backup](../pdf/NV-Tegra-X1-whitepaper-v1.0.pdf)]
 9. [Vulkan features for GTX 980](https://vulkan.gpuinfo.org/listreports.php?devicename=NVIDIA%20GeForce%20GTX%20980)
+10. [Tile-based Rasterization in Nvidia GPUs](https://www.realworldtech.com/tile-based-rasterization-nvidia-gpus/)
 
-## Notes
+## Features
 
+* Vulkan support.
 * FP16 data storage.
 * Unified L1/Texture cache.
 * Native shared memory atomic operations for 32-bit integer arithmetic, along with native 32 or 64-bit compare-and-swap (CAS).
 * Async transfer queue.
+* Tile based rasterization (TBR). [10]
+
+## Notes
 
 * instructions IMAD and IMUL have a long latency because they are emulated. [ref](https://arxiv.org/pdf/1903.07486)
 

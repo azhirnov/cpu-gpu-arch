@@ -14,7 +14,7 @@
 1. [Mesa driver details](https://docs.mesa3d.org/drivers/freedreno.html)
 2. [Inside Qualcomm’s Adreno 530](https://chipsandcheese.com/2024/01/20/inside-qualcomms-adreno-530-a-small-mobile-igpu/)
 3. [Correction on Qualcomm iGPUs](https://chipsandcheese.com/2024/05/06/correction-on-qualcomm-igpus/)
-4. [Vulkan features for Adreno 540](https://vulkan.gpuinfo.org/listreports.php?devicename=Adreno%20(TM)%20540)
+4. [Vulkan features for Adreno 540](https://vulkan.gpuinfo.org/listreports.php?devicename=Adreno%20(TM)%20540), [Adreno 505](https://vulkan.gpuinfo.org/listreports.php?devicename=Adreno%20(TM)%20505)
 5. [Game Developer Guides](https://developer.qualcomm.com/sites/default/files/docs/adreno-gpu/developer-guide/gpu/gpu.html), [[webarchive](https://web.archive.org/web/20220104180856/https://developer.qualcomm.com/sites/default/files/docs/adreno-gpu/developer-guide/gpu/gpu.html)]
 6. [Adreno 505 Benchmarks](https://github.com/azhirnov/as-en/blob/dev/AE/docs/papers/bench-gpu/Adreno_505.md)
 

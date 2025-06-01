@@ -9,7 +9,9 @@
 6. [Memory limits with Vulkan on Mali GPUs](https://community.arm.com/arm-community-blogs/b/graphics-gaming-and-vr-blog/posts/memory-limits-with-vulkan-on-mali-gpus)
 7. [Forward Pixel Kill](https://community.arm.com/arm-community-blogs/b/graphics-gaming-and-vr-blog/posts/killing-pixels---a-new-optimization-for-shading-on-arm-mali-gpus), [[webarchive](https://web.archive.org/web/20240922023725/https://community.arm.com/arm-community-blogs/b/graphics-gaming-and-vr-blog/posts/killing-pixels---a-new-optimization-for-shading-on-arm-mali-gpus)]
 8. [GDC2015: How to Optimize Your Mobile Game with ARM Tools and Practical Examples](https://www.gdcvault.com/play/1022397/How-to-Optimize-Your-Mobile) (Midgard architecture)
-9. [Hidden Surface Removal in Immortalis-G925: The Fragment Prepass](https://community.arm.com/arm-community-blogs/b/graphics-gaming-and-vr-blog/posts/immortalis-g925-the-fragment-prepass), [[webarchive](https://web.archive.org/web/20241202033355/https://community.arm.com/arm-community-blogs/b/graphics-gaming-and-vr-blog/posts/immortalis-g925-the-fragment-prepass)]<br/>
+9. [Hidden Surface Removal in Immortalis-G925: The Fragment Prepass](https://community.arm.com/arm-community-blogs/b/graphics-gaming-and-vr-blog/posts/immortalis-g925-the-fragment-prepass), [[webarchive](https://web.archive.org/web/20241202033355/https://community.arm.com/arm-community-blogs/b/graphics-gaming-and-vr-blog/posts/immortalis-g925-the-fragment-prepass)]
+10. [Vulkanised 2025: Vulkan Best Practices for Mobile Development](https://youtu.be/fWeR4ECVcW8)
+11. [Constant data in Vulkan](https://github.com/KhronosGroup/Vulkan-Samples/tree/main/samples/performance/constant_data)
 
 **Guide**<br/>
 1.1. [Accelerating 2D Applications](https://developer.arm.com/documentation/102524/0100/Overview)<br/>
@@ -97,15 +99,16 @@
 
 * Workgroup sizes: [1]
 	- The GPU hardware can split up, and then merge, workgroups during shader core resource scheduling. If barriers or shared memory are used, then GPUs cannot do this with workgroups.
-	- Use 64 as a baseline workgroup size. Do not use more than 64 threads per workgroup.
+	- Large workgroup sizes restrict the number of registers that are available to each work item in this scenario. In turn, forcing shader programs to use stack memory if insufficient registers are available.
+	- Use 64 as a baseline workgroup size.
 	- When working with images or textures, use a square execution dimension, for example 8x8, to exploit optimal 2D cache locality.
 	- Do not assume that barriers with small workgroups are free from performance costs.
-	- For barriers, smaller workgroups are less expensive.
 
 * Shared memory: [1]
 	- Arm GPUs do not implement dedicated on-chip shared memory for compute shaders. The shared memory that is available to use is system RAM that is backed up by the load-store cache.
 	- Keep your shared memory as small as possible, as it reduces the chance of thrashing the data cache.
 	- Do not copy data from global memory to shared memory on Arm GPUs. Doing so pollutes the caches.
+	- For barriers, smaller workgroups are less expensive.
 
 * FP16: [1]
 	- If using explicit FP16, make sure to vectorize the code by using f16vec2 or f16vec4. Modern GPU architectures use packed f16x2 instructions to improve arithmetic performance. Scalar float16_t does not gain the same benefit.
@@ -150,7 +153,7 @@
 	- Starting from Mali Bifrost: MP4 equal to MC2 with 2 pixel per clock, MP3 is MC2 with different cores: 2 pixel per clock + 1 pixel per clock.
 	- Based on `VK_ARM_shader_core_builtins` they are same. [[az](https://github.com/azhirnov)]
 
-* Forward Pixel Kill:
+* Forward Pixel Kill (FPK):
 	- Calculations already in flight can be terminated at any time if we spot that a later thread will write opaque data to the same pixel location. Since each thread takes a finite time to complete, we have a window in time which  we can exploit to kill pixels already in the pipeline. [7]
 	- Situations where FPK commonly fails include draw calls using: [1]
 		* Alpha blended transparency
@@ -174,3 +177,10 @@
 
 * Fragment Pre-pass benefits: [9]
 	- No need to sort by depth any more.
+
+* Transfer commands may be executed in compute and fragment stream. [10]
+	- can cause false dependencies
+
+* Avoid indexing in the shader if possible, such as dynamically indexing into buffer arrays or uniform arrays, as this can disable shader optimisations. [11]
+	- on Mali it is not a recommend practice as it disables a compiler optimisation technique known as pilot shaders.
+	- Pilot shaders are a technique that allows us to determine what calculations can be "piloted" into your GPU’s register so that when the data needs to be read it doesn’t take a full read cycle from the GPU RAM.

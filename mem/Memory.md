@@ -4,18 +4,35 @@
 1. [Failing to Reach DDR4 Bandwidth](https://ashvardanian.com/posts/ddr4-bandwidth/)
 
 
+## Notes
+
+* latency: [ref](https://www.crucial.com/articles/about-memory/difference-between-speed-and-latency)
+	- CAS latency - he total number of clock cycles the data must go through.
+	- latency (ns) = clock cycle time (ns) x number of clock cycles
+	- Latency is best measured in nanoseconds, which is a combination of speed and CAS latency.
+	- Example: because the latency in nanoseconds for DDR4-2400 CL17 and DDR4-2666 CL19 is roughly the same, the higher speed DDR4-2666 RAM will provide better performance.
+	```
+	DDR4-2400 CL17: l=2/2.400 * 17 = 14.16 ns
+	DDR4-2666 CL19: l=2/2.666 * 19 = 14.25 ns
+	```
+
 ## PCI-E Speed
 
-| Generation | Lanes | transfer rate (GT/s) | bandwidth (GiB/s) |
+* transfer rate - each lane can transmit 1 bit per transaction.
+* line code - encoding scheme. 8b/10b means that 10 bits must be sent for every 8 bits transmitted.
+
+| Generation | transfer rate (GT/s) | bandwidth per lane (GB/s) | line code (bits) |
 |---|---|---|---|
-| Gen 1 | x4  |   1 |   0.93 |
-| Gen 1 | x8  |   2 |   1.86 |
-| Gen 1 | x16 |   4 |   3.72 |
-| Gen 2 | x16 |   8 |   7.45 |
-| Gen 3 | x16 |  16 |  14.9  |
-| Gen 4 | x16 |  32 |  29.8  |
-| Gen 5 | x16 |  64 |  59.6  |
-| Gen 6 | x16 | 128 | 119.2  |
+| Gen 1 |  2.5 | 0.25 | 8 / 10 |
+| Gen 2 |  5   | 0.5  | 8 / 10 |
+| Gen 3 |  8   | 1    | 128 / 130 |
+| Gen 4 | 16   | 2    | 128 / 130 |
+| Gen 5 | 32   | 4    | 128 / 130 |
+| Gen 6 | 64   | 8    | 1 / 1 |
+
+Links:
+* [PCIE1.0-6.0 Interface Bandwidth & Speed Calculation](https://www.diskmfr.com/pcie-interface-bandwidth-speed-calculation/)
+* [Your Ultimate Guide to Understanding PCIe 6.0](https://www.onlogic.com/blog/your-ultimate-guide-to-understanding-pcie-6-0/)
 
 
 ## Memory Speed
@@ -38,3 +55,8 @@
 | GDDR6   | 11K  | 32 | 1375 | 44.0 | 41   | 15 |
 | GDDR6X  | 19K  | 32 | 1188 | 76.0 | 70   | 14 |
 | GDDR7   |      |    |      |      |      | 8  |
+
+Calculate bandwidth:
+```
+transfer_rate (MT/s) * bit_width * channel_count / 8 = bandwidth (MB/s)
+```

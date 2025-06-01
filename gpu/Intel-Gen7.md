@@ -1,4 +1,4 @@
-code names: Ivy Bridge, Haswell.
+CPU code names: Ivy Bridge, Haswell.
 
 
 ## Examples

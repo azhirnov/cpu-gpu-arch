@@ -1,23 +1,27 @@
 Content:
 * [Desktop](#Desktop)
 * [Mobile](#Mobile)
+* [All](#all)
 
 
 # Desktop
 
 ## References
 
-1.1. [PerfTest](https://github.com/sebbbi/perftest)
+1.1. [PerfTest](https://github.com/sebbbi/perftest)<br/>
+1.2. PCI-Express Scaling: [RTX 5090](https://www.techpowerup.com/review/nvidia-geforce-rtx-5090-pci-express-scaling/29.html)<br/>
 
 ## Notes
+
+* PCIe bandwidth doesn’t have a significant effect on gaming performance until you get to extremely slow configurations. [1.2]
 
 
 # Mobile
 
 ## References
 
-2.1. [Modern Mobile Rendering at HypeHype (2023)](https://enginearchitecture.realtimerendering.com/downloads/reac2023_modern_mobile_rendering_at_hypehype.pdf)
-2.2. [Mobile Rendering Architecture](https://advances.realtimerendering.com/s2023/AaltonenHypeHypeAdvances2023.pdf)
+2.1. [Modern Mobile Rendering at HypeHype (2023)](https://enginearchitecture.realtimerendering.com/downloads/reac2023_modern_mobile_rendering_at_hypehype.pdf)<br/>
+2.2. [Mobile Rendering Architecture](https://advances.realtimerendering.com/s2023/AaltonenHypeHypeAdvances2023.pdf)<br/>
 
 ## Notes
 
@@ -55,3 +59,40 @@ Content:
 	- PowerVR ?
 	- Apple ?
 
+# All
+
+## References
+
+3.1. Vulkanised 2025: What is Maximal Reconvergence and Why it Matters, [video](https://youtu.be/QefxN0PXwwM), [pdf](https://vulkan.org/user/pages/09.events/vulkanised-2025/T08-Hugo-Devillers-SaarlandUniversity.pdf)<br/>
+3.2. [Benchmarks](https://github.com/azhirnov/as-en/blob/dev/AE/docs/papers/GPU_Benchmarks.md)<br/>
+3.3. [List of GPUs with Vulkan support](https://www.khronos.org/conformance/adopters/conformant-products/vulkan), [GPU info](https://vulkan.gpuinfo.org/)<br/>
+
+## Notes
+
+* Branching in shader may cause warp divergence.[3.1]
+	- After branching reconvergence may not happen, it is implementation defined.
+	- Operations with subgroups and quadgroups will return undefined value.
+	- Vulkan supports maximal reconvergence extension, but it is not supported on all devices.
+
+* Branching vs Branchless: [3.2]
+	- Uniform branching is faster.
+	- Non-uniform branching may be a bit slower than branchless.
+	- On vector GPUs should be used matrix or vector params for branchless technique.
+	- Use `subgroupAll`, `subgroupAllEqual` to detect uniform control flow and go to branching version, otherwise use branchless.
+
+* GPUs with Vulkan support: [3.3]
+	- Windows:
+		* AMD: GCN1 (vk 1.0), GCN2 (vk 1.2)
+		* NV: Maxwell (vk 1.4)
+		* Intel gen9 (Skylake)
+	- Linux:
+		* AMD GCN2
+		* Mali Midgard gen3
+		* NV Kepler
+		* Intel gen7 (Haswell)
+		* VideoCore VI
+		* PowerVR Series6
+	- Android:
+		* Adreno 400
+		* Mali Midgard gen3
+		* PowerVR Series6

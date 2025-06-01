@@ -16,6 +16,14 @@
 7. [Reverse engineering the Apple G13 GPU architecture](https://dougallj.github.io/applegpu/docs.html)
 
 
+## Features
+
+* Ray tracing (software).
+* Mesh shader (software).
+* SIMD matrix multiply instruction. [1]
+* Metal 3.
+
+
 ## Notes
 
 * FP16:
@@ -23,10 +31,6 @@
 	- that there is a penalty (of exactly one cycle) for switching between FP32 and FP16 operation. [ref](https://www.realworldtech.com/forum/?threadid=197759&curpostid=197855)
 	- FP32 ALU rate is half of FP16 rate on A14 (and earlier chips). That has not changed on A14. F32 ALU rate relative to F16 increased on M1.
 
-
-## Features
-
-* Ray tracing (software).
 
 ## Specs
 

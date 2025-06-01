@@ -19,13 +19,11 @@ Codename: GP10x
 2. [GTX 1080 Whitepaper](https://www.es.ele.tue.nl/~heco/courses/ECA/GPU-papers/GeForce_GTX_1080_Whitepaper_FINAL.pdf), [[backup](../pdf/NV-GeForce_GTX_1080_Whitepaper_FINAL.pdf)]
 3. [Tuning CUDA Applications for Pascal](https://docs.nvidia.com/cuda/pascal-tuning-guide/index.html)
 4. [Compute Capability 6.x](https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#compute-capability-6-x)
-5. [Tile-based Rasterization in Nvidia GPUs](https://www.realworldtech.com/tile-based-rasterization-nvidia-gpus/)
-6. [Vulkan features for GTX 1080](https://vulkan.gpuinfo.org/listreports.php?devicename=NVIDIA%20GeForce%20GTX%201080)
+5. [Vulkan features for GTX 1080](https://vulkan.gpuinfo.org/listreports.php?devicename=NVIDIA%20GeForce%20GTX%201080)
 
 
 ## Features
 
-* Tile based rasterization (TBR). [5]
 * Async compute queue. [2]
 * Software ray tracing.
 

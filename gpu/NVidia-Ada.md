@@ -18,14 +18,14 @@ Codename: AD10x
 ## Features
 
 * DLSS Frame Generation.
-* Tensor core with FP8 format.
+* Tensor core with FP8, FP64 formats. [2]
 
 
 ## Specs
 
 * ops/clock per SM: [5]
-	- 128 fp16 FMA
-	- 128 fp32 FMA
+	- 128 fp16 FMA (2xFP16 on 1 datapath)
+	- 128 fp32 FMA (2 datapaths)
 	- 2 fp64 FMA
-	- 64 i32
+	- 64 i32 (on 1 datapath)
 	- 16 SFU

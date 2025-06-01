@@ -17,6 +17,8 @@
 ## Features
 
 * BF16 support.
+* Lossy RT compression.
+
 
 ## Specs
 

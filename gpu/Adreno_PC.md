@@ -14,6 +14,7 @@
 
 ## Notes
 
+**Cluster** - A group of hardware registers, often with multiple copies to allow pipelining. There is an M:N relationship between hardware blocks that do work and the clusters of registers for the state that hardware blocks use.<br/>
 **CCU** - Color Cache Unit. Separate cache used by 2D blits and sysmem render target access (and also for resolves to system memory when in **GMEM** mode).<br/>
 **CMP** - Compression and Decompression?<br/>
 **DMA** - Direct memory access.<br/>
@@ -29,10 +30,10 @@
 **ICL** - ?<br/>
 **LRZ** - Low resolution Z. A low resolution area of the depth buffer that can be initialized during the binning pass to contain the worst-case (farthest) Z values in a block, and then used to early reject fragments during rasterization.<br/>
 **LM** - Local memory. GMEM for compute is used as shared memory for waves.<br/>
-**ME** - Microcode Engine, handles most **PM4** commands.<br/>
+**ME** - Microcode Engine, handles most **PM4** commands. Adreno 2xx-4xx CP component.<br/>
 **maskgen** - ?<br/>
 **PC** - ?<br/>
-**PFP** - Prefetch Parser<br/>
+**PFP** - Prefetch Parser. Adreno 2xx-4xx CP component.<br/>
 **PM4** - AMD Radeon’s command packet format.<br/>
 **ROQ** - **DMA** engine used by the **SQE** for reading memory, with some prefetch buffering.<br/>
 **RAS** - Rasterizer. Responsible for generating PS invocations from primitives, also does **LRZ**.<br/>

@@ -1,4 +1,4 @@
-code name: Sandy Bridge.
+CPU code name: Sandy Bridge.
 
 
 ## Examples

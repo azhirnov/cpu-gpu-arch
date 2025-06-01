@@ -17,8 +17,9 @@
 ## References
 
 1. [GCN, AMD’s GPU Architecture Modernization](https://chipsandcheese.com/2023/12/04/gcn-amds-gpu-architecture-modernization/)
-2. [Architecture](https://web.archive.org/web/20140405160015/https://www.amd.com/Documents/GCN_Architecture_whitepaper.pdf), [[backup](../pdf/AMD-GCN_Architecture_whitepaper.pdf)]
+2. [Architecture](https://web.archive.org/web/20140405160015/https://www.amd.com/Documents/GCN_Architecture_whitepaper.pdf), [[mirror](https://www.techpowerup.com/gpu-specs/docs/amd-gcn1-architecture.pdf)], [[backup](../pdf/AMD-GCN_Architecture_whitepaper.pdf)]
 3. [Vulkan features for HD 7700 series](https://vulkan.gpuinfo.org/listreports.php?devicename=AMD+Radeon+HD+7700+Series)
+4. [Instruction Set Architecture](https://www.x.org/docs/AMD/old/AMD_Southern_Islands_Instruction_Set_Architecture.pdf), [[backup](../pdf/AMD-Southern_Islands_Instruction_Set_Architecture.pdf)]
 
 
 ## Notes

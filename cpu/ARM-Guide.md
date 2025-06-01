@@ -15,11 +15,10 @@
 	  This need for translation also applies to cached data, because on Armv6 and later processors, the data caches store data using the physical address.  Therefore, the address must be translated before a cache lookup can complete.
 	- Large blocks require fewer levels of reads to translate than small blocks. Plus, large blocks are more efficient to cache in the TLBs.
 	- Small blocks give software fine-grain control over memory allocation. However, small blocks are less efficient to cache in the TLBs. Caching is less efficient because small blocks require multiple reads through the levels to translate.
-	
+
 	| Level of table | 4kb granule | 16kb granule | 64kb granule |
 	|---|---|---|---|
 	| 0 | 512GB | 128TB |   -   |
 	| 1 | 1GB   | 64GB  | 4TB   |
 	| 2 | 2MB   | 32MB  | 512MB |
 	| 3 | 4KB   | 16KB  | 64kb  |
-	

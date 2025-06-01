@@ -16,6 +16,11 @@ Furian architecture in Series8XT.
 * GT8525
 * GT8540
 
+
+**Soc**
+* MediaTek Helio G25 (GE8320)
+
+
 ## References
 
 1. [Imagination Announces PowerVR Series8XE Plus](https://www.anandtech.com/show/11028/powervr-8xe-plus-announced)
