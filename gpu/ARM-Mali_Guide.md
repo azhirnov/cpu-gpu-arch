@@ -1,8 +1,8 @@
 
 ## References
 
-1. [Arm GPU Best Practices Developer Guide](https://developer.arm.com/documentation/101897/latest/), [[backup](../pdf/arm-gpu_best_practices_developer_guide_3_3.pdf)]
-2. [Arm GPU Datasheet](https://developer.arm.com/documentation/102849/latest/), [backup: [v3](../pdf/Arm-GPU_Datasheet_v3.pdf), [v7](../pdf/Arm-GPU_datasheet_v7.pdf)]
+1. [Arm GPU Best Practices Developer Guide](https://developer.arm.com/documentation/101897/latest/), [[backup](../pdf/arm-gpu_best_practices_developer_guide_3_4.pdf)]
+2. [Arm GPU Datasheet](https://developer.arm.com/documentation/102849/latest/), [backup: [v3](../pdf/Arm-GPU_Datasheet_v3.pdf), [v7](../pdf/Arm-GPU_datasheet_v7.pdf), [v8](../pdf/Arm-GPU_Datasheet_v8.pdf)]
 3. [AFBC](https://developer.arm.com/Architectures/Arm%20Frame%20Buffer%20Compression)
 4. [(video playlist) Arm Mali GPU Training Series](https://www.youtube.com/playlist?list=PLKjl7IFAwc4QUTejaX2vpIwXstbgf8Ik7)
 5. [Authoring Efficient Shaders for Optimal Mobile Performance](https://www.dropbox.com/s/ic0c6k0yzf2uk81/Authoring%20Efficient%20Shaders%20for%20Optimal%20Mobile%20Performance%20-%20GDC2022%20-Arm%20%26%20NaturalMotion.pdf?dl=0)
@@ -184,3 +184,12 @@
 * Avoid indexing in the shader if possible, such as dynamically indexing into buffer arrays or uniform arrays, as this can disable shader optimisations. [11]
 	- on Mali it is not a recommend practice as it disables a compiler optimisation technique known as pilot shaders.
 	- Pilot shaders are a technique that allows us to determine what calculations can be "piloted" into your GPU’s register so that when the data needs to be read it doesn’t take a full read cycle from the GPU RAM.
+
+* Tiles are rendered in parallel: [[az](https://github.com/azhirnov)]
+	- single tile 16x16 is at least 16x simd16 warps *()*
+	- single core can process <= 32 warps (Valhall Gen2)
+	- on multicore GPU *(MC12 for example)* some cores render first tile, some second tile, etc.
+	- cores per tile depends on warps per core, which depends on register count (?).
+	- Valhall supports 0-32 registers with max warps per core and 32-64 with half size *(similar to compute workgroup size)*.
+	- some cores can execute vertex/binning or compute tasks in parallel with rasterization and fragment shading.
+	- before Image Region Dependencies at the end of tile rendering core may have low number of active warps.

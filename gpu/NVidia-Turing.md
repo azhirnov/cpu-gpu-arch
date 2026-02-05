@@ -58,6 +58,7 @@ With RTX:
 	- TODO [7]
 	- Scheduler operate on threads instead of warps. So when things diverged, the scheduler serialised the divergent components. Do divergent block `A` till completion, then `B`. [?]
 	- Each L0 instruction cache is private to one scheduler/processing block. [4]
+	- `subgroupElect()` has different behavior than on all other GPUs - it executes once per active thread instead of once per subgroup. [10]
 
 * Instruction Scheduling: [1]
 	- Each Turing SM includes 4 warp-scheduler units. Each scheduler handles a static set of warps and issues to a dedicated set of arithmetic instruction units. Instructions are performed over two cycles, and the schedulers can issue independent instructions every cycle. Dependent instruction issue latency for core FMA math operations is four clock cycles, like Volta, compared to six cycles on Pascal. As a result, execution latencies of core math operations can be hidden by as few as 4 warps per SM, assuming 4-way instruction-level parallelism ILP per warp, or by 16 warps per SM without any instuction-level parallelism.
@@ -78,7 +79,9 @@ With RTX:
 * Uniform Data Path. This design is intended to accelerate numerical, array-based, computebound workloads that occupy the main datapaths almost completely with floating-point instructions, typically FFMA or HMMA, but also contain a few integer operations, typically updating array indices, loop indices or pointers; or performing array or loop boundary checks. These few integer instructions spoil the instruction mix, and prevent the main datapaths from ingesting a 100% pure stream of FFMA or HMMA. In these circumstances, even a small fraction of integer instructions can hurt the overall arithmetic throughput, lowering it significantly from its theoretical maximum. [4]
 
 * fp16 performance: HADD2, HMUL2, HFMA2 has same performance, MAD has 2 instructions, so HFMA2 should be used instead. [10]
-* SM bound to one or multiple render target regions with tile size 16x16 (or lower on high register usage) [10]
+* Tile size is fixed to 16x16 pixels: [10]
+	- On low register count and when fragment count equal to pixel count only one SM is used per tile.
+	- If fragment count or register count increases then multiple SM us used (work stealing?).
 * Minimal workgroup size 32x2, because FMA perform over 2 cycles (like a SIMD16 with dual issue). [10]
 
 * Each Tensor Core can perform up to 64 floating point fused multiply-add (FMA) operations per clock using FP16 inputs. [2]
@@ -200,6 +203,11 @@ With RTX:
 	- 16 to/from i64/fp64
 	- 16 type conversions
 	- 512 fp16 FMA on tensor core
+
+* ops/clock per Tensor core: [3]
+	- 64 fp16 FMA or 128 FLOPS
+	- 256 i8
+	- 512 i4
 
 * Render target compression:
 	- block size: 4x4 pix [10]

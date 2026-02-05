@@ -49,6 +49,7 @@ Content:
 2.2. [Arm Mali-G72 Performance Counters Reference Guide](https://developer.arm.com/documentation/102642/0106/), [[backup](../pdf/arm-mali-g72_performance_counters_reference_guide_102642_0106_en.pdf)]<br/>
 2.3. [Mali-G52](https://developer.arm.com/Processors/Mali-G52)<br/>
 2.4. [Vulkan features for Mali-G52](https://vulkan.gpuinfo.org/listreports.php?devicename=Mali-G52)<br/>
+2.5. [Arm’s Bifrost Architecture and the Mali-G52](https://chipsandcheese.com/2025/05/09/arms-bifrost-architecture-and-the-mali-g52/)<br/>
 
 ## Notes
 

@@ -25,7 +25,7 @@
 **TA** - Tile Accelerator, determines which tiles contain each transformed primitive.<br/>
 **TLA** - ?<br/>
 **TSP** - Texture and Shading Processor. Applies colouring operations, like fragment shaders, to the visible pixels.<br/>
-**VDM** - vertex data master. 
+**VDM** - vertex data master.
 
 ### Timings
 

@@ -16,22 +16,26 @@
 
 1. [Vulkan features for Xclipse 530](https://vulkan.gpuinfo.org/listreports.php?devicename=Samsung%20Xclipse%20530), [Xclipse 940](https://vulkan.gpuinfo.org/listreports.php?devicename=Samsung%20Xclipse%20940)
 
+## Features
+
+* Tile based immediate mode rendering (not TBDR).
 
 ## Specs
 
 * Xclipse 530
-	- RDNA3
+	- RDNA3 based
 	- 128 shader units
 	- 8 texture units
 	- 8 render output units
 	- 2 ray accelerators
 	- 1 WGP
+	- cache ?
 
 * Xclipse 540
-	- RDNA3
+	- RDNA3 based
 
 * Xclipse 920
-	- RDNA2
+	- RDNA2 based
 	- 384 shader units
 	- 24 texture units
 	- 24 render output units
@@ -39,7 +43,7 @@
 	- 3 WGP
 
 * Xclipse 940
-	- RDNA3
+	- RDNA3 based
 	- 768 shader units
 	- 48 texture units
 	- 32 render output units

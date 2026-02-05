@@ -190,14 +190,47 @@
 11th generation.<br/>
 **Willow Cove** microarchitecture.
 
+## Examples
+
+* Core i7 1185G7
+* Core i7 11800H
+
 ## Notes
 
 * AVX512 extensions: F, CD, VL, DQ, BW, IFMA, VBMI, VBMI2, VPOPCNTDQ, BITALG, VNNI, VPCLMULQDQ, GFNI, VAES, **VP2INTERSECT**
+
+## Tests
+
+<details><summary>AIDA64</summary>
+
+* Core i7 1185G7:
+	- clock: 2.998 GHz
+	- cores: 4
+	- | cache | read | write | copy | latency | cycles |
+	  |---|---|---|---|---|---|
+	  | L1 | 2'122 | 1'073 | 2'129 | 1.1  | 3  |
+	  | L2 | 716   | 317   | 455   | 4.1  | 12 |
+	  | L3 | 204   | 100   | 123   | 20.0 | 60 |
+
+* Core i7 11800H:
+	- clock: 4.2 GHz
+	- cores: 8
+	- | cache | read | write | copy | latency | cycles |
+	  |---|---|---|---|---|---|
+	  | L1 | 4'080 | 2'054 | 4'133 | 1.2  | 5  |
+	  | L2 | 1'176 | 646   | 903   | 4.5  | 19 |
+	  | L3 | 268   | 144   | 136   | 19.4 | 81 |
+
+</details>
 
 
 # Rocket Lake (2021)
 11th generation.<br/>
 **Cypress Cove** microarchitecture.
+
+## Examples
+
+* Core i7 11700K
 
 ## References
 
@@ -208,6 +241,20 @@
 * SHA instructions.
 * Celeron and Pentium processors supports AVX2.
 
+## Tests
+
+<details><summary>AIDA64</summary>
+
+* Core i7 11700K:
+	- clock: 4.888 GHz
+	- cores: 8
+	- | cache | read | write | copy | latency | cycles |
+	  |---|---|---|---|---|---|
+	  | L1 | 4'513 | 2'280 | 4'572 | 1.0  | 5  |
+	  | L2 | 1'554 | 666   | 1'058 | 2.7  | 13 |
+	  | L3 | 312   | 205   | 243   | 12.0 | 59 |
+
+</details>
 
 
 # Alder Lake (2021)
@@ -227,7 +274,7 @@
 
 **Alder Lake-N**
 * Core i3 N300
-* Intel Processor N100, N200
+* Intel Processor N95, N100, N200
 
 **Alder Lake-P**
 * Core i7 1280P
@@ -263,6 +310,39 @@
 	- AVX2
 * AVX-IFMA instructions.
 
+## Tests
+
+<details><summary>AIDA64</summary>
+
+* Core i9 12900H:
+	- clock: 4.5 GHz
+	- cores: 6P + 8E
+	- | cache | read | write | copy | latency | cycles |
+	  |---|---|---|---|---|---|
+	  | L1 | 2'737 | 1'049 | 3'140 | 1.1  | 5  |
+	  | L2 | 769   | 355   | 669   | 4.0  | 18 |
+	  | L3 | 310   | 275   | 344   | 18.7 | 84 |
+
+* Core i3 12100:
+	- clock: 4.3 GHz
+	- cores: 4
+	- | cache | read | write | copy | latency | cycles |
+	  |---|---|---|---|---|---|
+	  | L1 | 1'400 | 1'020 | 1'740 | 1.2  | 5  |
+	  | L2 | 643   | 260   | 450   | 4.2  | 18 |
+	  | L3 | 344   | 185   | 254   | 15.8 | 68 |
+
+* M95:
+	- clock: 3.4 GHz
+	- cores: 4
+	- | cache | read | write | copy | latency | cycles |
+	  |---|---|---|---|---|---|
+	  | L1 | 335 | 300 | 607 | 0.9  | 3 |
+	  | L2 | 150 | 41  | 73  | 5.9  | 20 |
+	  | L3 | 56  | 25  | 41  | 14.9 | 51 |
+
+</details>
+
 
 # Twin Lake (2024)
 **Skymont** microarchitecture for efficiency core.<br/>
@@ -276,13 +356,14 @@
 ## References
 
 1. [Intel Nx50 Series "Twin Lake" Pure E-core Processor Line Powered by "Skymont" Surfaces](https://www.techpowerup.com/330317/intel-nx50-series-twin-lake-pure-e-core-processor-line-powered-by-skymont-surfaces)
+2. [Intel Details Skymont](https://chipsandcheese.com/p/intel-details-skymont)
 
 ## Notes
 
 * AVX2, AVX-VNNI
 * E-core: without SMT.
 * two "Skymont" E-core clusters sharing an L3 cache. [1]
-
+* iGPU with Xe-LPG graphics architecture. [1]
 
 
 # Raptor Lake (2022)
@@ -320,6 +401,41 @@
 	- L1 Data: 32 KB per core
 	- L2: 4 MB per cluster
 
+* iGPU: UHD 7xx
+
+## Tests
+
+<details><summary>AIDA64</summary>
+
+* Core i9 13900K:
+	- clock: 5.5 GHz
+	- cores: 8P + 16E
+	- | cache | read | write | copy | latency | cycles |
+	  |---|---|---|---|---|---|
+	  | L1 | 5'816 | 4'214 | 8'389 | 0.9  | 5  |
+	  | L2 | 1'458 | 657   | 1'046 | 3.7  | 20 |
+	  | L3 | 1'296 | 600   | 915   | 13.7 | 75 |
+
+* Core i7 13620H:
+	- clock: 4.5 GHz
+	- cores: 6P + 4E
+	- | cache | read | write | copy | latency | cycles |
+	  |---|---|---|---|---|---|
+	  | L1 | 2'600 | 1'900 | 3'420 | 1.1  | 5  |
+	  | L2 | 897   | 380   | 574   | 4.0  | 18 |
+	  | L3 | 314   | 277   | 310   | 15.4 | 70 |
+
+* Core i5 1335U:
+	- clock: 4.3 GHz
+	- cores: 2P + 8E
+	- | cache | read | write | copy | latency | cycles |
+	  |---|---|---|---|---|---|
+	  | L1 | 1'450 | 732 | 1'775 | 1.1  | 5  |
+	  | L2 | 454   | 119 | 237   | 4.0  | 20 |
+	  | L3 | 140   | 100 | 127   | 15.5 | 67 |
+
+</details>
+
 
 # Raptor Lake Refresh (2023)
 14th generation.<br/>
@@ -352,6 +468,35 @@
 
 ## Notes
 
+* Cache: [from tests]
+	- L1D: latency 5cy
+	- L2: latency 20cy
+	- L3: latency 74cy
+
+## Tests
+
+<details><summary>AIDA64</summary>
+
+* Core i9 14900KF
+	- clock: 5.6 GHz
+	- cores: 8P + 16E
+	- | cache | read | write | copy | latency | cycles |
+	  |---|---|---|---|---|---|
+	  | L1 | 6'249 | 3'510 | 8'562 | 0.9  | 5  |
+	  | L2 | 1'237 | 645   | 1'066 | 3.6  | 20 |
+	  | L3 | 868   | 524   | 868   | 13.2 | 74 |
+
+* Core i5 14600K:
+	- clock: 6 GHz
+	- cores: 6P + 8E
+	- | cache | read | write | copy | latency | cycles |
+	  |---|---|---|---|---|---|
+	  | L1 | 4'192 | 3'050 | 6'036 | 0.8  | 5  |
+	  | L2 | 1'404 | 496   | 748   | 3.4  | 20 |
+	  | L3 | 830   | 428   | 719   | 11.4 | 68 |
+
+</details>
+
 
 # Meteor Lake (2023)
 Core Ultra Series 1.
@@ -371,21 +516,66 @@ Core Ultra Series 1.
 
 1. [The Intel Core Ultra 7 155H Review](https://www.anandtech.com/show/21282/intel-core-ultra-7-115h-review-meteor-lake-makes-makes-fresh-start-to-mobile-cpus)
 2. [Intel Releases Core Ultra H and U-Series Processors](https://www.anandtech.com/show/21185/intel-releases-core-ultra-h-and-u-series-processors-meteor-lake-brings-ai-and-arc-to-ultra-thin-notebooks)
+3. [Intel Meteor Lake Technical Deep Dive](https://www.techpowerup.com/review/intel-meteor-lake-technical-deep-dive/)
+4. [Intel Details Skymont](https://chipsandcheese.com/p/intel-details-skymont) - compared with Crestmont
 
 ## Notes
 
-* Arc Graphics
+* Arc Graphics (Xe-LPG)
 
-* P-core Cache:
+* Memory: dual-channel DDR5-5600, dual-channel LPDDR5X-7467.
+* AVX-IFMA instructions.
+
+### Redwood Cove P-core
+
+* Cache:
 	- L1 Instruction: 64 KB per core
 	- L1 Data: 48 KB per core
 	- L2: 2 MB per core
-* E-core and LP E-core Cache:
+	- L3: shared with E-cores, up to 24 MB
+
+### Crestmont E-core
+
+* Performance:
+	- A FP multiply with a subnormal result costs over 280 cycles on Crestmont. [4]
+
+* Cache:
+	- L1 Instruction: 64 KB per core
+	- L1 Data: 32 KB, read 2x 16B/cy [4]
+	- L2: 2 MB per cluster
+	- L3: shared with P-cores, up to 24 MB
+	- L3 to L2: 16 B/cy [4]
+
+### Crestmont LP E-core
+
+* Cache:
 	- L1 Instruction: 64 KB per core (per 2 cores?)
 	- L1 Data: 32 KB
 	- L2: 2 MB per cluster
-* Memory: dual-channel DDR5-5600, dual-channel LPDDR5X-7467.
-* AVX-IFMA instructions.
+
+## Tests
+
+<details><summary>AIDA64</summary>
+
+* Core Ultra 5 125H:
+	- clock: 4.3 GHz (specs: 4.5 + 3.6 + 2.5)
+	- cores: 4P + 8E + 2LP
+	- | cache | read | write | copy | latency | cycles |
+	  |---|---|---|---|---|---|
+	  | L1 | 1'210 | 1220 | 1'850 | 1.1  | 5   |
+	  | L2 | 550   | 260  | 330   | 4.6  | 20  |
+	  | L3 | 530   | 270  | 350   | 23.7 | 102 |
+
+* Core Ultra 7 155H:
+	- clock: 1.6 GHz (specs: 4.8 + 3.8 + 2.5)
+	- cores: 6P + 8E + 2 LP
+	- | cache | read | write | copy | latency | cycles |
+	  |---|---|---|---|---|---|
+	  | L1 | 1'120 | 1'150 | 2'270 | 1.1  | 5  |
+	  | L1 | 584   | 330   | 395   | 4.6  | 20 |
+	  | L1 | 538   | 364   | 457   | 22.1 | 95 |
+
+</details>
 
 
 # Arrow Lake (2024)
@@ -412,15 +602,98 @@ Core Ultra Series 2.
 ## References
 
 1. [Examining Intel’s Arrow Lake, at the System Level](https://chipsandcheese.com/2024/12/04/examining-intels-arrow-lake-at-the-system-level/)
+2. [Intel’s Lion Cove P-Core and Gaming Workloads](https://chipsandcheese.com/p/intels-lion-cove-p-core-and-gaming)
+3. [Intel Core Ultra Arrow Lake Preview](https://www.techpowerup.com/review/intel-core-ultra-arrow-lake-preview/)
+4. [Analyzing Lion Cove’s Memory Subsystem in Arrow Lake](https://old.chipsandcheese.com/2025/01/05/analyzing-lion-coves-memory-subsystem-in-arrow-lake/)
+5. MicroBenchmarks: [cache](https://github.com/azhirnov/as-en/blob/dev/AE/docs/papers/bench-cpu/MemAccess.md#Intel-Ultra-7-255H), [FLOPS](https://github.com/azhirnov/as-en/blob/dev/AE/docs/papers/bench-cpu/SIMD_FLOPS.md#Intel-Ultra-7-255H-P-core)
+6. [Skymont in Gaming Workloads](https://chipsandcheese.com/p/skymont-in-gaming-workloads)
+7. [Intel Details Skymont](https://chipsandcheese.com/p/intel-details-skymont)
 
 ## Notes
 
-* SHA-512, AVX-IFMA instructions.
+* SHA-512, AVX-IFMA, AVX-VNNI instructions.
 * Memory: DDR5-5600, DDR5-10000.
 
-* Lion Cove P-core:
-	* Removed Simultaneous multithreading (SMT).
-	* AVX512 supported but disabled.
+* Arrow Lake-S/HX with Xe-LPG
+* Arrow Lake-H with Arc Graphics 130T, 140T (Xe-LPG+)
+* 10-13 TOPS i8 NPU
+
+### Lion Cove P-core
+
+* Removed Simultaneous multithreading (SMT).
+* AVX512 supported but disabled.
+
+* performance:
+	- 2x fp32 256-bit FMA pipes, 32 FLOPS/cy
+	- 2x i32 256-bit pipes, 16 OPS/cy
+	- in tests achieve only 60-70% of theoretical fp32 FMA performance [5]
+	- 576 entry reorder buffer [6]
+
+* Cache: [4]
+	- L1 Instruction: 64 KB per core
+	- L1 Data: 48 KB per core, read 128 B/cy, write 64 B/cy, 4cy
+	- L1.5 Data: 192 KB per core, *64 B/cy ?*, 9cy
+	- L2: 3 MB per core, *32 B/cy ?*, 17cy
+	- L3: shared with E-cores, ~84cy
+
+* L1.5 basically replaces the L2 as the primary data source for L1D misses. [4]
+
+### Skymont E-core
+
+* performance:
+	- 4x fp32 128-bit FMA pipes, 32 FLOPS/cy [5, 7]
+	- 4x i32 128-bit pipes, 16 OPS/cy
+	- 8 micro-ops per cycle. [6, 7]
+	- 416 entry reorder buffer [6]
+	- in tests achieve 90% of theoretical fp32 FMA performance [5]
+	- adds fast path hardware to handle subnormal floating point numbers. [7]
+
+* Cache: [4, 5, 6]
+	- L1 Instruction: 64 KB per core, read 3x 32B/cy [7]
+	- L1 Data: 32 KB per core, read 3x 16B/cy, write 32 B/cy, 4cy [7]
+	- L2: 4 MB per cluster (4 cores), read 64 B/cy per core, 128 B/cy total, 17cy [7]
+	- L3 to L2: 32 B/cy [7]
+	- L3: shared with P-cores
+
+
+### Skymont LP E-core
+
+* performance:
+	- 2x fp32 128-bit FMA pipes, 16 FLOPS/cy [5]
+	- 2x i32 128-bit pipes, 8 OPS/cy
+	- 256-bit ops are split into 2x 128-bit uops internally.
+
+* Cache:
+	- L1 Instruction: 64 KB per core
+	- L1 Data: 32 KB, read 64 B/cy, write 32 B/cy [5]
+	- L2: 4 MB per cluster (4 cores), 64 B/cy
+
+
+## Tests
+
+<details><summary>AIDA64</summary>
+
+* Core Ultra 7 265K:
+	- clock: 5.186 GHz (5.4 + 4.6)
+	- cores: 8P + 12E
+	- | cache | read | write | copy | latency | cycles |
+	  |---|---|---|---|---|---|
+	  | L1   | 5'009 | 3'535 | 7'244 | 0.8  | 4   |
+	  | L1.5 | 1'361 | 639   | 1'164 | 1.7  | 8   |
+	  | L2   | 673   | 592   | 750   | 4.2  | 22  |
+	  | L3   | 1'197 | 648   | 933   | 19.5 | 100 |
+
+* Core Ultra 9 275HX:
+	- clock: 5.19 GHz
+	- cores: 8P + 16E
+	- | cache | read | write | copy | latency | cycles |
+	  |---|---|---|---|---|---|
+	  | L1   | 4'920 | 3'580 | 6'800 | 0.8  | 4 |
+	  | L1.5 | 1'190 | 572   | 873   | 1.8  | 9 |
+	  | L2   | 549   | 588   | 750   | 4.3  | 22 |
+	  | L3   | 700   | 640   | 700   | 20.9 | 108 |
+
+</details>
 
 
 # Lunar Lake (2024)
@@ -438,32 +711,73 @@ Core Ultra 200V Series.
 
 ## Notes
 
-* SHA-512 instructions.
+* SHA-512, AVX-IFMA, AVX-VNNI instructions.
 * Memory: LPDDR5X-8533
+* Arc Graphics 130V, 140V (Xe2-LPG)
+* 47-48 TOPS i8 NPU
+
+### Lion Cove P-core
+
+* Same as Arrow Lake
+
+### Skymont E-core
+
+* Same as Arrow Lake
+* Lunar Lake's cluster of 4 Skymont E-cores exist on a 'Low Power Island' separate from the P-cores. As a result, the E-cores have their own dedicated L3 cache not accessible to the P-cores. [[wiki](https://en.wikipedia.org/wiki/Lunar_Lake)]
+
+## Tests
+
+<details><summary>AIDA64</summary>
+
+* Core Ultra 9 288V:
+	- clock: 4.6 GHz (5.1 + 3.7)
+	- cores: 4P + 4E
+	- | cache | read | write | copy | latency | cycles |
+	  |---|---|---|---|---|---|
+	  | L1 | 1'865 | 1'350 | 2'680 | 0.8  | 4 |
+	  | L2 | 396   | 281   | 340   | 4.3  | 20 |
+	  | L3 | 470   | 250   | 380   | 10.9 | 50 |
+
+</details>
 
 
-# Sapphire Rapids (2023)
-Server CPU.<br/>
-**Golden Cove** microarchitecture.
+# Panther Lake (2025)
+Core Ultra Series 3
 
-## Examples
+## References
 
-* Xeon Max 9480
-* Xeon Platinum 8400
-* Xeon Gold 5400, 6400
-* Xeon Silver 4400
+1. [Intel Panther Lake Technical Deep Dive](https://www.techpowerup.com/review/intel-panther-lake-technical-deep-dive/)
+2. [Panther Lake’s Reveal at ITT 2025](https://chipsandcheese.com/p/panther-lakes-reveal-at-itt-2025)
 
-## Notes
+* P-core: [1]
+	- Cougar Cove architecture
 
-* AVX512 extensions: F, CD, VL, DQ, BW, IFMA, VBMI, VBMI2, BITALG, VNNI, GFNI, VPOPCNTDQ, VPCLMULQDQ, VAES, BF16, FP16
+* P-core cache: [1]
+	- L1I: ?
+	- L1D: 48 KB
+	- L1.5D: 192 KB
+	- L2: 3 MB per core
+	- L3: up to 18MB shared
 
+* E-core, LP-core: [1]
+	- Darkmont architecture
 
-# Granite Rapids (2024)
-Server CPU.<br/>
+* E-core cache: [1]
+	- L1I: 64 KB
+	- L1D: 32 KB
+	- L2: 4 MB per cluster
 
-## Notes
+* iGPU on Xe3 architecture. [1]
+* NPU 5: [1]
+	- up to 50 TOPS (i8 ?)
+	- FP8
 
-* AVX10.1 instructions.
+* Compute tile has the main CPU complex, the Low Power CPU complex, the ISP, the NPU, the Media engines, and the 8MB Memory Side Cache alongside the 128b memory bus. [2]
+* Starting with the smallest Panther Lake configuration, we have 4 P-Cores and 4 LP E-Cores paired with 8MB Memory-side Cache on the Compute Tile. [2]
+	- That Compute Tile is paired with a 4 core Xe3 iGPU.
+* In middle configuration of Panther Lake the Compute Tile now has 4 P-Cores and 8 E-Cores which share a 18MB L3 cache with an extra 4 LP E-Cores, all of which can access the 8MB memory-side cache on board the Compute tile. [2]
+
+* Intel had increased the TLB capacity by 50% compared to Lion Cove along with improving the branch predictor by increasing some of the structure sizes in the BPU along with porting over some of the novel BPU algorithms that Intel tested in Lunar Lake. [3.1]
 
 
 # Future

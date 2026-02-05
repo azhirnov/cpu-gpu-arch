@@ -26,7 +26,7 @@
 4. [AMD’s HD 6950 vs RX 6900 XT](https://chipsandcheese.com/2023/04/01/amds-hd-6950-vs-rx-6900-xt-what-does-adding-50-do/)
 5. [AMD’s RDNA 2: Shooting For the Top](https://chipsandcheese.com/2023/02/19/amds-rdna-2-shooting-for-the-top/)
 6. [AMD’s Zen 4, Part 3: System Level Stuff, and iGPU](https://chipsandcheese.com/2023/01/05/amds-zen-4-part-3-system-level-stuff-and-igpu/)
-7. [Vulkan features for RX 6700 XT](https://vulkan.gpuinfo.org/listreports.php?devicename=AMD%20Radeon%20RX%206700%20XT)
+7. [Vulkan features for RX 6700 XT](https://vulkan.gpuinfo.org/listreports.php?devicename=AMD%20Radeon%20RX%206700%20XT), [610M](https://vulkan.gpuinfo.org/listreports.php?property=devicename&value=AMD%20Radeon(TM)%20610M), [RADV RX 6900 XT](https://vulkan.gpuinfo.org/listreports.php?devicename=AMD+Radeon+RX+6900+XT+%28RADV+NAVI21%29&platform=linux)
 
 ## Features
 
@@ -53,6 +53,7 @@
 
 * The RDNA command processor reads commands that the host has written to memory-mapped RDNA registers in the system-memory address space. The command processor sends hardware-generated interrupts to the host when the command is completed. [1]
 * The RDNA processor hides memory latency by keeping track of potentially hundreds of workitems in various stages of execution, and by overlapping compute operations with memory access operations. [1]
+* The workgroup processor can issue wavefronts to any available CU within the shader engine. Wavefronts from the same workgroup may be executed on different CUs to maximize occupancy. [1]
 
 
 ## Specs
@@ -67,6 +68,9 @@
 	- 2x SIMDs (simdPerComputeUnit)
 	- Ray tracing accelerator
 	- L0 vector cache: 16 KB
+	- Matrix core with: [link](https://gpuopen.com/learn/matrix_core_amd_rdna4/)
+		* 256 fp16 FLOPS/clk
+		* 512 i8 FLOPS/clk
 
 * SIMD config: [5, 7]
 	- 32x FMA
@@ -88,7 +92,7 @@
 	- Texture Rate: 321.6 GTexel/s
 
 * SteamDeck: [specs](https://www.techpowerup.com/gpu-specs/steam-deck-gpu.c3897)
-	- Memory: 16GB, LPDDR5, 128 bit, 88GB/s, (72 GB/s from tests [2]) 
+	- Memory: 16GB, LPDDR5, 128 bit, 88GB/s, (72 GB/s from tests [2])
 	- GPU with 8 CU, 1.6GHz
 	- L0 Cache: 32 KB per WGP, latency: 54ns, bandwidth: 1.4TB/s [2]
 	- L1 Cache: 128 KB per Array, latency: 80ns, bandwidth: 823 GB/s [2]
@@ -99,4 +103,9 @@
 	- Texture Rate: 51.20 GTexel/s
 	- GPU to CPU, copy engine: 43.8 GB/s, compute shader: 34.8 GB/s [2]
 	- CPU to GPU, copy engine: 43.7 GB/s, compute shader: 34.6 GB/s [2]
+
+* Tensor core ops per CU: [[ref](https://gpuopen.com/learn/wmma_on_rdna3/)]
+	- fp16: 256
+	- i8: 512
+	- i4: 1024
 

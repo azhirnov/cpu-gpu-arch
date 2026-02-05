@@ -13,11 +13,11 @@
 
 ## Notes
 
-
-* With PowerVR TBDR, Hidden Surface Removal (HSR) will completely remove overdraw regardless of draw call submission order. [4]
-* Do Not Use Depth Pre-pass. Depth pre-pass is redundant on deferred rendering architectures. [4]
-
-* With the Hidden Surface Removal (HSR) feature on PowerVR hardware it is not necessary to submit geometry in depth-order to reduce overdraw. By freeing applications from this restriction they can focus on sorting draws by render state, ensuring state changes are minimised. [4]
+* Hidden Surface Removal:
+	- With PowerVR TBDR, Hidden Surface Removal (HSR) will completely remove overdraw regardless of draw call submission order. [4]
+	- Do Not Use Depth Pre-pass. Depth pre-pass is redundant on deferred rendering architectures. [4]
+	- With the Hidden Surface Removal (HSR) feature on PowerVR hardware it is not necessary to submit geometry in depth-order to reduce overdraw. By freeing applications from this restriction they can focus on sorting draws by render state, ensuring state changes are minimised. [4]
+	- In B-Series HSR is similar to Mali FPK and have same bad cases on small triangles. [[ref](https://github.com/azhirnov/AsEn-ShaderEditor/blob/main/papers/GeometryCulling-en.md#hardware-optimization)]
 
 * Rasterization and pixel colouring are performed on a per-tile basis with the following steps: [4]
 	1. When a tile operation begins, the corresponding tile list is retrieved from the Parameter Buffer (PB) to identify the screen-space primitive data that needs to be fetched.
@@ -30,8 +30,6 @@
 * PowerVR shader engine: [4]
 	- It is hardware-managed and load-balanced by using a data driven execution model to ensure the highest possible utilisation efficiency.
 	- This approach schedules tasks based on data availability, and enables switching between independent processing tasks to ensure that data dependency stalls are avoided at all costs.
-
-
 
 
 ### PowerVR Rogue (vector arch?)

@@ -10,9 +10,15 @@
 1.4. [Optimizing subroutines in assembly language (1996-2023)](https://www.agner.org/optimize/optimizing_assembly.pdf), [[backup](../pdf/CPU-optimizing_assembly.pdf)]<br/>
 1.5. [Intel Optimization Reference Manual](https://www.intel.com/content/dam/www/public/us/en/documents/manuals/64-ia-32-architectures-optimization-manual.pdf)<br/>
 1.6. [Reading privileged memory with a side-channel](https://googleprojectzero.blogspot.com/2018/01/reading-privileged-memory-with-side.html), [Spectre Attacks: Exploiting Speculative Execution](https://spectreattack.com/spectre.pdf)<br/>
-
+1.7. [Notes on the mystery of hardware cache performance counters](https://sites.utexas.edu/jdm4372/2013/07/14/notes-on-the-mystery-of-hardware-cache-performance-counters/)<br/>
 
 ## Notes
+
+* Some examples of behavior that could make the L1 miss counter larger than the L2 access counter: [1.7]
+    - If an instruction fetch misses in the L1 Icache, the fetch may be retried several times before the instructions have been returned to the L1 Icache. The L1 Icache miss event might be incremented every time the fetch is attempted, while the L2 cache access counter may only be incremented on the initial fetch.
+    - L1 caches (both data and instruction) typically have hardware prefetch engines. The L1 Icache miss counter may only be incremented when the instruction fetcher requests data that is not found in the L1 Icache, while the L2 cache access counter may be incremented every time the L2 receives either an L1 Icache miss or an L1 Icache prefetch.
+    - The processor may attempt multiple instruction fetches of different addresses in the same cache line. The L1 Icache miss event might be incremented on each of these fetch attempts, while the L2 cache access counter might only be incremented once for the cache line request.
+    - The processor may be fetching data that is not allowed to be cached in the L2 cache, such as ROM-resident code. It may not be allowed in the L1 Instruction cache either, so every instruction fetch would miss in the L1 cache (because it is not allowed to be there), then bypass access to the L2 cache (because it is not allowed to be there), then get retrieved directly from memory. (I don’t know of any specific processors that work this way, but it is certainly plausible.)
 
 
 # ARM
@@ -62,11 +68,11 @@
 	- cold/unlikely path is placed under the hot path.
 	- compiler may ignore `[[unlikely]]` if code in cold path is too small, but it cause performance penalty on high-loaded code.
 
-* Programs can use the _mm_prefetch intrinsic on any pointer in the program. [1.1]
+* Programs can use the `_mm_prefetch` intrinsic on any pointer in the program. [1.1]
 	- Most processors (certainly all x86 and x86-64 processors) ignore errors resulting from invalid pointers which makes the life of the programmer significantly easier.
 	-  If the passed pointer references valid memory, the prefetch unit will be instructed to load the data into cache and, if necessary, evict other data.
 
-* Prefetching with a null pointer seems silly, but it's also costly: evidently every such prefetch on x86 machines (and, seemingly, ARM as well) causes a translation lookaside buffer miss and a pipeline stall. Each null prefetch cost about 20 processor cycles. [The problem with prefetch](https://lwn.net/Articles/444336/)
+* Prefetching with a null pointer seems silly, but it's also costly: evidently every such prefetch on x86 machines (and, seemingly, ARM as well) causes a translation lookaside buffer miss and a pipeline stall. Each null prefetch cost about 20 processor cycles. [[The problem with prefetch](https://lwn.net/Articles/444336/)]
 
 * As long as predictions hold, CPU executes a static instruction sequence: [2]
 	- Instructions are read, decoded, scheduled, executed, and retired.

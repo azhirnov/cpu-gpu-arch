@@ -254,3 +254,7 @@ Stall reasons explain why a warp was unable to issue an instruction. Each stall 
 	- Consider converting texture lookups or surface loads into global memory lookups (UAVs). Texture can accept 4 threads’ requests per cycle, whereas global accepts 32 threads.
 
 * __Wait__ : Waiting for coupled math data dependency (FMA, ALU, FP16+Tensor).
+
+
+[ref](https://chipsandcheese.com/p/starfield-on-the-rx-6900-xt-rx-7600-and-rtx-2060-mobile)
+TODO

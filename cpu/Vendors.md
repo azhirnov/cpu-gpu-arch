@@ -27,6 +27,7 @@ Content:
 ## Intel
 
 * [CPU Architectures](Intel-Arch.md)
+* [Server CPU Architectures](Intel-Server-Arch.md)
 * [Best practices, Optimization guide](Intel-Guide.md)
 
 ## Qualcomm
@@ -40,8 +41,7 @@ Content:
 
 ## HiSilicon
 
-TODO:
-TaiShan V120
+* [TaiShan V1xx](HiSilicon-Arch.md)
 
 ## MCST
 

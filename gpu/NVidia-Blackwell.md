@@ -11,6 +11,9 @@ Codename: GB100 (datacenter), GB20x (consumer)
 1. [Compute Capability 12.0](https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#compute-capability-12-0)
 2. [A Deeper Analysis of Nvidia RTX 50 Blackwell GPU Architecture](https://www.guru3d.com/review/technical-analysis-of-nvidia-rtx-50-blackwell-gpu-architecture/)
 3. [NVIDIA RTX BLACKWELL GPU ARCHITECTURE (5090)](https://images.nvidia.com/aem-dam/Solutions/geforce/blackwell/nvidia-rtx-blackwell-gpu-architecture.pdf)
+4. [Blackwell: Nvidia’s Massive GPU](https://chipsandcheese.com/p/blackwell-nvidias-massive-gpu)
+5. [Vulkan features for GTX 5080](https://vulkan.gpuinfo.org/listreports.php?devicename=NVIDIA%20GeForce%20RTX%205080)
+6. [RTX 5070Ti Benchmarks](https://github.com/azhirnov/as-en/blob/dev/AE/docs/papers/bench-gpu/NVidia_RTX5070Ti.md)
 
 ## Features
 
@@ -42,6 +45,9 @@ Codename: GB100 (datacenter), GB20x (consumer)
 	- includes a Triangle Cluster Intersection Engine, which further accelerates ray tracing of Mega Geometry. [3]
 	- adds Linear Swept Spheres as a hardware-accelerated path to ray trace fine geometry like hair. [3]
 
+* added floating point instructions to uniform datapath. [4]
+	- include adds, multiples, FMAs, min/max, and conversions between integer and floating point.
+
 
 ## Specs
 
@@ -52,18 +58,33 @@ Codename: GB100 (datacenter), GB20x (consumer)
 	- 64 i32 (on 1 datapath)
 	- 16 SFU
 	- 4 warp schedulers
+	- 4 Tensor cores
 
 * Tensor core formats: INT4, INT8, FP4, FP8, FP16, FP32, BF16, TF32
+
+* Tensor core ops/clock per SM (dense/sparse):
+	- fp4: 4096 / 8192
+	- fp8 with fp16 accum: 2048 / 4098
+	- fp8 with fp32 accum: 1024 / 2048
+	- fp16, bf16: 1024 / 2048
+	- fp16, bf16 with fp32 accum: 512 / 1024
+	- tf32: 256 / 512
 
 * RTX 5090 performance: [3]
 	- clock: 2407 MHz
 	- SM: 170
-	- fp32 FLOPS: 104.8T
-	- fp16 FLOPS: 104.8T
-	- bf16 FLOPS: 104.8T
-	- i32 OPS: 104.8T
-	- RT ops: 317.5T
-	- fp4 Tensor FLOPS: 1676
+	- fp32 TFLOPS: 104.8
+	- fp16 TFLOPS: 104.8
+	- bf16 TFLOPS: 104.8
+	- i32 TOPS: 104.8
+	- RT TOPS: 317.5
+	- Tensor cores: 680
+	- fp4 Tensor TFLOPS: 1676 / 3352
+	- fp8 Tensor fp16 accum TFLOPS: 838 / 1676
+	- fp8 Tensor fp32 accum TFLOPS: 419 / 838
+	- fp16 Tensor TFLOPS: 419 / 838
+	- fp16 Tensor fp32 accum TFLOPS: 209.5 / 419
+	- tf32 Tensor TFLOPS: 104.8 / 209.5
 	- Memory Bandwidth: 1792 GB/s
 	- Pixel Fill-rate: 423.6 GigaPixels/s
 	- Texel Fill-rate: 1636.8 GigaTexels/s

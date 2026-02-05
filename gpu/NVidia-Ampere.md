@@ -47,15 +47,24 @@ Codename: GA10x
 	- 2 fp64 FMA
 	- 64 i32 (on 1 datapath)
 	- 16 SFU
+	- 4 Tensor cores
+	- 1 RT core
 
 * RTX 3080 specs:
 	- shaderSMCount: 68 [vk]
 	- shaderWarpsPerSM: 48 [vk] (32?)
 	- warp size: 32 [vk]
-	- Shading Units: 8704 [specs] *(68 * 32 * 4 ???)*
+	- Shading Units: 8704 [specs] *(68 * 32 * 4)*
 	- total threads: 69 632 [calc] *(68 * 32 * 32)*
 	- Clock: 1440 MHz / 1710 MHz [specs]
 	- FP32 TFLOPS: 29.77 [specs], 37.6 [calc] *{104.4K threads * 1.44GHz / (4cycles (5?) for ADD/MUL/FMA)}*
+
+* RTX 3090 specs:
+	- SMs: 82
+	- RT TFLOPS: 69
+	- fp16 Tensor TFLOPS dense/sparse: 142.3 / 284.6
+	- fp16 Tensor with fp32 accum: 71.2 / 142.4
+	- tf32 Tensor TFLOPS dense/sparse: 35.6 / 71.2
 
 * SM:
 	- 4 Tensor Cores

@@ -14,6 +14,9 @@
 * RX 7600, RX 7600 XT
 * RX 7600S, RX 7600M, RX 7600M XT, RX 7700S
 
+**Custom**
+* Steam Machine (28CU)
+
 **Integrated (N4P)**:
 * 740M, 760M, 780M
 * Z1 (740M), Z1 Extreme (780M), Z2 (780M)
@@ -21,21 +24,34 @@
 * Ryzen 8x40, 8x45
 * Ryzen 8x00G (Desktop)
 
+**RDNA 3.5**
+* Radeon 880M, 890M
+* GPU in Ryzen AI 3xx
+* Radeon 8060S
+* Ryzen Z2 Extreme (16CU)
+
+
 ## References
 
 1. [Beyond the current gen](https://gpuopen.com/presentations/2023/RDNA3_Beyond-the-current-gen-v4.pdf), [[backup](../pdf/AMD-RDNA3_Beyond-the-current-gen-v4.pdf)]
 2. [Architecture Deep Dive](https://www.tomshardware.com/news/amd-rdna-3-gpu-architecture-deep-dive-the-ryzen-moment-for-gpus)
-3. [Instruction Set Architecture](https://gpuopen.com/rdna3-isa-guide-now-available/), [[backup](../pdf/AMD-rdna3_isa.pdf)]
+3. [Instruction Set Architecture](https://www.amd.com/content/dam/amd/en/documents/radeon-tech-docs/instruction-set-architectures/rdna3-shader-instruction-set-architecture-feb-2023_0.pdf), [[backup](../pdf/AMD-rdna3_isa.pdf)]
 4. [Micro Engine Scheduler Specification](https://gpuopen.com/download/documentation/micro_engine_scheduler.pdf), [[backup](../pdf/AMD-rdna3_micro_engine_scheduler.pdf)]
-5. [AMD RDNA 3.5’s LLVM Changes](https://chipsandcheese.com/2024/02/04/amd-rdna-3-5s-llvm-changes/)
 6. [Ryzen Z1’s Tiny iGPU](https://chipsandcheese.com/2024/02/25/ryzen-z1s-tiny-igpu/)
 7. [Latency Testing is Hard (RDNA 3 Power Saving)](https://chipsandcheese.com/2023/06/14/latency-testing-is-hard-rdna-3-power-saving/)
 8. [AMD’s RX 7600: Small RDNA 3 Appears](https://chipsandcheese.com/2023/06/04/amds-rx-7600-small-rdna-3-appears/)
 9. [Microbenchmarking AMD’s RDNA 3 Graphics Architecture](https://chipsandcheese.com/2023/01/07/microbenchmarking-amds-rdna-3-graphics-architecture/)
 10. [AMD RDNA3 mesh shading with RADV](https://timur.hu/blog/2024/rdna3-mesh-shading)
 11. [AMD Reveals Radeon RX 7900 XTX and 7900 XT](https://www.anandtech.com/show/17638/amd-reveals-radeon-rx-7900-xtx-and-7900-xt-first-rdna-3-parts-to-hit-shelves-in-december)
-12. [Vulkan features for RX 7900 XT](https://vulkan.gpuinfo.org/listreports.php?devicename=AMD%20Radeon%20RX%207900%20XT), [Radeon 780M](https://vulkan.gpuinfo.org/listreports.php?devicename=AMD+Radeon%28TM%29+890M+Graphics), [Radeon 780M](https://vulkan.gpuinfo.org/listreports.php?devicename=AMD%20Radeon%20780M%20Graphics)
+12. [Vulkan features for RX 7900 XT](https://vulkan.gpuinfo.org/listreports.php?devicename=AMD%20Radeon%20RX%207900%20XT), [Radeon 780M](https://vulkan.gpuinfo.org/listreports.php?devicename=AMD%20Radeon%20780M%20Graphics), [RADV 780M](https://vulkan.gpuinfo.org/listreports.php?devicename=AMD+Radeon+780M+Graphics+%28RADV+PHOENIX%29&platform=linux)
+13. [How to accelerate AI applications on RDNA 3 using WMMA](https://gpuopen.com/learn/wmma_on_rdna3/)
 
+
+**RDNA 3.5**
+2.1. [Vulkan features for Radeon 890M](https://vulkan.gpuinfo.org/listreports.php?devicename=AMD+Radeon%28TM%29+890M+Graphics), [8060S](https://vulkan.gpuinfo.org/listreports.php?property=devicename&value=AMD%20Radeon(TM)%208060S%20Graphics&platform=all), [RADV 890M](https://vulkan.gpuinfo.org/listreports.php?devicename=AMD+Radeon+890M+Graphics+%28RADV+GFX1150%29&platform=linux)<br/>
+2.2. ["RDNA3.5" Instruction Set Architecture](https://www.amd.com/content/dam/amd/en/documents/radeon-tech-docs/instruction-set-architectures/rdna35_instruction_set_architecture.pdf), [[backup](../pdf/AMD-rdna3_5_isa.pdf)<br/>
+2.3. [AMD RDNA 3.5’s LLVM Changes](https://chipsandcheese.com/2024/02/04/amd-rdna-3-5s-llvm-changes/)<br/>
+2.4. [AMD’s Radeon 890M: Strix Point’s Bigger iGPU](https://chipsandcheese.com/2024/08/24/amds-radeon-890m-strix-points-bigger-igpu/)
 
 ## Features
 
@@ -70,7 +86,7 @@
 * MIX instructions: [3]
 	- allow to combine fp32 and fp16, fp16_lo and fp16_hi.
 	- V_FMA_MIX_F32, V_FMA_MIXLO_F16, V_FMA_MIXHI_F16.
-	
+
 * Ray tracing instructions: [3]
 	- Box BVH nodes perform 4x Ray/Box intersection, sorts the 4 children based on intersection distance and returns the child pointers and hit status.
 	- Triangle nodes perform 1 Ray/Triangle intersection test and returns the intersection point and triangle ID.
@@ -79,6 +95,7 @@
 	- Shader programs can leverage its dual issue capability by using wave64 mode or special dual issue instructions in wave32 mode.
 	- On RDNA hardware, pixel shaders often use wave64 mode, in which 2048-bit vectors execute on the WGP’s 1024-bit execution units over 2 clock cycles, but achieve 1 instruction per cycle throughput on operations with dual issue support.
 	- Wave32 mode lets individual threads (waves) finish faster as 1 instruction per cycle throughput becomes the general case. However, taking advantage of RDNA 3’s extra FP32 units in wave32 mode requires the compiler to find dual issue pairs. That requires instruction-level parallelism within a basic block, and could be upended by register cache source port or result bus limitations.
+	- The dual issue shader array allows the scheduler to issue two wavefronts per cycle to different execution units within the WGP, improving utilization of the ALU resources.
 
 * A WGP with four SIMDs can thus track up to 64 independent instruction streams. [6]
 
@@ -110,6 +127,10 @@
 	- In the ideal access pattern, each attribute store would overwrite a full cache line so the shader won’t actually touch VRAM.
 	- In mesh shader: Any invocation can now truly write generic attributes of any other invocation without restrictions, because these are just a memory write. The shader compiler now has to worry about memory access patterns.
 
+* iGPU supports max 16GB memory.
+* Radeon 8060S supports max 96GB memory with quad channel LPDDR5X.
+
+
 ## Specs
 
 * cumulative bandwidth between the MCDs and GCD is 5.3TB/s 5.3TB/s [11]
@@ -132,7 +153,7 @@
 	- Memory: 16GB, bandwidth 25 GB/s, scalar latency 218ns, vector latency 233ns
 	- GPU clock: 2700MHz, CU: 12, WGP: 6, ShaderArrays: 2
 
-* Tensor core ops per CU:
+* Tensor core ops per CU: [13]
 	- fp32: 256
 	- fp64: 4
 	- fp16: 512
@@ -157,6 +178,10 @@
 	- 2x SIMDs (simdPerComputeUnit)
 	- Ray tracing accelerator
 	- L0 vector cache: 16 KB
+	- Matrix core with: [link](https://gpuopen.com/learn/matrix_core_amd_rdna4/)
+		* 512 fp16 FLOPS/clk
+		* 512 bf16 FLOPS/clk
+		* 512 i8 FLOPS/clk
 
 * SIMD config: [12]
 	- 32x FMA

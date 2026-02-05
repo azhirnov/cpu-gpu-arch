@@ -14,6 +14,10 @@ Content:
 
 ### Architecture
 
+**Pre-GCN**
+* Xenos
+* TeraScale 1,2,3
+
 **GCN**
 * [GCN 1 (Southern Islands)](AMD-GCN1.md)
 * [GCN 2 (Sea Islands)](AMD-GCN2.md)
@@ -22,9 +26,7 @@ Content:
 * [GCN 5 (Vega)](AMD-GCN5.md)
 
 **CDNA**
-* [CDNA 1](AMD-CDNA1.md)
-* [CDNA 2](AMD-CDNA2.md)
-* [CDNA 3](AMD-CDNA3.md)
+* [CDNA 1,2,3,4](AMD-CDNA.md)
 
 **RDNA**
 * [RDNA 1 (Navi)](AMD-RDNA1.md)
@@ -76,12 +78,14 @@ Content:
 
 ### Architecture
 
-* Kepler
+* Tesla (G8000, G9000, GT100-300)
+* Fermi (GTX400-500)
+* Kepler (GTX600-800)
 * [Maxwell (GTX 900)](NVidia-Maxwell.md)
 * [Pascal (GTX 1000)](NVidia-Pascal.md)
 * [Volta](NVidia-Volta.md)
 * [Turing (RTX 2000)](NVidia-Turing.md)
-* [Ampere (RTX 3000](NVidia-Ampere.md)
+* [Ampere (RTX 3000)](NVidia-Ampere.md)
 * [Ada (RTX 4000)](NVidia-Ada.md)
 * [Blackwell 2.0 (RTX 5000)](NVidia-Blackwell.md)
 
@@ -134,8 +138,8 @@ Content:
 
 * [500](Adreno-500.md)
 * [600](Adreno-600.md)
-* [700, X](Adreno-700.md)
-* [800](Adreno-800.md)
+* [700, X1](Adreno-700.md)
+* [800, X2](Adreno-800.md)
 
 ### Specs & Guide
 

@@ -45,17 +45,27 @@
 
 * Wavefront:
 	- In AMD GPUs, a high number of concurrent wavefronts running on the same Compute Unit (CU) enables the GPU to hide the time spent in accessing global memory, which is higher than the time needed to perform a compute operation, with operations performed by other wavefronts.
-	- Wavefront - A collection of 32 or 64 work-items that execute in parallel on a single RDNA processor.
+	- Wavefront - A collection of 32 or 64 work-items that execute in parallel on a single GCN/RDNA processor.
 	- A wavefront executes a number of work-items in lock step relative to each other.
 	- Each GPU wavefront has its own register state, which enables the fast singlecycle switching between threads. [1.5]
 	- On a GPU, hardware schedules groups of work-items, called wavefronts, onto compute units; thus, work-items within a wavefront execute in lock-step; the same instruction is executed on different data. [1.5]
+
+* Wavefront-based scheduling:
+	- It is different from NV's fixed warp-to-SM assignment.
+	- A single compute shader dispatch can have its wavefronts spread across all CUs, and this mapping can change during execution.
+	- Dynamic Wavefront Dispatch: hw scheduler can dispatch wavefronts to any available CU.
+	- Work Stealing: Idle CUs can "steal" work from busy CUs' queues.
+	- Wavefronts redistributed based on memory controller load.
+	- Work moved from hot CUs to cooler ones.
+	- Large wavefronts can be split across CUs. Small, related wavefronts can be fused onto same CU for better data sharing.
+
 
 ### Pre-GCN
 
 * HiZ: [5.1]
 	- For each tile HiZ stores a low resolution minimum or maximum depth value depending on the depth comparison the application uses.
 	- Since it only stores one of the values changing the comparison direction in the middle of a frame makes the existing values in the buffer unusable. Thus HiZ will have to be disabled until the buffer is either cleared or the application changes the comparison direction back to the original.
-	- Since the stored HiZ values are low resolution the effectiveness depends on the amount of range covered. Keeping a low far/near plane ratio can help HiZ to throw away more hidden tiles. 
+	- Since the stored HiZ values are low resolution the effectiveness depends on the amount of range covered. Keeping a low far/near plane ratio can help HiZ to throw away more hidden tiles.
 
 
 ### GCN
@@ -66,7 +76,7 @@
 
 * Hardware have 7 context rolls for parallel execution of draw commands with different render states. [2.3]
 
-* Each GCN rasterizer can read one triangle per clock and produce up to 16 pixels per clock. Because of this, small triangles are extremely inefficient to rasterize. [[slide 51](https://ubm-twvideo01.s3.amazonaws.com/o1/vault/gdc2016/Presentations/Wihlidal_Graham_OptimizingTheGraphics.pdf)]
+* Each GCN rasterizer can read one triangle per clock and produce up to 16 pixels per clock. Because of this, small triangles are extremely inefficient to rasterize. [[page 51](https://gdcvault.com/play/1023109/Optimizing-the-Graphics-Pipeline-With)]
 
 
 ### RDNA
@@ -90,9 +100,14 @@
 
 * Scan Converter (SC): [3.12]
 	- Determine pixels covered by each triangle.
+	- Contains 2 levels: coarse and fine.
+	- Scan Conversion only on a coarse level.
 	- On a fine level (4x4 pixels) test against the triangle edges.
 	- Forwards quads to the Shader Processor Input. (SPI).
 
 * Shader Processor Input (SPI): [3.12]
 	- Gets enough quads from the Scan Converter.
 	- Chooses Dual Compute Unit, sets it up.
+
+* Dual Compute Units:
+	- Work can migrate between paired CUs without performance penalty.

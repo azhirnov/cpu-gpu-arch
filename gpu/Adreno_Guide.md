@@ -40,6 +40,7 @@
 	- Use of secondary command buffers (Vulkan) (Snapdragon 865 and newer will not disable LRZ based on this criteria)
 	- Since LRZ is an early depth test, such test cannot be used when late-z is required. [2.1]
 	- LRZ buffer could be formed only in one direction, changing depth comparison directions without disabling LRZ would lead to a malformed LRZ buffer. [2.1]
+	- In tests LRZ shows 10% loss in back to front draw order even on small triangles. [[ref](https://github.com/azhirnov/AsEn-ShaderEditor/blob/main/papers/GeometryCulling-en.md#hardware-optimization)]
 
 * LRZ:
 	- The interesting part of this feature is that it allows applications to submit the vertices in any order. [2.1]
@@ -60,7 +61,7 @@
 	- LRZ can be reused between render passes.
 
 * LRZ on A7xx: [2.1]
-	- introduces the concept of bidirectional LRZ where there are two LRZ buffers, one for each direction. 
+	- introduces the concept of bidirectional LRZ where there are two LRZ buffers, one for each direction.
 
 * LRZ Feedback: [2.1]
 	- Some draws do write depth but cannot contribute to LRZ during the BINNING pass e.g. when fragment shader has “discard” in it, however they can contribute to LRZ during the RENDERING pass via LRZ feedback mechanism.
@@ -94,4 +95,5 @@ Bad. The one (1) prim/clock will turn into 50 cycles if you must clip the primit
 * Which is better: vertex stream or attribute fetching in VS? [2]<br/>
 Vertex stream is preferred. Adreno GPUs have specialized hardware for fetch and decode of these.
 
+* FP16 inverse squareroot is 2x faster than FP32.
 

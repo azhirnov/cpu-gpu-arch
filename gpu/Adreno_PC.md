@@ -99,6 +99,7 @@ adb shell "echo 1 > /sys/class/kgsl/kgsl-3d0/perfcounter"
 | OPPO Find X3                  | 650 | yes | [ref](https://developer.android.com/agi/supported-devices) |
 | OPPO Reno 6 Pro+              | 650 | yes | [ref](https://developer.android.com/agi/supported-devices) |
 | OnePlus 9R                    | 650 | yes | [ref](https://developer.android.com/agi/supported-devices) |
+TODO: VR
 
 
 ## A5xx
@@ -1716,6 +1717,162 @@ CMP: cmpdecmp 2D busy cycles
 CMP: cmpdecmp 2D reorder starve cycles
 CMP: cmpdecmp 2D pixels
 ```
+</details>
+
+
+### Adreno 610
+
+<details>
+
+| group, counter | name | desc |
+|---|---|---|
+| - | **Command Parser** | - |
+| 0, 0 | always count |
+| 0, 1 | busy gfx core idle |
+| 0, 2 | busy cycles |
+| 0, 3 | num preemptions |
+| 0, 4 | preemption reaction delay |
+| 0, 5 | preemption switch out time |
+| 0, 6 | preemption switch IN time |
+| 0, 7 | dead draws IN bin render |
+| 0, 8 | predicated draws killed |
+| 0, 9 | mode switch |
+| 0, 10 | zpass done |
+| 0, 11 | context done |
+| 0, 12 | cache flush |
+| 0, 13 | long preemptions |
+| - | **RBBM** | - |
+| 1, 3 | RAS busy |
+| 1, 9 | vbif busy |
+| 1, 10 | VSC busy |
+| 1, 12 | UCHE busy |
+| - | **PC** | - |
+| 2, 17 | VPC primitives |
+| 2, 18 | dead prim |
+| 2, 19 | live prim |
+| 2, 21 | IA vertices |
+| 2, 22 | IA primitives |
+| 2, 26 | VS invocations |
+| 2, 30 | 3D drawcalls |
+| 2, 31 | 2D drawcalls |
+| - | Vertex Fetch and Decode | - |
+| 3, 0 | busy cycles |
+| 3, 1 | stall cycles UCHE |
+| 3, 2 | stall cycles VPC alloc |
+| 3, 3 | stall cycles SP info |
+| 3, 4 | stall cycles SP attr |
+| 3, 5 | starve cycles UCHE |
+| 3, 6 | rbuffer full |
+| 3, 23 | ??? |
+| - | **High Level SeQuencer** | - |
+| 4, 0 | busy cycles |
+| 4, 1 | stall cycles UCHE |
+| 4, 2 | stall cycles SP state |
+| 4, 3 | stall cycles SP FS stage |
+| 4, 4 | UCHE latency cycles |
+| 4, 5 | UCHE latency count |
+| - | **Varying/Position Cache** | - |
+| 5, 0 | busy cycles |
+| 5, 1 | working cycles |
+| 5, 2 | stall cycles UCHE |
+| 5, 3 | stall cycles VFD wack |
+| 5, 4 | stall cycles HLSQ prim alloc |
+| 5, 5 | stall cycles PC |
+| - | **Triangle Setup Engine** | - |
+| 6, 0 | busy cycles |
+| 6, 1 | clipping cycles |
+| 6, 2 | stall cycles RAS |
+| 6, 3 | stall cycles LRZ baryplane |
+| - | **Rasterizer** | - |
+| 7, 4 | super tiles |
+| 7, 5 | 8x4 tiles |
+| 7, 6 | maskgen active |
+| 7, 7 | fully covered super tiles |
+| - | **Unified L2 Cache** | - |
+| 8, 0 | busy cycles |
+| 8, 1 | stall cycles arbiter |
+| 8, 2 | vbif latency cycles |
+| 8, 3 | vbif latency samples |
+| 8, 4 | vbif read beats TP |
+| 8, 5 | vbif read beats VFD |
+| 8, 6 | vbif read beats HLSQ |
+| 8, 7 | vbif read beats LRZ |
+| 8, 8 | vbif read beats SP |
+| 8, 9 | read requests TP |
+| 8, 10 | read requests VFD |
+| 8, 11 | read requests HLSQ |
+| - | **Texture Processor** | - |
+| 9, 0 | busy cycles |
+| 9, 1 | stall cycles UCHE |
+| 9, 2 | latency cycles |
+| 9, 3 | latency trans |
+| 9, 4 | flag cache request samples |
+| 9, 5 | flag cache request latency |
+| 9, 6 | L1 cacheline requests |
+| 9, 7 | L1 cacheline misses |
+| 9, 8 | SP TP trans |
+| 9, 9 | TP SP trans |
+| 9, 10 | output pixels |
+| 9, 11 | filter workload 16bit |
+| - | **Shader/Streaming Processor** | - |
+| 10, 0 | busy cycles |
+| 10, 1 | ALU working cycles |
+| 10, 2 | EFU working cycles |
+| 10, 3 | stall cycles VPC |
+| 10, 4 | stall cycles TP |
+| 10, 5 | stall cycles UCHE |
+| 10, 6 | stall cycles RB |
+| 10, 7 | non execution cycles |
+| 10, 8 | wave contexts |
+| 10, 9 | wave context cycles |
+| 10, 10 | FS stage wave cycles |
+| 10, 11 | FS stage wave samples |
+| 10, 12 | VS stage wave cycles |
+| 10, 13 | VS stage wave samples |
+| 10, 14 | FS stage duration cycles |
+| 10, 15 | VS stage duration cycles |
+| 10, 16 | wave ctrl cycles |
+| 10, 17 | wave load cycles |
+| 10, 18 | wave emit cycles |
+| 10, 19 | wave nop cycles |
+| 10, 20 | wave wait cycles |
+| 10, 21 | wave fetch cycles |
+| 10, 22 | wave idle cycles |
+| 10, 23 | wave end cycles |
+| - | **Render backend** | - |
+| 11, 13 | Z write |
+| 11, 14 | C read |
+| 11, 15 | C write |
+| 11, 16 | total pass |
+| 11, 18 | Z fail |
+| 11, 19 | S fail |
+| 11, 20 | blended fxp components |
+| 11, 24 | 2D stall cycles a2d |
+| - | **VBIF** | - |
+| 13, 34 | ??? |
+| 13, 35 | ??? |
+| 13, 46 | ??? |
+| 13, 47 | ??? |
+| - | **Visibility Stream Compressor** | - |
+| 23, 0 | busy cycles |
+| 23, 1 | working cycles |
+| - | **Cache and Compression Unit** | - |
+| 24, 4 | depth blocks |
+| 24, 5 | color blocks |
+| 24, 8 | partial block read |
+| 24, 9 | gmem read |
+| 24, 10 | gmem write |
+| - | **Low Resolution Z pass** | - |
+| 25, 7 | LRZ read |
+| 25, 8 | LRZ write |
+| 25, 11 | prim killed BY maskgen |
+| 25, 12 | prim killed BY LRZ |
+| - | **CMP** | - |
+| 26, 0 | cmpdecmp stall cycles arb |
+| 26, 1 | cmpdecmp vbif latency cycles |
+| 26, 2 | cmpdecmp vbif latency samples |
+| 26, 3 | cmpdecmp vbif read data CCU |
+
 </details>
 
 

@@ -2,12 +2,6 @@
 
 ## Examples
 
-**RDNA 3.5**
-* Radeon 880M, 890M
-* GPU in Ryzen AI 3xx
-* Radeon 8060S
-* Ryzen Z2 Extreme (16CU)
-
 **Navi 48**
 * Radeon RX 9070, RX 9070 XT
 
@@ -16,11 +10,12 @@
 1. [Examining AMD’s RDNA 4 Changes in LLVM](https://chipsandcheese.com/2024/01/28/examining-amds-rdna-4-changes-in-llvm/)
 2. [Instruction Set Architecture](https://www.amd.com/content/dam/amd/en/documents/radeon-tech-docs/instruction-set-architectures/rdna4-instruction-set-architecture.pdf)
 3. [AMD RDNA 4 architecture deep dive](https://www.notebookcheck.net/AMD-RDNA-4-architecture-deep-dive-A-64-CU-monolithic-design-with-all-round-improvements-to-compute-media-encode-decode-ray-tracing-and-AI.969593.0.html)
-4. ["RDNA3.5" Instruction Set Architecture](https://www.amd.com/content/dam/amd/en/documents/radeon-tech-docs/instruction-set-architectures/rdna35_instruction_set_architecture.pdf), [[backup](../pdf/AMD-rdna3_5_isa.pdf)
 5. [RDNA 4's "Out-of-Order" Memory Accesses](https://chipsandcheese.com/p/rdna-4s-out-of-order-memory-accesses)
-6. [Vulkan features for RX 9070 XT](https://vulkan.gpuinfo.org/listreports.php?devicename=AMD+Radeon+RX+9070+XT)
+6. [Vulkan features for RX 9070 XT](https://vulkan.gpuinfo.org/listreports.php?devicename=AMD+Radeon+RX+9070+XT), [RADV RX 9070 XT](https://vulkan.gpuinfo.org/listreports.php?devicename=AMD+Radeon+RX+9070+XT+%28RADV+GFX1201%29&platform=linux)
 7. [RDNA 4’s Raytracing Improvements](https://chipsandcheese.com/p/rdna-4s-raytracing-improvements)
 8. [Dynamic Register Allocation on AMD's RDNA 4 GPU Architecture](https://chipsandcheese.com/p/dynamic-register-allocation-on-amds)
+9. [Using the Matrix Cores of AMD RDNA 4 architecture GPUs](https://gpuopen.com/learn/matrix_core_amd_rdna4/)
+10. [AMD’s RDNA4 GPU Architecture at Hot Chips 2025](https://chipsandcheese.com/p/amds-rdna4-gpu-architecture-at-hot)
 
 ## Features
 
@@ -66,7 +61,8 @@
 	- LDS: 128 KB
 
 * SIMD Core config: [2, 3, 6]
-	- 32x FMA SIMD Unit
+	- 32x fp32 FMA SIMD Unit
+	- 64x fp16 FMA
 	- 32x FMA/Int SIMD Unit
 	- 8x Transcendental Logic Unit (TLU)
 	- Scalar Unit
@@ -79,12 +75,13 @@
 * RX 9070 XT theoretical performance:
 	- fp32 FLOPS: 64 WGP * 4 * 32 FMA * 2.97 GHz = 24.3T FMA = 48.66 TFLOPS
 	- Ray/triangle: 64 WGP * 2 RA * 1 ray/tri * 2.97 GHz = 380 GRays/s
-	- Ray/Box: 64 WGP * 2 RA * 4 ray/box * 2,97 GHz = 1.5 TRays/s
-	- AI:
+	- Ray/Box: 64 WGP * 2 RA * 4 ray/box * 2.97 GHz = 1.5 TRays/s
+	- NPU fp16 dense: 64 WGP * 1024 * 2.97 GHz = 195 TOPS
+	- NPU fp8 dense: 64 WGP * 2048 * 2.97 GHz = 389 TOPS
 	- Pixel Rate: 380.2 GPixel/s [specs]
 	- Texture Rate: 760.3 GTexel/s [specs]
 
-* Tensor core ops per CU (dense/sparse): [3]
+* Tensor core ops per CU (dense/sparse): [3, 9]
 	- fp32: 256
 	- fp64: 4
 	- fp16, bf16: 1024 / 2048

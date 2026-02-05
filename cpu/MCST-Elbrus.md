@@ -6,7 +6,7 @@
 	* [new](https://www.nanoindustry.su/files/article_pdf/6/article_6754_973.pdf), [[backup](../pdf/Elbrus-article_6754_973.pdf)]
 3. [Secure computing technology](https://mcst.ru/sites/default/files/u11/Elbrus_secure_computing_2023-09-26_ru.pdf), [[backup](../pdf/Elbrus-secure_computing_2023-09-26_ru.pdf)]
 4. [ISA Review (2025)](http://www.iakovlev.org/index.html?p=8912&m=1&l1=7), [[backup](../pdf/Elbrus-e2k_ISA_review.pdf)]
- 
+
 
 **Development Tools**
 * [Dev News](https://dev.mcst.ru)

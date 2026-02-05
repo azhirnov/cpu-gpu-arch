@@ -23,6 +23,10 @@ Content:
 2.1. [Modern Mobile Rendering at HypeHype (2023)](https://enginearchitecture.realtimerendering.com/downloads/reac2023_modern_mobile_rendering_at_hypehype.pdf)<br/>
 2.2. [Mobile Rendering Architecture](https://advances.realtimerendering.com/s2023/AaltonenHypeHypeAdvances2023.pdf)<br/>
 
+TODO:
+* https://developer.samsung.com/galaxy-gamedev/best-practice.html
+* https://developer.samsung.com/galaxy-gamedev/resources/articles/usage.html
+
 ## Notes
 
 * Min spec 2023: 95% of our users have Vulkan 1.0 + Android 9, 2GB memory (1.4GB usable). [2.1]<br/>
@@ -66,6 +70,7 @@ Content:
 3.1. Vulkanised 2025: What is Maximal Reconvergence and Why it Matters, [video](https://youtu.be/QefxN0PXwwM), [pdf](https://vulkan.org/user/pages/09.events/vulkanised-2025/T08-Hugo-Devillers-SaarlandUniversity.pdf)<br/>
 3.2. [Benchmarks](https://github.com/azhirnov/as-en/blob/dev/AE/docs/papers/GPU_Benchmarks.md)<br/>
 3.3. [List of GPUs with Vulkan support](https://www.khronos.org/conformance/adopters/conformant-products/vulkan), [GPU info](https://vulkan.gpuinfo.org/)<br/>
+3.4. [Learning About GPUs Through Measuring Memory Bandwidth](https://www.evolvebenchmark.com/blog-posts/learning-about-gpus-through-measuring-memory-bandwidth)<br/>
 
 ## Notes
 

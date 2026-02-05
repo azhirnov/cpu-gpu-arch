@@ -40,7 +40,7 @@ Content:
 	- 2 frag/cy
 	- 2 pix/cy
 	- 4 tex/cy
-	
+
 * Tile size: [1.4]
 	- 16x16 if <= 256 bits per pixel
 	- 16x8  if <= 512 bpp
@@ -102,6 +102,7 @@ Content:
 3.2. [Arm Announces New Mali-G710, G610, G510 & G310 Mobile GPU Families](https://www.anandtech.com/show/16694/arm-announces-new-malig710-g610-g510-g310-mobile-gpu-families)<br/>
 3.3. [Mali-G510](https://developer.arm.com/Processors/Mali-G510)<br/>
 3.4. [Vulkan features for Mali-G710](https://vulkan.gpuinfo.org/listreports.php?devicename=Mali-G710), [G710 MC10](https://vulkan.gpuinfo.org/listreports.php?devicename=Mali-G710%20MC10), [G610](https://vulkan.gpuinfo.org/listreports.php?devicename=Mali-G610), [G610 MC6](https://vulkan.gpuinfo.org/listreports.php?devicename=Mali-G610%20MC6)<br/>
+3.5. [Vulkan subpasses: the good, the bad, and the ugly](https://developer.arm.com/community/arm-community-blogs/b/mobile-graphics-and-gaming-blog/posts/vulkan-subpasses-the-good-the-bad-and-the-ugly)<br/>
 
 ## Notes
 
@@ -155,6 +156,9 @@ Content:
 * Valhall maintains native support for int8, int16, and fp16 data types. These data types can be packed using SIMD instructions to fill each 32-bit data processing lane. This arrangement maintains the power efficiency and performance that is provided by the types that are narrower than 32-bits. [4.2]
 * A single 16-wide warp maths unit can therefore perform 32x fp16/int16 operations per clock cycle, or 64x int8 operations per clock cycle. [4.2]
 * Fragment shading rate (VRS)
+* Cooperative matrix support on Google Tensor. [4.3]
+
+## Specs
 
 * LSU: [4.2]
 	- 64-byte cache line.

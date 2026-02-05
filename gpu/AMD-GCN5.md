@@ -23,13 +23,13 @@
 3. [The AMD Radeon VII Review](https://www.anandtech.com/show/13923/the-amd-radeon-vii-review)
 4. [Vega Whitepaper](https://en.wikichip.org/w/images/a/a1/vega-whitepaper.pdf), [[backup](../pdf/AMD-vega-whitepaper.pdf)]
 5. [Vega 7nm ISA](https://www.amd.com/content/dam/amd/en/documents/radeon-tech-docs/instruction-set-architectures/vega-7nm-shader-instruction-set-architecture.pdf), [[backup](../pdf/AMD-vega-shader-instruction-set-architecture.pdf)]
-6. [Vulkan features for Radeon VII](https://vulkan.gpuinfo.org/listreports.php?devicename=AMD%20Radeon%20VII), [RX Vega](https://vulkan.gpuinfo.org/listreports.php?devicename=Radeon%20RX%20Vega)
+6. [Vulkan features for Radeon VII](https://vulkan.gpuinfo.org/listreports.php?devicename=AMD%20Radeon%20VII), [RX Vega](https://vulkan.gpuinfo.org/listreports.php?devicename=Radeon%20RX%20Vega), [RX Vega 10](https://vulkan.gpuinfo.org/listreports.php?property=devicename&value=AMD%20Radeon(TM)%20RX%20Vega%2010%20Graphics)
 7. [The AMD Vega GPU Architecture Teaser: Higher IPC, Tiling, & More, Coming in H1’2017](https://www.anandtech.com/show/11002/the-amd-vega-gpu-architecture-teaser/3)
 
 ## Notes
 
 * Draw-Stream Binning Rasterizer (DSBR): [4]
-	- The DSBR works by first dividing the image to be rendered into a grid of bins or tiles in screen space and then collecting a batch of primitives to be rasterized in the scan converter. The bin and batch sizes can be adjusted dynamically to optimize for the content being rendered. 
+	- The DSBR works by first dividing the image to be rendered into a grid of bins or tiles in screen space and then collecting a batch of primitives to be rasterized in the scan converter. The bin and batch sizes can be adjusted dynamically to optimize for the content being rendered.
 	The DSBR then traverses the batched primitives one bin at a time, determining which ones are fully or partially covered by the bin. Geometry is processed once, requiring one clock cycle per primitive in the pipeline.
 	There are no restrictions on when binning can be enabled, and it is fully compatible with tessellation and geometry shading.
 	- This design economizes on-chip memory bandwidth by keeping all the data necessary to rasterize geometry for a bin in fast on-chip memory (i.e., the L2 cache).

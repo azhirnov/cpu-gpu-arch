@@ -1,0 +1,64 @@
+
+# CDNA
+
+## Examples
+
+* AMD Instinct MI100
+
+
+## References
+
+1.1. [AMD Instinct MI100/CDNA1 Instruction Set Architecture](https://www.amd.com/system/files/TechDocs/instinct-mi100-cdna1-shader-instruction-set-architecture%C2%A0.pdf), [[backup](../pdf/AMD-instinct-mi100-cdna1-shader-instruction-set-architecture.pdf)]
+1.2. [Whitepaper](https://web.archive.org/web/20240329063257/https://www.amd.com/content/dam/amd/en/documents/instinct-business-docs/white-papers/amd-cdna-white-paper.pdf), [[backup](../pdf/amd-cdna-white-paper.pdf)
+1.3. [AMD Instinct™ MI100 Hardware](https://rocm.docs.amd.com/en/docs-5.7.1/understand/gpu_arch/mi100.html)
+
+## Notes
+
+
+# CDNA2
+
+## Examples
+
+* AMD Instinct MI210
+* AMD Instinct MI250
+* AMD Instinct MI250X
+
+## References
+
+2.1. [AMD CDNA 2 ARCHITECTURE](https://www.amd.com/content/dam/amd/en/documents/instinct-business-docs/white-papers/amd-cdna2-white-paper.pdf), [[backup](../pdf/amd-cdna2-white-paper.pdf)]
+2.2. [AMD Announces Instinct MI200 Accelerator Family](https://www.anandtech.com/show/17054/amd-announces-instinct-mi200-accelerator-family-cdna2-exacale-servers)
+2.3. [Register pressure in AMD CDNA2 GPUs](https://gpuopen.com/learn/amd-lab-notes/amd-lab-notes-register-pressure-readme/)
+2.4. [AMD Instinct MI200 GPU memory space overview](https://gpuopen.com/learn/amd-lab-notes/amd-lab-notes-mi200-memory-space-overview/)
+2.5. [AMD Instinct MI200 Instruction Set Architecture](https://www.amd.com/content/dam/amd/en/documents/instinct-tech-docs/instruction-set-architectures/instinct-mi200-cdna2-instruction-set-architecture.pdf), [[backup](../pdf/AMD-instinct-mi200-cdna2-instruction-set-architecture.pdf)]
+
+## Notes
+
+
+
+# CDNA3
+
+## Examples
+
+* AMD Instinct MI300A
+* AMD Instinct MI300X
+* AMD Instinct MI325X
+
+
+## References
+
+3.1. [ISA](https://www.amd.com/content/dam/amd/en/documents/instinct-tech-docs/instruction-set-architectures/amd-instinct-mi300-cdna3-instruction-set-architecture.pdf), [[backup](../pdf/amd-instinct-mi300-cdna3-instruction-set-architecture.pdf)]
+3.2. [Whitepaper](https://www.amd.com/content/dam/amd/en/documents/instinct-tech-docs/white-papers/amd-cdna-3-white-paper.pdf), [[backup](../pdf/amd-cdna-3-white-paper.pdf)]
+3.3. [AMD Plans Massive Memory Instinct MI325X for Q4'24, Lays Out Accelerator Roadmap to 2026](https://www.anandtech.com/show/21422/amd-instinct-mi325x-reveal-and-cdna-architecture-roadmap-computex)
+
+## Notes
+
+
+# CDNA4
+
+## Examples
+
+## References
+
+4.1. [AMD’s CDNA 4 Architecture Announcement](https://chipsandcheese.com/p/amds-cdna-4-architecture-announcement)<br/>
+
+## Notes

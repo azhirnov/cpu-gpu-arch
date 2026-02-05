@@ -7,7 +7,7 @@
 
 ## Examples
 
-* Phenom  
+* Phenom
 * Phenom II
 * Athlon X2
 * Athlon II
@@ -118,7 +118,7 @@
 	- float register file: 160 entry. [3]
 	- The PRF has 8 read ports and 4 write ports for ALU results, each 256 bits wide and two additional write ports supporting up to two 256-bit load operations per cycle. [3]
 	- The latency of fused multiply-add (FMA) instructions remains 5 cycles. [3]
-	
+
 * Integer unit: [3]
 	- register file: 180
 	- reorder buffer: 224
@@ -126,13 +126,16 @@
 
 * Cache:
 	- L1I: 32KB, 4-way, 64B line, 32B/cy from L2. [3]
+		* Shared by the two threads, per core [3]
 	- L1D: 32KB, 8-way. [3]
 		* 4-5 cycles latency for Int [3]
 		* 7-8 cycles latency for FP [3]
+		* write to: 32B/cy [3]
+		* read from: 64B/cy, two loads up to 256bit [3]
 	- L2: 512KB, 8-way, ≥ 12 cycles latency. [3, 6]
 	- L3: 16-way, 16MB per CCX (4 cores), 4x slices of 4MB, 64B line. [3]
 	- Each core in CCX can access all L3 slices with the same average load-to-use latency of 39 cycles. [3]
-	- L3 to L2: 32B. [3]
+	- L3 to L2: 32B/cy. [3]
 	- L2 to L1: 32B/cy. [3]
 
 * LSU: [3]
@@ -141,10 +144,29 @@
 	- The DC load-to-use latency is 4 cycles to the integer unit, 7 cycles to the FPU.
 	- Can track up to 22 in-flight cache misses, these are recorded in the miss address buffer (MAB).
 
-* Ryzen 3900 performance: [7]
-	- L1: ? *(64B/cy * 4.2 GHz = 269 GB/s)*
-	- L2: 134.5 GB/s per core *(32B/cy * 4.2 GHz = 134 GB/s)*
-	- L3: 93.6 GB/s per core?
+## Tests
+
+<details><summary>AIDA64</summary>
+
+* Ryzen 5 3600:
+	- clock: 4.4 GHz
+	- cores: 6
+	- | cache | read | write | copy | latency | cycles |
+	  |---|---|---|---|---|---|
+	  | L1 | 1'634 | 820 | 1'634 | 0.9 | 4  |
+	  | L2 | 823   | 802 | 823   | 2.7 | 12 |
+	  | L3 | 593   | 532 | 469   | 9.9 | 44 |
+
+* Ryzen 9 3900X:
+	- clock: 4.7 GHz (actual 4.2)
+	- cores: 12
+	- | cache | read | write | copy | latency | cycles |
+	  |---|---|---|---|---|---|
+	  | L1 | 3'200 | 1'600 | 3'200 | 0.9 | 4  |
+	  | L2 | 1'600 | 1'550 | 1'630 | 2.5 | 12 |
+	  | L3 | 1'120 | 1'110 | 1'120 | 9.1 | 43 |
+
+</details>
 
 
 # Zen 3 (2020)
@@ -154,6 +176,7 @@
 * Ryzen 9 5950X
 * Ryzen 7 6800U
 * Threadripper PRO 5995WX
+* Ryzen Z2 Go
 
 ## References
 
@@ -174,12 +197,27 @@
 
 * Cache: [1]
 	- Increased L3 latency (~46 cycles).
-	
+
 * LSU: [1]
 	- Load throughput increased from 2 to 3, if not 256b.
 	- Store throughput increased from 1 to 2, if not 256b.
 
 * New Instructions: VAES, VPCLMULQDQ. [1]
+
+## Tests
+
+<details><summary>AIDA64</summary>
+
+* Ryzen 5 5600G:
+	- clock: 4.65 GHz
+	- cores: 6
+	- | cache | read | write | copy | latency | cycles |
+	  |---|---|---|---|---|---|
+	  | L1 | 1'726 | 869 | 1'404 | 0.9  | 4 |
+	  | L2 | 871   | 745 | 855   | 2.6  | 12 |
+	  | L3 | 354   | 395 | 319   | 11.4 | 53 |
+
+</details>
 
 
 # Zen 4 (2022)
@@ -188,6 +226,7 @@
 
 **Desktop**
 * Ryzen 9 7900X
+* Ryzen 7 7800X3D
 * Threadripper 7980X
 
 **Desktop APU**
@@ -200,6 +239,7 @@
 * Ryzen 9 7940HS
 * Ryzen 3 7440U
 * Ryzen 5 7545U, Ryzen 3 7440U *(Phenix2 with Zen4c)*
+* Ryzen Z2
 
 **Mobile Dragon Range**
 * Ryzen 9 7945HX
@@ -229,12 +269,18 @@
 11. [AMD Zen 4 AVX-512 Performance Analysis On The Ryzen 9 7950X](https://www.phoronix.com/review/amd-zen4-avx512)
 12. [Hiding x86 Port Latency for 330 GB/s/core Reductions](https://ashvardanian.com/posts/cpu-ports/)
 13. [AMD Disables Zen 4's Loop Buffer](https://chipsandcheese.com/p/amd-disables-zen-4s-loop-buffer)
+14. [Hot Chips 2023: Characterizing Gaming Workloads on Zen 4](https://chipsandcheese.com/p/hot-chips-2023-characterizing-gaming-workloads-on-zen-4)
 
 ## Notes
 
 * Cache: [4]
 	- L1 Instruction: 32 KB per core, 8-way, 64 B/cy
-	- L1 Data: 32 KB per core, 8-way, 32 B/cy
+	- L1 Data:
+		* 32 KB per core
+		* 8-way set associative
+		* read: 64 B/cy, write: 32 B/cy
+		* int latency: 4-5cy
+		* fp latency: 7-8cy
 	- L2: 1 MB per core, 8-way, 32 B/cy, latency: 14cy
 	- L3 desktop: 32 MB per CCD, 16-way, read: 32 B/cy, write: 16 B/cy, latency 50cy
 	- L3 with 3D V-Cache: 96 MB per CCD
@@ -251,10 +297,55 @@
 * FPU:
 	- Some ALU operations on vector registers increased throughput from 2 to 3 ops/cycle. [4]
 	- Some ALU operations on vector registers (VPABSx,VPHADDx,VPHSUBx,VPSLLx,VPSRLx,VPSRAx,VPACKx,VPSIGNx,VMAXx,VMINx) increased latency by 1 cycle. [4]
+* LSU:
+	- Three largely independent pipelines can execute up to two 256-bit load operations and one 256-bit store per cycle. [4]
 
 * `vaddps` instruction takes ports 2 and 3, and the `vfmadd132ps` instruction takes ports 0 and 1. [12]
 
 * NPU (Ryzen AI) on XDNA architecture.
+
+## Tests
+
+<details><summary>AIDA64</summary>
+
+* Ryzen 7 7800X3D:
+	- clock: 5.185 GHz
+	- cores: 8
+	- | cache | read | write | copy | latency | cycles |
+	  |---|---|---|---|---|---|
+	  | L1 | 2'600 | 1'306 | 2'597 | 0.8  | 4  |
+	  | L2 | 1'299 | 964   | 1'254 | 2.7  | 14 |
+	  | L3 | 714   | 738   | 691   | 11.6 | 60 |
+
+* Ryzen 7 7700X:
+	- clock: 5.35 GHz
+	- cores: 8
+	- | cache | read | write | copy | latency | cycles |
+	  |---|---|---|---|---|---|
+	  | L1 | 2'719 | 1'384 | 2'743 | 0.8  | 4  |
+	  | L2 | 1'290 | 1'287 | 1'253 | 3.1  | 17 |
+	  | L3 | 885   | 858   | 854   | 10.5 | 56 |
+
+* Ryzen 9 7950X3D:
+	- clock: 5.05 Ghz
+	- cores: 16
+	- | cache | read | write | copy | latency | cycles |
+	  |---|---|---|---|---|---|
+	  | L1 | 4'783 | 2'520 | 4'917 | 0.8  | 4  |
+	  | L2 | 2'483 | 2'360 | 2'392 | 3.1  | 16 |
+	  | L3 | 1'480 | 1'477 | 1'321 | 11.8 | 60 |
+
+* Ryzen 7 8840HS:
+	- clock: 4.78 Ghz
+	- cores: 8
+	- | cache | read | write | copy | latency | cycles |
+	  |---|---|---|---|---|---|
+	  | L1 | 2'320 | 1'180 | 2'350 | 0.8  | 4  |
+	  | L2 | 1'080 | 1'020 | 895   | 2.9  | 14 |
+	  | L3 | 846   | 500   | 780   | 15.5 | 74 |
+
+</details>
+
 
 ## Zen4c
 
@@ -262,7 +353,7 @@
 * L3 cache: 16MB per CCD instead of 32MB. [4]
 * none of the Zen 4c chips clock higher than 3.1GHz. [9]
 	- Zen 4 and Zen 4c are not identical CPU cores.
-	- Zen 4c is for all practical purposes AMD’s efficiency core, and it needs to be treated as such. 
+	- Zen 4c is for all practical purposes AMD’s efficiency core, and it needs to be treated as such.
 	- Phoenix 2 probably is more efficient – and thus higher scoring – in heavily multithreaded scenarios.
 
 
@@ -281,8 +372,9 @@
 
 **Mobile**
 * Ryzen AI 9: HX 375, HX 370, 365
-* Ryzen AI 7 360
+* Ryzen AI 7 360 *(4x Zen5, 4x Zen5c)*
 * Ryzen AI 5 340
+* Ryzen Z2 Extreme *(3x Zen5, 5x Zen5c)*
 
 
 ## References
@@ -295,12 +387,15 @@
 6. [Quantifying The AVX-512 Performance Impact With AMD Zen 5](https://www.phoronix.com/review/amd-zen5-avx-512-9950x)
 7. [Disabling Zen 5’s Op Cache and Exploring its Clustered Decoder](https://chipsandcheese.com/p/disabling-zen-5s-op-cache-and-exploring)
 8. [AMD Strix Point SoC Reintroduces Dual-CCX CPU, Other Interesting Silicon Details Revealed](https://www.techpowerup.com/324872/amd-strix-point-soc-reintroduces-dual-ccx-cpu-other-interesting-silicon-details-revealed)
+9. [Evaluating the Infinity Cache in AMD Strix Halo](https://chipsandcheese.com/p/evaluating-the-infinity-cache-in)
+10. [AMD’s Chiplet APU: An Overview of Strix Halo](https://chipsandcheese.com/p/amds-chiplet-apu-an-overview-of-strix)
+11. [Strix Halo’s Memory Subsystem: Tackling iGPU Challenges](https://chipsandcheese.com/p/strix-halos-memory-subsystem-tackling)
 
 ## Notes
 
 * Cache:
 	- L1 Instruction: 32 KB per core, 8-way, 64 B/cy
-	- L1 Data: 48 KB per core, 12-way, 64 B/cy
+	- L1 Data: 48 KB per core, 12-way, read: 128 B/cy, write: 64 B/cy
 	- L2: 1 MB per core, 16-way, 64 B/cy
 	- L3 desktop: 32 MB per CCD, 16-way, read: 32 B/cy, write: 16 B/cy
 	- L3 mobile: 24 MB
@@ -313,7 +408,71 @@
 * AVX512 extensions: F, CD, VL, DQ, BW, IFMA, VBMI, VBMI2, VPOPCNTDQ, BITALG, VNNI, VPCLMULQDQ, GFNI, VAES, BF16, **VP2INTERSECT**
 * AVX-VNNI instructions.
 * Memory: DDR5-5600 DC 160bit (?) (112GB/s), LPDDR5X-7500 QC 128bit (120GB/s). [8]
+* Ryzen AI 395 with quad-channel LPDDR5X-8000 memory (256GB/s). [[ref](https://www.techpowerup.com/cpu-specs/ryzen-ai-max-395.c3994)]
 * two-ahead branch prediction - try to predict two code paths ahead before they are executed.
+	- dual decode pipes
+* Ryzen AI with i8 50 TOPS NPU on XDNA2 architecture
+
+## Tests
+
+<details><summary>AIDA64</summary>
+
+* Ryzen 9950X:
+	- clock: 5.07 GHz
+	- cores: 16
+	- | cache | read | write | copy | latency | cycles |
+	  |---|---|---|---|---|---|
+	  | L1 | 10'678 | 5'416 | 10'588 | 0.7 | 4   |
+	  | L2 | 3'013  | 2'598 | 3'726  | 2.4 | 12  |
+	  | L3 | 1'492  | 1'602 | 1'421  | 9.7 | 49  |
+
+* Ryzen 7 9800X3D:
+	- clock: 4.69 GHz
+	- cores: 8
+	- | cache | read | write | copy | latency | cycles |
+	  |---|---|---|---|---|---|
+	  | L1 | 5'012 | 2'568 | 5'007 | 0.8  | 4  |
+	  | L2 | 1'947 | 1'953 | 1'940 | 2.7  | 12 |
+	  | L3 | 705   | 781   | 708   | 13.7 | 64 |
+
+* Ryzen AI 9 HX 370:
+	- clock: 4.8 GHz (5.1 + 3.3)
+	- cores: 4P + 8E
+	- | cache | read | write | copy | latency | cycles |
+	  |---|---|---|---|---|---|
+	  | L1 | 2'260 | 2'260 | 4'100 | 0.8  | 4  |
+	  | L2 | 1'740 | 1'340 | 1'760 | 2.7  | 12 |
+	  | L3 | 570   | 620   | 500   | 10.7 | 51 |
+
+* Ryzen AI 7 350:
+	- clock: 5.07 GHz
+	- cores: 4P + 4E
+	- | cache | read | write | copy | latency | cycles |
+	  |---|---|---|---|---|---|
+	  | L1 | 1'730 | 1'740 | 3'440 | 0.8  | 4  |
+	  | L2 | 1'300 | 1'320 | 1'330 | 2.8  | 14 |
+	  | L3 | 940   | 860   | 920   | 11.0 | 56 |
+
+* Ryzen AI 9 MAX 395+:
+	- clock: 5.15 GHz
+	- cores: 16
+	- | cache | read | write | copy | latency | cycles |
+	  |---|---|---|---|---|---|
+	  | L1 | 8'540 | 4'580 | 8'440 | 0.8  | 4 |
+	  | L2 | 3'350 | 2'190 | 2'970 | 2.7  | 14 |
+	  | L3 | 1'270 | 1'140 | 1'380 | 10.6 | 54 |
+
+</details>
+
 
 ## Zen 5c
 
+
+
+# Zen 6 (?)
+
+## Examples
+
+## References
+
+## Notes

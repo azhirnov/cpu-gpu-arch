@@ -14,7 +14,7 @@ CPU code name: Broadwell, Braswell.
 ## References
 
 1. [The Compute Architecture of Intel Processor Graphics Gen8](https://www.intel.com/content/dam/develop/external/us/en/documents/compute-architecture-of-intel-processor-graphics-gen8-166010.pdf), [[backup](../pdf/Intel-compute-architecture-of-intel-processor-graphics-gen8-166010.pdf)]
-
+2. [Vulkan features for HD 400](https://vulkan.gpuinfo.org/listreports.php?property=devicename&value=Intel(R)%20HD%20Graphics%20400%20(BSW)&platform=linux)
 
 ## Notes
 
