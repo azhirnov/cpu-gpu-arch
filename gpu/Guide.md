@@ -61,7 +61,10 @@ TODO:
 	- Mali: 16x16 - one tile per core?
 	- Adreno: as large as possible to put in GMEM - for all cores?
 	- PowerVR ?
-	- Apple ?
+	- Apple: 32x32 *(from Metal Feature Set table)*
+
+* Some GPU vendors (ARM Mali and Qualcomm Adreno) take the uniformity analysis a step further. The shader compiler extracts uniform loads and uniform math. A scalar preamble runs before the shader. Uniform memory loads and math is executed once for the whole draw/dispatch and the results are stored in special hardware constant registers (the same registers used by root constants). [[ref](https://www.sebastianaaltonen.com/blog/no-graphics-api)]
+
 
 # All
 

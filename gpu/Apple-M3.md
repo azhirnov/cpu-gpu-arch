@@ -8,7 +8,7 @@
 ## References
 
 1. [Explore GPU advancements in M3 and A17 Pro](https://developer.apple.com/videos/play/tech-talks/111375)
-2. [Apple Announces M3 SoC Family: M3, M3 Pro, and M3 Max Make Their Marks](https://www.anandtech.com/show/21116/apple-announces-m3-soc-family-m3-m3-pro-and-m3-max-make-their-marks)
+2. [Apple Announces M3 SoC Family: M3, M3 Pro, and M3 Max Make Their Marks](https://web.archive.org/web/20231031124416/https://www.anandtech.com/show/21116/apple-announces-m3-soc-family-m3-m3-pro-and-m3-max-make-their-marks)
 
 
 ## Features

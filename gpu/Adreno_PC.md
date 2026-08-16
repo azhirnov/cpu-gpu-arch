@@ -70,7 +70,7 @@ Vulkan adds implicit barriers when used timestamps, it prevent commands to overl
 
 Warning: some devices requires root to access performance counters.<br/>
 Other devices requires to enable performance counters from adb, which may requires root: [ref](https://github.com/google/agi/issues/1113#issuecomment-1165786744)
-```
+```sh
 adb shell "echo 1 > /sys/class/kgsl/kgsl-3d0/perfcounter"
 ```
 
@@ -99,7 +99,10 @@ adb shell "echo 1 > /sys/class/kgsl/kgsl-3d0/perfcounter"
 | OPPO Find X3                  | 650 | yes | [ref](https://developer.android.com/agi/supported-devices) |
 | OPPO Reno 6 Pro+              | 650 | yes | [ref](https://developer.android.com/agi/supported-devices) |
 | OnePlus 9R                    | 650 | yes | [ref](https://developer.android.com/agi/supported-devices) |
-TODO: VR
+| Galaxy Tab S9                 | 740 | ?  | [ref](https://github.com/google/agi/issues/1403) |
+| samsung SM-X710               | 740 | ?  | [ref](https://github.com/google/agi/issues/1402) |
+| Quest 3                       | 740 | no | ? |
+| Pcio 4 Ultra                  | 740 | no | ? |
 
 
 ## A5xx
@@ -631,526 +634,528 @@ CMP: cmpdecmp 2D WR data
 
 <details>
 
+*description from LLM*
 | group, counter | name | desc |
 |---|---|---|
 | - | **Command Parser** | - |
-| 0, 0 | always count | All cycles (?) |
-| 0, 1 | busy gfx core idle | Cycles where Gfx is busy but Core is idle (?) |
-| 0, 2 | busy cycles | Only busy cycles. `utilization = busy_cycles / always_count` (?) |
-| 0, 3 | pfp idle | Prefetch parser idle (cycles?) |
-| 0, 4 | pfp busy working | Prefetch parser busy (cycles?) |
-| 0, 5 | pfp stall cycles any | Prefetch parser stall cycles. |
-| 0, 6 | pfp starve cycles any |
-| 0, 7 | pfp icache miss | Prefetch parser instruction cache miss (count?) |
-| 0, 8 | pfp icache hit | Prefetch parser instruction cache hit (count?) |
-| 0, 9 | pfp match pm4 pkt profile |
-| 0, 10 | ME busy working | Microcode Engine busy (cycles?) |
-| 0, 11 | ME idle | Microcode Engine idle (cycles?) |
-| 0, 12 | ME starve cycles any |
-| 0, 13 | ME fifo empty pfp idle |
-| 0, 14 | ME fifo empty pfp busy |
-| 0, 15 | ME fifo full ME busy |
-| 0, 16 | ME fifo full ME non working |
-| 0, 17 | ME stall cycles any |
-| 0, 18 | ME icache miss | Microcode Engine instruction cache miss (count?) |
-| 0, 19 | ME icache hit | Microcode Engine instruction cache hit (count?) |
-| 0, 20 | num preemptions |
-| 0, 21 | preemption reaction delay |
-| 0, 22 | preemption switch out time |
-| 0, 23 | preemption switch IN time |
-| 0, 24 | dead draws IN bin render |
-| 0, 25 | predicated draws killed |
-| 0, 26 | mode switch |
-| 0, 27 | zpass done |
-| 0, 28 | context done |
-| 0, 29 | cache flush |
-| 0, 30 | long preemptions |
+| 0, 0 | always count | Reference counter: total measured cycles for this group (denominator for utilization). |
+| 0, 1 | busy gfx core idle | Cycles where command front-end considers “graphics busy” while the rest of the core is idle (front-end active / backend idle symptom). |
+| 0, 2 | busy cycles | Cycles where the GPU is busy executing work (typical utilization numerator). |
+| 0, 3 | pfp idle | Cycles the **PFP** (prefetch parser) is idle (no work). |
+| 0, 4 | pfp busy working | Cycles the PFP is actively parsing / prefetching commands. |
+| 0, 5 | pfp stall cycles any | Cycles the PFP is stalled for any reason (backpressure, waits, etc.). |
+| 0, 6 | pfp starve cycles any | Cycles the PFP is starved (has nothing to do / waiting for input work to arrive). |
+| 0, 7 | pfp icache miss | PFP instruction-cache misses (event count). |
+| 0, 8 | pfp icache hit | PFP instruction-cache hits (event count). |
+| 0, 9 | pfp match pm4 pkt profile | Count of PM4 packets matching a “profiled” type/class (packet classification counter). |
+| 0, 10 | ME busy working | Cycles the **ME** (microcode engine) is executing/dispatching commands. |
+| 0, 11 | ME idle | Cycles the ME is idle. |
+| 0, 12 | ME starve cycles any | Cycles the ME is starved (no commands available from upstream). |
+| 0, 13 | ME fifo empty pfp idle | Cycles ME FIFO is empty while PFP is idle (no work generated). |
+| 0, 14 | ME fifo empty pfp busy | Cycles ME FIFO is empty while PFP is busy (PFP not producing ME-ready work yet / bubbles). |
+| 0, 15 | ME fifo full ME busy | Cycles ME FIFO is full while ME is busy (dispatch queue full under load). |
+| 0, 16 | ME fifo full ME non working | Cycles ME FIFO is full while ME is not working (blocked condition/backpressure). |
+| 0, 17 | ME stall cycles any | Cycles ME is stalled for any reason (waiting on resources/sync). |
+| 0, 18 | ME icache miss | ME instruction-cache misses (event count). |
+| 0, 19 | ME icache hit | ME instruction-cache hits (event count). |
+| 0, 20 | num preemptions | Number of GPU preemption events. |
+| 0, 21 | preemption reaction delay | Cycles from preemption request to acknowledged/serviced (latency). |
+| 0, 22 | preemption switch out time | Cycles to save/switch-out current context. |
+| 0, 23 | preemption switch IN time | Cycles to restore/switch-in the new context. |
+| 0, 24 | dead draws IN bin render | Draws killed/culled during binning/render (no contributing fragments). |
+| 0, 25 | predicated draws killed | Draws skipped due to predication/conditional rendering evaluating false. |
+| 0, 26 | mode switch | Number of pipeline mode switches (e.g., binning↔rendering / state modes). |
+| 0, 27 | zpass done | Count of completed Z-pass operations (depth pass completion events). |
+| 0, 28 | context done | Number of completed contexts (context-end events). |
+| 0, 29 | cache flush | Number of cache flush events issued/processed. |
+| 0, 30 | long preemptions | Count of “long” preemptions (exceeding an internal threshold). |
 | - | **RBBM** | - |
-| 1, 0 | always count | All cycles (?) |
-| 1, 1 | always ON | Busy cycles (?) |
-| 1, 2 | TSE busy | (cycles?) |
-| 1, 3 | RAS busy | (cycles?) |
-| 1, 4 | PC dcall busy | (cycles?) |
-| 1, 5 | PC vsd busy | (cycles?) |
-| 1, 6 | status masked | (cycles?) |
-| 1, 7 | com busy | (cycles?) |
-| 1, 8 | dcom busy | (cycles?) |
-| 1, 9 | VBIF busy | (cycles?) |
-| 1, 10 | VSC busy | (cycles?) |
-| 1, 11 | tess busy | (cycles?) |
-| 1, 12 | UCHE busy | (cycles?) |
-| 1, 13 | HLSQ busy | (cycles?) |
+| 1, 0 | always count | Reference cycles for the RBBM (top-level) domain. |
+| 1, 1 | always ON | Cycles the GPU domain is powered/clocked on (may equal 1,0 depending on gating). |
+| 1, 2 | TSE busy | Cycles **TSE** (triangle setup) block is busy. |
+| 1, 3 | RAS busy | Cycles **RAS** (rasterizer) block is busy. |
+| 1, 4 | PC dcall busy | Cycles **PC** is busy handling draw-call related work. |
+| 1, 5 | PC vsd busy | Cycles **PC** is busy handling vertex/stream/dispatch-side work (vertex/stream distribution). |
+| 1, 6 | status masked | Cycles where busy status is masked/ignored due to power/clock gating or debug mask. |
+| 1, 7 | com busy | Cycles “COM” (command/control fabric) is busy (internal control/command interconnect). |
+| 1, 8 | dcom busy | Cycles “DCOM” (data command/control path) is busy (data-side control fabric). |
+| 1, 9 | VBIF busy | Cycles **VBIF** (bus interface) is busy servicing memory transactions. |
+| 1, 10 | VSC busy | Cycles **VSC** (visibility stream compressor) is busy. |
+| 1, 11 | tess busy | Cycles tessellation pipeline is busy. |
+| 1, 12 | UCHE busy | Cycles **UCHE** (unified cache/L2 front) is busy. |
+| 1, 13 | HLSQ busy | Cycles **HLSQ** (high-level sequencer) is busy. |
 | - | **PC** | - |
-| 2, 0 | busy cycles |
-| 2, 1 | working cycles |
-| 2, 2 | stall cycles VFD |
-| 2, 3 | stall cycles TSE |
-| 2, 4 | stall cycles VPC |
-| 2, 5 | stall cycles UCHE |
-| 2, 6 | stall cycles tess |
-| 2, 7 | stall cycles TSE only |
-| 2, 8 | stall cycles VPC only |
-| 2, 9 | pass1 TF stall cycles |
-| 2, 10 | starve cycles for index |
-| 2, 11 | starve cycles for tess factor |
-| 2, 12 | starve cycles for viz stream |
-| 2, 13 | starve cycles for position |
-| 2, 14 | starve cycles DI |
-| 2, 15 | vis streams loaded |
-| 2, 16 | instances | Number of instances in draw call (?) |
-| 2, 17 | VPC primitives | Varying/Position Cache primitives (?) |
-| 2, 18 | dead prim | Invisible primitives (?) |
-| 2, 19 | live prim | Visible primitives (?) |
-| 2, 20 | vertex hits | Vertex cache hit. `utilization = vertex_hits / IA_vertices` (?) |
-| 2, 21 | IA vertices | Input vertices (?) |
-| 2, 22 | IA primitives | Input primitives (?) |
-| 2, 23 | GS primitives |
-| 2, 24 | HS invocations |
-| 2, 25 | DS invocations |
-| 2, 26 | VS invocations |
-| 2, 27 | GS invocations |
-| 2, 28 | DS primitives |
-| 2, 29 | VPC pos data transaction |
-| 2, 30 | 3D drawcalls |
-| 2, 31 | 2D drawcalls |
-| 2, 32 | non drawcall global events |
-| 2, 33 | tess busy cycles |
-| 2, 34 | tess working cycles |
-| 2, 35 | tess stall cycles PC |
-| 2, 36 | tess starve cycles PC |
+| 2, 0 | busy cycles | Cycles the **Primitive/Param Cache (PC)** block is busy (active in any state). |
+| 2, 1 | working cycles | Cycles PC is doing useful work (excluding stalls/starvation). |
+| 2, 2 | stall cycles VFD | Cycles PC stalled waiting on **VFD** (vertex fetch/decode) output/resources. |
+| 2, 3 | stall cycles TSE | Cycles PC stalled due to **TSE** backpressure or dependency. |
+| 2, 4 | stall cycles VPC | Cycles PC stalled waiting for **VPC** (varying/position cache) availability. |
+| 2, 5 | stall cycles UCHE | Cycles PC stalled on UCHE/L2/cache transactions/returns. |
+| 2, 6 | stall cycles tess | Cycles PC stalled due to tessellation stage dependency/backpressure. |
+| 2, 7 | stall cycles TSE only | Cycles stalled *only* because of TSE (exclusive stall attribution). |
+| 2, 8 | stall cycles VPC only | Cycles stalled *only* because of VPC (exclusive stall attribution). |
+| 2, 9 | pass1 TF stall cycles | Cycles tess-factor (TF) pass1 stalls (tess-factor generation/consumption bottleneck). |
+| 2, 10 | starve cycles for index | Cycles starved waiting for index data/stream. |
+| 2, 11 | starve cycles for tess factor | Cycles starved waiting for tessellation factors. |
+| 2, 12 | starve cycles for viz stream | Cycles starved waiting for visibility stream data. |
+| 2, 13 | starve cycles for position | Cycles starved waiting for position/vertex position stream. |
+| 2, 14 | starve cycles DI | Cycles starved waiting for draw/dispatch input (“DI”: draw input/indirect). |
+| 2, 15 | vis streams loaded | Number of visibility stream loads/blocks loaded. |
+| 2, 16 | instances | Instance count processed (sum of instance invocations across draws). |
+| 2, 17 | VPC primitives | Number of primitives sent to/processed by VPC. |
+| 2, 18 | dead prim | Primitives rejected/culled before reaching raster (e.g., clip/cull/zero-area). |
+| 2, 19 | live prim | Primitives surviving and forwarded downstream. |
+| 2, 20 | vertex hits | Vertex cache hits (event count). |
+| 2, 21 | IA vertices | Input Assembler vertices fetched/consumed (pre-VS). |
+| 2, 22 | IA primitives | Input Assembler primitives assembled (pre-setup). |
+| 2, 23 | GS primitives | Primitives output by geometry shader stage (if used). |
+| 2, 24 | HS invocations | Hull shader invocations (tess control shader calls). |
+| 2, 25 | DS invocations | Domain shader invocations (tess eval shader calls). |
+| 2, 26 | VS invocations | Vertex shader invocations. |
+| 2, 27 | GS invocations | Geometry shader invocations. |
+| 2, 28 | DS primitives | Primitives generated post-domain stage (tessellated primitives). |
+| 2, 29 | VPC pos data transaction | Position data transactions to VPC (writes/exports). |
+| 2, 30 | 3D drawcalls | Number of 3D draw calls seen by PC. |
+| 2, 31 | 2D drawcalls | Number of 2D/blit draw calls seen by PC. |
+| 2, 32 | non drawcall global events | Non-draw events (state updates, sync, clears, flushes, etc.). |
+| 2, 33 | tess busy cycles | Cycles tessellation sub-pipeline is busy (within PC domain). |
+| 2, 34 | tess working cycles | Cycles tessellation sub-pipeline is doing useful work. |
+| 2, 35 | tess stall cycles PC | Tessellation stalled due to PC-side backpressure/dependency. |
+| 2, 36 | tess starve cycles PC | Tessellation starved for PC-provided input. |
 | - | **Vertex Fetch and Decode** | - |
-| 3, 0 | busy cycles |
-| 3, 1 | stall cycles UCHE |
-| 3, 2 | stall cycles VPC alloc |
-| 3, 3 | stall cycles miss VB |
-| 3, 4 | stall cycles miss Q |
-| 3, 5 | stall cycles SP info |
-| 3, 6 | stall cycles SP attr |
-| 3, 7 | stall cycles vfdp VB |
-| 3, 8 | stall cycles vfdp Q |
-| 3, 9 | decoder packer stall |
-| 3, 10 | starve cycles UCHE |
-| 3, 11 | rbuffer full |
-| 3, 12 | attr info fifo full |
-| 3, 13 | decoded attribute bytes |
-| 3, 14 | num attributes |
-| 3, 15 | instructions |
-| 3, 16 | upper shader fibers |
-| 3, 17 | lower shader fibers |
-| 3, 18 | mode 0 fibers |
-| 3, 19 | mode 1 fibers |
-| 3, 20 | mode 2 fibers |
-| 3, 21 | mode 3 fibers |
-| 3, 22 | mode 4 fibers |
-| 3, 23 | total vertices |
-| 3, 24 | num attr miss |
-| 3, 25 | 1 burst req |
-| 3, 26 | vfdp stall cycles VFD |
-| 3, 27 | vfdp stall cycles VFD index |
-| 3, 28 | vfdp stall cycles VFD prog |
-| 3, 29 | vfdp starve cycles PC |
-| 3, 30 | vfdp VS stage 32 waves |
+| 3, 0 | busy cycles | Cycles VFD is active (fetch/decode pipeline running). |
+| 3, 1 | stall cycles UCHE | Cycles VFD stalled waiting on UCHE/L2 data/returns. |
+| 3, 2 | stall cycles VPC alloc | Cycles stalled waiting for VPC allocation/space. |
+| 3, 3 | stall cycles miss VB | Cycles stalled due to missing vertex buffer data (cache miss / memory wait). |
+| 3, 4 | stall cycles miss Q | Cycles stalled due to queue miss/empty (internal fetch/decode queue). |
+| 3, 5 | stall cycles SP info | Cycles stalled waiting for SP shader info/metadata. |
+| 3, 6 | stall cycles SP attr | Cycles stalled waiting for SP attribute consumption/readiness. |
+| 3, 7 | stall cycles vfdp VB | Cycles VFD prefetch path stalled on vertex buffer access. |
+| 3, 8 | stall cycles vfdp Q | Cycles VFD prefetch path stalled on internal queueing. |
+| 3, 9 | decoder packer stall | Cycles decode/pack stage stalled (format conversion/packing bottleneck). |
+| 3, 10 | starve cycles UCHE | Cycles starved due to lack of UCHE requests/returns to process (bubble attribution). |
+| 3, 11 | rbuffer full | Cycles stalled because result buffer is full (cannot write decoded output). |
+| 3, 12 | attr info fifo full | Cycles stalled because attribute-info FIFO is full. |
+| 3, 13 | decoded attribute bytes | Total bytes of vertex attributes decoded/unpacked. |
+| 3, 14 | num attributes | Number of attributes processed (attribute elements). |
+| 3, 15 | instructions | Micro-ops/instructions executed by VFD (format/decode ops). |
+| 3, 16 | upper shader fibers | Count of “upper” shader fibers/threads launched for VFD-related work. |
+| 3, 17 | lower shader fibers | Count of “lower” shader fibers/threads launched for VFD-related work. |
+| 3, 18 | mode 0 fibers | Fiber count in mode 0 (implementation-defined decoding mode). |
+| 3, 19 | mode 1 fibers | Fiber count in mode 1. |
+| 3, 20 | mode 2 fibers | Fiber count in mode 2. |
+| 3, 21 | mode 3 fibers | Fiber count in mode 3. |
+| 3, 22 | mode 4 fibers | Fiber count in mode 4. |
+| 3, 23 | total vertices | Total vertices fetched/decoded. |
+| 3, 24 | num attr miss | Number of attribute fetch misses (cache miss events for attributes). |
+| 3, 25 | 1 burst req | Number of single-burst memory requests issued (small fetches). |
+| 3, 26 | vfdp stall cycles VFD | Prefetch path stalled due to VFD backpressure. |
+| 3, 27 | vfdp stall cycles VFD index | Prefetch stalled due to index-stream related backpressure. |
+| 3, 28 | vfdp stall cycles VFD prog | Prefetch stalled due to program/state related backpressure. |
+| 3, 29 | vfdp starve cycles PC | Prefetch starved waiting for PC to request/provide work. |
+| 3, 30 | vfdp VS stage 32 waves | Number of VS waves issued in wave32 mode via VFD prefetch/issue path. |
 | - | **High Level SeQuencer** | - |
-| 4, 0 | busy cycles |
-| 4, 1 | stall cycles UCHE |
-| 4, 2 | stall cycles SP state |
-| 4, 3 | stall cycles SP FS stage |
-| 4, 4 | UCHE latency cycles | L2 latency cycles |
-| 4, 5 | UCHE latency count |
-| 4, 6 | FS stage 32 waves | Number of waves with 32 threads. |
-| 4, 7 | FS stage 64 waves | Number of waves with 64 threads. |
-| 4, 8 | quads | Number of 2x2 pixel quads. |
-| 4, 9 | SP state copy trans FS stage |
-| 4, 10 | SP state copy trans VS stage |
-| 4, 11 | TP state copy trans FS stage |
-| 4, 12 | TP state copy trans VS stage |
-| 4, 13 | CS invocations | Compute shader total threads. |
-| 4, 14 | compute drawcalls | Dispatch count. |
+| 4, 0 | busy cycles | Cycles HLSQ is active (scheduling/dispatching waves). |
+| 4, 1 | stall cycles UCHE | Cycles stalled waiting on UCHE/L2 for data (loads, state, etc.). |
+| 4, 2 | stall cycles SP state | Cycles stalled waiting on SP state (program/state upload, register state). |
+| 4, 3 | stall cycles SP FS stage | Cycles stalled due to fragment-shader stage backpressure/availability. |
+| 4, 4 | UCHE latency cycles | Sum of cycles spent waiting on UCHE/L2 (latency accumulator). |
+| 4, 5 | UCHE latency count | Number of UCHE/L2 latency samples/transactions counted by 4,4. |
+| 4, 6 | FS stage 32 waves | Fragment shader waves launched/executed in wave32 mode. |
+| 4, 7 | FS stage 64 waves | Fragment shader waves launched/executed in wave64 mode. |
+| 4, 8 | quads | Total pixel quads (2x2) scheduled/processed by FS stage. |
+| 4, 9 | SP state copy trans FS stage | Transactions copying SP state for FS stage (state upload/mem moves). |
+| 4, 10 | SP state copy trans VS stage | Transactions copying SP state for VS stage. |
+| 4, 11 | TP state copy trans FS stage | Transactions copying texture processor state for FS stage. |
+| 4, 12 | TP state copy trans VS stage | Transactions copying texture processor state for VS stage. |
+| 4, 13 | CS invocations | Total compute shader thread invocations (work-items). |
+| 4, 14 | compute drawcalls | Number of compute dispatches. |
 | - | **Varying/Position Cache** | - |
-| 5, 0 | busy cycles |
-| 5, 1 | working cycles |
-| 5, 2 | stall cycles UCHE |
-| 5, 3 | stall cycles VFD wack |
-| 5, 4 | stall cycles HLSQ prim alloc |
-| 5, 5 | stall cycles PC |
-| 5, 6 | stall cycles SP LM | stall cycles on Streaming Processor Local Memory (?) |
-| 5, 7 | pos export stall cycles |
-| 5, 8 | starve cycles SP |
-| 5, 9 | starve cycles LRZ |
-| 5, 10 | PC primitives |
-| 5, 11 | SP components |
-| 5, 12 | SP LM primitives | Streaming Processor Local Memory primitive count (?) |
-| 5, 13 | SP LM components |
-| 5, 14 | SP LM dwords |
-| 5, 15 | streamout components |
-| 5, 16 | grant phases |
+| 5, 0 | busy cycles | Cycles VPC block is active. |
+| 5, 1 | working cycles | Cycles VPC is doing useful work (not stalled). |
+| 5, 2 | stall cycles UCHE | Cycles stalled waiting on UCHE/L2 for reads/writes. |
+| 5, 3 | stall cycles VFD wack | Cycles stalled waiting on VFD (writeback/acknowledge handshake). |
+| 5, 4 | stall cycles HLSQ prim alloc | Cycles stalled waiting for primitive allocation/credits from HLSQ. |
+| 5, 5 | stall cycles PC | Cycles stalled due to PC backpressure/dependency. |
+| 5, 6 | stall cycles SP LM | Cycles stalled due to SP local-memory (LM) path constraints (LM exports/reads). |
+| 5, 7 | pos export stall cycles | Cycles stalled while exporting position data downstream. |
+| 5, 8 | starve cycles SP | Cycles starved waiting for SP-produced data. |
+| 5, 9 | starve cycles LRZ | Cycles starved waiting for LRZ consumer/producer handshake. |
+| 5, 10 | PC primitives | Primitives received from PC into VPC. |
+| 5, 11 | SP components | Number of varying components exported/handled from SP (varyings). |
+| 5, 12 | SP LM primitives | Primitives whose varyings/positions were routed via SP local memory path. |
+| 5, 13 | SP LM components | Varying components routed via SP local memory. |
+| 5, 14 | SP LM dwords | Dwords transferred via SP local memory path. |
+| 5, 15 | streamout components | Components written to stream-out/transform feedback. |
+| 5, 16 | grant phases | Number of VPC arbitration/grant phases (internal scheduling rounds). |
 | - | **Triangle Setup Engine** | - |
-| 6, 0 | busy cycles |
-| 6, 1 | clipping cycles |
-| 6, 2 | stall cycles RAS |
-| 6, 3 | stall cycles LRZ baryplane |
-| 6, 4 | stall cycles LRZ zplane |
-| 6, 5 | starve cycles PC |
-| 6, 6 | input prim |
-| 6, 7 | input null prim |
-| 6, 8 | trival rej prim |
-| 6, 9 | clipped prim |
-| 6, 10 | zero area prim |
-| 6, 11 | faceness culled prim |
-| 6, 12 | zero pixel prim |
-| 6, 13 | output null prim |
-| 6, 14 | output visible prim |
-| 6, 15 | cinvocation |
-| 6, 16 | cprimitives |
-| 6, 17 | 2D input prim |
-| 6, 18 | 2D alive clcles |
+| 6, 0 | busy cycles | Cycles TSE is active. |
+| 6, 1 | clipping cycles | Cycles spent in clipping work. |
+| 6, 2 | stall cycles RAS | Cycles stalled due to rasterizer backpressure. |
+| 6, 3 | stall cycles LRZ baryplane | Cycles stalled waiting on LRZ barycentric plane related dependency. |
+| 6, 4 | stall cycles LRZ zplane | Cycles stalled waiting on LRZ Z-plane related dependency. |
+| 6, 5 | starve cycles PC | Cycles starved waiting for PC to provide primitives. |
+| 6, 6 | input prim | Number of input primitives into TSE. |
+| 6, 7 | input null prim | Input null/degenerate primitives (no-op primitives). |
+| 6, 8 | trival rej prim | Trivially rejected primitives (fast reject). |
+| 6, 9 | clipped prim | Primitives that required clipping / were clipped. |
+| 6, 10 | zero area prim | Zero-area primitives (degenerate after setup). |
+| 6, 11 | faceness culled prim | Primitives culled by facing (backface culling). |
+| 6, 12 | zero pixel prim | Primitives that cover zero pixels (after setup/raster rules). |
+| 6, 13 | output null prim | Null primitives output (discarded) from TSE. |
+| 6, 14 | output visible prim | Visible primitives output downstream to rasterizer. |
+| 6, 15 | cinvocation | Clipping invocation count (clipper calls). |
+| 6, 16 | cprimitives | Clipping primitive count (primitives processed by clipper). |
+| 6, 17 | 2D input prim | 2D primitives input (blits/rects). |
+| 6, 18 | 2D alive clcles | Cycles 2D path is active/alive in TSE domain. |
 | - | **Rasterizer** | - |
-| 7, 0 | busy cycles |
-| 7, 1 | supertile active cycles |
-| 7, 2 | stall cycles LRZ |
-| 7, 3 | starve cycles TSE |
-| 7, 4 | super tiles | Large tiles from 32x32px to 256x256 and greater. Use all GMem to store attachments. |
-| 7, 5 | 8x4 tiles | tiles inside super tile? |
-| 7, 6 | maskgen active |
-| 7, 7 | fully covered super tiles | All pixels in tile are filled. |
-| 7, 8 | fully covered 8x4 tiles | All pixels in tile are filled. |
-| 7, 9 | prim killed invisible |
+| 7, 0 | busy cycles | Cycles rasterizer is active. |
+| 7, 1 | supertile active cycles | Cycles processing supertiles (bin/render tile units). |
+| 7, 2 | stall cycles LRZ | Cycles stalled due to LRZ backpressure/dependency. |
+| 7, 3 | starve cycles TSE | Cycles starved waiting for TSE to deliver primitives. |
+| 7, 4 | super tiles | Number of supertiles processed (large tile bins covering many 8x4 tiles). |
+| 7, 5 | 8x4 tiles | Number of 8x4 micro-tiles processed. |
+| 7, 6 | maskgen active | Cycles mask generation is active (coverage mask generation). |
+| 7, 7 | fully covered super tiles | Supertiles fully covered (all samples covered by primitives). |
+| 7, 8 | fully covered 8x4 tiles | 8x4 tiles fully covered. |
+| 7, 9 | prim killed invisible | Primitives killed as invisible during raster (coverage/visibility rejection). |
 | - | **Unified L2 Cache** | - |
-| 8, 0 | busy cycles |
-| 8, 1 | stall cycles VBIF |
-| 8, 2 | VBIF latency cycles |
-| 8, 3 | VBIF latency samples |
-| 8, 4 | VBIF read beats TP |
-| 8, 5 | VBIF read beats VFD |
-| 8, 6 | VBIF read beats HLSQ |
-| 8, 7 | VBIF read beats LRZ |
-| 8, 8 | VBIF read beats SP |
-| 8, 9 | read requests TP |
-| 8, 10 | read requests VFD |
-| 8, 11 | read requests HLSQ |
-| 8, 12 | read requests LRZ |
-| 8, 13 | read requests SP |
-| 8, 14 | write requests LRZ |
-| 8, 15 | write requests SP |
-| 8, 16 | write requests VPC |
-| 8, 17 | write requests VSC |
-| 8, 18 | evicts |
-| 8, 19 | bank req0 |
-| 8, 20 | bank req1 |
-| 8, 21 | bank req2 |
-| 8, 22 | bank req3 |
-| 8, 23 | bank req4 |
-| 8, 24 | bank req5 |
-| 8, 25 | bank req6 |
-| 8, 26 | bank req7 |
-| 8, 27 | VBIF read beats ch0 |
-| 8, 28 | VBIF read beats ch1 |
-| 8, 29 | gmem read beats |
-| 8, 30 | flag count |
+| 8, 0 | busy cycles | Cycles UCHE/L2 interface is active. |
+| 8, 1 | stall cycles VBIF | Cycles stalled waiting on VBIF/memory fabric (external memory). |
+| 8, 2 | VBIF latency cycles | Accumulated latency cycles waiting on VBIF. |
+| 8, 3 | VBIF latency samples | Number of latency samples/transactions counted in 8,2. |
+| 8, 4 | VBIF read beats TP | Read data beats returned for TP clients. |
+| 8, 5 | VBIF read beats VFD | Read data beats returned for VFD clients. |
+| 8, 6 | VBIF read beats HLSQ | Read data beats returned for HLSQ clients. |
+| 8, 7 | VBIF read beats LRZ | Read data beats returned for LRZ clients. |
+| 8, 8 | VBIF read beats SP | Read data beats returned for SP clients. |
+| 8, 9 | read requests TP | Read requests issued by TP to UCHE/VBIF. |
+| 8, 10 | read requests VFD | Read requests issued by VFD. |
+| 8, 11 | read requests HLSQ | Read requests issued by HLSQ. |
+| 8, 12 | read requests LRZ | Read requests issued by LRZ. |
+| 8, 13 | read requests SP | Read requests issued by SP. |
+| 8, 14 | write requests LRZ | Write requests issued by LRZ. |
+| 8, 15 | write requests SP | Write requests issued by SP. |
+| 8, 16 | write requests VPC | Write requests issued by VPC. |
+| 8, 17 | write requests VSC | Write requests issued by VSC. |
+| 8, 18 | evicts | L2 cache evictions (lines/blocks evicted). |
+| 8, 19 | bank req0 | Requests to L2 bank 0 (banked distribution). |
+| 8, 20 | bank req1 | Requests to L2 bank 1. |
+| 8, 21 | bank req2 | Requests to L2 bank 2. |
+| 8, 22 | bank req3 | Requests to L2 bank 3. |
+| 8, 23 | bank req4 | Requests to L2 bank 4. |
+| 8, 24 | bank req5 | Requests to L2 bank 5. |
+| 8, 25 | bank req6 | Requests to L2 bank 6. |
+| 8, 26 | bank req7 | Requests to L2 bank 7. |
+| 8, 27 | VBIF read beats ch0 | Read beats on memory channel 0. |
+| 8, 28 | VBIF read beats ch1 | Read beats on memory channel 1. |
+| 8, 29 | gmem read beats | Read beats from GMEM (on-chip tile memory) path. |
+| 8, 30 | flag count | Number of “flag” transactions/events (compression/CCU flag traffic) observed at UCHE. |
 | - | **Texture Processor** | - |
-| 9, 0 | busy cycles |
-| 9, 1 | stall cycles UCHE |
-| 9, 2 | latency cycles |
-| 9, 3 | latency trans |
-| 9, 4 | flag cache request samples |
-| 9, 5 | flag cache request latency |
-| 9, 6 | L1 cacheline requests |
-| 9, 7 | L1 cacheline misses |
-| 9, 8 | SP TP trans |
-| 9, 9 | TP SP trans |
-| 9, 10 | output pixels |
-| 9, 11 | filter workload 16bit | fp16 or 16bit per texel? |
-| 9, 12 | filter workload 32bit | fp32 or 32bit per texel? |
-| 9, 13 | quads received |
-| 9, 14 | quads offset |
-| 9, 15 | quads shadow |
-| 9, 16 | quads array |
-| 9, 17 | quads gradient |
-| 9, 18 | quads 1D |
-| 9, 19 | quads 2D |
-| 9, 20 | quads buffer |
-| 9, 21 | quads 3D |
-| 9, 22 | quads cube |
-| 9, 23 | state cache requests |
-| 9, 24 | state cache misses |
-| 9, 25 | divergent quads received |
-| 9, 26 | bindless state cache requests |
-| 9, 27 | bindless state cache misses |
-| 9, 28 | prt non resident events |
-| 9, 29 | output pixels point |
-| 9, 30 | output pixels bilinear |
-| 9, 31 | output pixels mip |
-| 9, 32 | output pixels aniso |
-| 9, 33 | output pixels zero lod |
-| 9, 34 | flag cache requests |
-| 9, 35 | flag cache misses |
-| 9, 36 | L1 5 L2 requests |
-| 9, 37 | 2D output pixels |
-| 9, 38 | 2D output pixels point |
-| 9, 39 | 2D output pixels bilinear |
-| 9, 40 | 2D filter workload 16bit |
-| 9, 41 | 2D filter workload 32bit |
+| 9, 0 | busy cycles | Cycles TP is active. |
+| 9, 1 | stall cycles UCHE | Cycles TP stalled waiting for UCHE/L2/memory (texture fetch returns). |
+| 9, 2 | latency cycles | Accumulated texture fetch latency cycles. |
+| 9, 3 | latency trans | Number of texture fetch latency transactions sampled in 9,2. |
+| 9, 4 | flag cache request samples | Number of flag-cache (compression metadata) request samples. |
+| 9, 5 | flag cache request latency | Accumulated latency for flag-cache requests. |
+| 9, 6 | L1 cacheline requests | Texture L1 cache line fetch requests (event count). |
+| 9, 7 | L1 cacheline misses | Texture L1 cache line misses (event count). |
+| 9, 8 | SP TP trans | Transactions from SP to TP (texture instruction issue / requests). |
+| 9, 9 | TP SP trans | Transactions from TP back to SP (returns / responses). |
+| 9, 10 | output pixels | Total filtered texel results output (pixel/texel results produced). |
+| 9, 11 | filter workload 16bit | 16-bit filtering workload (texels filtered at 16bpp/FP16 formats; vendor-defined weighting). |
+| 9, 12 | filter workload 32bit | 32-bit filtering workload (texels filtered at 32bpp/FP32 formats; vendor-defined weighting). |
+| 9, 13 | quads received | Quads received for texturing (2x2 pixel groups). |
+| 9, 14 | quads offset | Quads using texel offset addressing mode. |
+| 9, 15 | quads shadow | Quads using shadow compare sampling. |
+| 9, 16 | quads array | Quads sampling array textures. |
+| 9, 17 | quads gradient | Quads using explicit gradients. |
+| 9, 18 | quads 1D | Quads sampling 1D textures. |
+| 9, 19 | quads 2D | Quads sampling 2D textures. |
+| 9, 20 | quads buffer | Quads sampling buffer textures. |
+| 9, 21 | quads 3D | Quads sampling 3D textures. |
+| 9, 22 | quads cube | Quads sampling cubemaps. |
+| 9, 23 | state cache requests | Texture state-cache requests (sampler/texture state fetches). |
+| 9, 24 | state cache misses | Texture state-cache misses. |
+| 9, 25 | divergent quads received | Quads with divergence (threads in quad take different texture paths/coords). |
+| 9, 26 | bindless state cache requests | Requests to bindless texture/sampler state cache. |
+| 9, 27 | bindless state cache misses | Misses in bindless state cache. |
+| 9, 28 | prt non resident events | Partially resident texture (PRT) non-resident page events. |
+| 9, 29 | output pixels point | Results produced using point sampling. |
+| 9, 30 | output pixels bilinear | Results produced using bilinear filtering. |
+| 9, 31 | output pixels mip | Results produced requiring mipmapping. |
+| 9, 32 | output pixels aniso | Results produced using anisotropic filtering. |
+| 9, 33 | output pixels zero lod | Results produced with LOD=0 (base level) sampling. |
+| 9, 34 | flag cache requests | Total flag-cache requests (compression metadata accesses). |
+| 9, 35 | flag cache misses | Flag-cache misses. |
+| 9, 36 | L1 5 L2 requests | L1→L2 requests (texture L1 misses that go to L2/UCHE). |
+| 9, 37 | 2D output pixels | Output results from the dedicated 2D path (blit/2D engine texture outputs). |
+| 9, 38 | 2D output pixels point | 2D-path point-sampled outputs. |
+| 9, 39 | 2D output pixels bilinear | 2D-path bilinear outputs. |
+| 9, 40 | 2D filter workload 16bit | 2D-path 16-bit filtering workload. |
+| 9, 41 | 2D filter workload 32bit | 2D-path 32-bit filtering workload. |
 | - | **Shader/Streaming Processor** | - |
-| 10, 0 | busy cycles |
-| 10, 1 | ALU working cycles | Cycles during FMA instructions |
-| 10, 2 | EFU working cycles | Cycles during EFU (special) instructions. |
-| 10, 3 | stall cycles VPC |
-| 10, 4 | stall cycles TP |
-| 10, 5 | stall cycles UCHE |
-| 10, 6 | stall cycles RB |
-| 10, 7 | scheduler non working |
-| 10, 8 | wave contexts |
-| 10, 9 | wave context cycles |
-| 10, 10 | FS stage wave cycles |
-| 10, 11 | FS stage wave samples |
-| 10, 12 | VS stage wave cycles |
-| 10, 13 | VS stage wave samples |
-| 10, 14 | FS stage duration cycles |
-| 10, 15 | VS stage duration cycles |
-| 10, 16 | wave ctrl cycles |
-| 10, 17 | wave load cycles |
-| 10, 18 | wave emit cycles |
-| 10, 19 | wave nop cycles |
-| 10, 20 | wave wait cycles |
-| 10, 21 | wave fetch cycles |
-| 10, 22 | wave idle cycles |
-| 10, 23 | wave end cycles |
-| 10, 24 | wave long sync cycles |
-| 10, 25 | wave short sync cycles |
-| 10, 26 | wave join cycles |
-| 10, 27 | LM load instructions | Local memory load instruction count |
-| 10, 28 | LM store instructions | Local memory store instruction count |
-| 10, 29 | LM atomics | Local memory atomic instruction count |
-| 10, 30 | GM load instructions | Global memory load instruction count |
-| 10, 31 | GM store instructions | Global memory store instruction count |
-| 10, 32 | GM atomics | Global memory atomic instruction count |
-| 10, 33 | VS stage tex instructions |
-| 10, 34 | VS stage cflow instructions |
-| 10, 35 | VS stage EFU instructions | EFU instruction count in Vertex shader |
-| 10, 36 | VS stage full ALU instructions | Full ALU instruction count in Vertex shader (wave64 / dual issue?) |
-| 10, 37 | VS stage half ALU instructions | Half ALU instruction count in Vertex shader (fp16 & fp32) |
-| 10, 38 | FS stage tex instructions |
-| 10, 39 | FS stage cflow instructions |
-| 10, 40 | FS stage EFU instructions | EFU instruction count in Fragment shader |
-| 10, 41 | FS stage full ALU instructions | Full ALU instruction count in Fragment shader (wave64 / dual issue?) |
-| 10, 42 | FS stage half ALU instructions | Half ALU instruction count in Fragment shader (fp16 & fp32) |
-| 10, 43 | FS stage bary instructions | Interpolation instructions (?) |
-| 10, 44 | VS instructions | Vertex shader instruction count |
-| 10, 45 | FS instructions | Fragment shader instruction count |
-| 10, 46 | addr lock count |
-| 10, 47 | UCHE read trans | Unified L2 cache read transactions (in pixels or group of pixels). It is buffer/image storage load operation. |
-| 10, 48 | UCHE write trans | Unified L2 cache write transactions (in pixels or group of pixels). It is buffer/image storage store operation. |
-| 10, 49 | export VPC trans |
-| 10, 50 | export RB trans |
-| 10, 51 | pixels killed |
-| 10, 52 | icl1 requests |
-| 10, 53 | icl1 misses |
-| 10, 54 | icl0 requests |
-| 10, 55 | icl0 misses |
-| 10, 56 | HS instructions |
-| 10, 57 | DS instructions |
-| 10, 58 | GS instructions |
-| 10, 59 | CS instructions | Compute shader instruction count |
-| 10, 60 | GPR read | Register read (count?) |
-| 10, 61 | GPR write | Register write (count?) |
-| 10, 62 | LM ch0 requests |
-| 10, 63 | LM ch1 requests |
-| 10, 64 | LM bank conflicts |
+| 10, 0 | busy cycles | Cycles SP core is active (any wave present/executing). |
+| 10, 1 | ALU working cycles | Cycles executing main ALU/FMA pipelines (arithmetic). |
+| 10, 2 | EFU working cycles | Cycles executing EFU/special function unit instructions. |
+| 10, 3 | stall cycles VPC | Cycles stalled waiting for VPC (varying/position I/O). |
+| 10, 4 | stall cycles TP | Cycles stalled waiting for texture results (texture pipe dependency). |
+| 10, 5 | stall cycles UCHE | Cycles stalled on memory ops via UCHE/L2 (SSBO/image/global loads). |
+| 10, 6 | stall cycles RB | Cycles stalled waiting for render backend (export/ROP backpressure). |
+| 10, 7 | scheduler non working | Cycles scheduler has no runnable wave (all waves blocked). |
+| 10, 8 | wave contexts | Number of wave contexts allocated/used (waves in flight). |
+| 10, 9 | wave context cycles | Sum of cycles wave contexts are resident (occupancy integral). |
+| 10, 10 | FS stage wave cycles | Sum of cycles FS waves are active (occupancy integral for FS). |
+| 10, 11 | FS stage wave samples | Number of FS wave samples contributing to 10,10. |
+| 10, 12 | VS stage wave cycles | Sum of cycles VS waves are active. |
+| 10, 13 | VS stage wave samples | Number of VS wave samples contributing to 10,12. |
+| 10, 14 | FS stage duration cycles | Total duration cycles spent executing FS work (aggregate). |
+| 10, 15 | VS stage duration cycles | Total duration cycles spent executing VS work (aggregate). |
+| 10, 16 | wave ctrl cycles | Cycles spent on control-flow management (branch/exec mask, wave control). |
+| 10, 17 | wave load cycles | Cycles spent executing load instructions (memory pipeline busy). |
+| 10, 18 | wave emit cycles | Cycles spent emitting exports (varyings/colors/pos) from waves. |
+| 10, 19 | wave nop cycles | Cycles where issued instruction is NOP (bubbles). |
+| 10, 20 | wave wait cycles | Cycles waves are waiting (scoreboard wait on dependency). |
+| 10, 21 | wave fetch cycles | Cycles fetching instructions (I-cache/pipe fetch activity). |
+| 10, 22 | wave idle cycles | Cycles wave slots are idle (no wave ready). |
+| 10, 23 | wave end cycles | Cycles spent on wave end/termination handling. |
+| 10, 24 | wave long sync cycles | Cycles spent in long synchronization (barriers/expensive waits). |
+| 10, 25 | wave short sync cycles | Cycles spent in short synchronization. |
+| 10, 26 | wave join cycles | Cycles spent joining reconverging control flow (join points). |
+| 10, 27 | LM load instructions | Count of local-memory (shared/LDS) load instructions. |
+| 10, 28 | LM store instructions | Count of local-memory (shared/LDS) store instructions. |
+| 10, 29 | LM atomics | Count of local-memory atomic instructions. |
+| 10, 30 | GM load instructions | Count of global memory load instructions. |
+| 10, 31 | GM store instructions | Count of global memory store instructions. |
+| 10, 32 | GM atomics | Count of global memory atomic instructions. |
+| 10, 33 | VS stage tex instructions | Texture instruction count issued by VS stage. |
+| 10, 34 | VS stage cflow instructions | Control-flow instruction count in VS (branches, calls, etc.). |
+| 10, 35 | VS stage EFU instructions | EFU instruction count in VS. |
+| 10, 36 | VS stage full ALU instructions | “Full-rate” ALU instruction count in VS (implementation-defined throughput class). |
+| 10, 37 | VS stage half ALU instructions | “Half-rate/half-precision” ALU instruction count in VS (often FP16-packed class). |
+| 10, 38 | FS stage tex instructions | Texture instruction count in FS stage. |
+| 10, 39 | FS stage cflow instructions | Control-flow instruction count in FS. |
+| 10, 40 | FS stage EFU instructions | EFU instruction count in FS. |
+| 10, 41 | FS stage full ALU instructions | Full-rate ALU instruction count in FS. |
+| 10, 42 | FS stage half ALU instructions | Half-rate/half-precision ALU instruction count in FS. |
+| 10, 43 | FS stage bary instructions | Barycentric/interpolation instruction count in FS (varying interpolation ops). |
+| 10, 44 | VS instructions | Total VS instruction count executed. |
+| 10, 45 | FS instructions | Total FS instruction count executed. |
+| 10, 46 | addr lock count | Address-register/addr calculation lock/stall events (address dependency conflicts). |
+| 10, 47 | UCHE read trans | UCHE read transactions initiated by SP (SSBO/image/UBO reads via UCHE path). |
+| 10, 48 | UCHE write trans | UCHE write transactions initiated by SP (SSBO/image stores/atomics writebacks). |
+| 10, 49 | export VPC trans | Export transactions from SP to VPC (varyings/positions). |
+| 10, 50 | export RB trans | Export transactions from SP to RB (color/depth/stencil exports). |
+| 10, 51 | pixels killed | Pixels killed in shader (discard/kill) or late-kill attribution (implementation-defined). |
+| 10, 52 | icl1 requests | Instruction cache L1 requests (event count). |
+| 10, 53 | icl1 misses | Instruction cache L1 misses. |
+| 10, 54 | icl0 requests | Instruction cache L0 requests (event count). |
+| 10, 55 | icl0 misses | Instruction cache L0 misses. |
+| 10, 56 | HS instructions | Hull shader instruction count. |
+| 10, 57 | DS instructions | Domain shader instruction count. |
+| 10, 58 | GS instructions | Geometry shader instruction count. |
+| 10, 59 | CS instructions | Compute shader instruction count. |
+| 10, 60 | GPR read | General-purpose register file read operations (event count). |
+| 10, 61 | GPR write | General-purpose register file write operations (event count). |
+| 10, 62 | LM ch0 requests | Local-memory channel 0 requests (bank/channel traffic). |
+| 10, 63 | LM ch1 requests | Local-memory channel 1 requests. |
+| 10, 64 | LM bank conflicts | Local-memory bank conflict events (serialization due to bank collisions). |
 | - | **Render backend** | - |
-| 11, 0 | busy cycles |
-| 11, 1 | stall cycles CCU |
-| 11, 2 | stall cycles HLSQ |
-| 11, 3 | stall cycles fifo0 full |
-| 11, 4 | stall cycles fifo1 full |
-| 11, 5 | stall cycles fifo2 full |
-| 11, 6 | starve cycles SP |
-| 11, 7 | starve cycles LRZ tile |
-| 11, 8 | starve cycles CCU |
-| 11, 9 | starve cycles Z plane |
-| 11, 10 | starve cycles bary plane |
-| 11, 11 | Z workload |
-| 11, 12 | HLSQ active | cycles? |
-| 11, 13 | Z read | bytes |
-| 11, 14 | Z write | bytes |
-| 11, 15 | C read | bytes |
-| 11, 16 | C write | bytes |
-| 11, 17 | total pass | pixels |
-| 11, 18 | Z pass | pixels |
-| 11, 19 | Z fail | pixels |
-| 11, 20 | S fail | pixels |
-| 11, 21 | blended fxp components | pixels? |
-| 11, 22 | blended fp16 components | pixels? |
-| 11, 23 | reserved |
-| 11, 24 | 2D alive cycles |
-| 11, 25 | 2D stall cycles a2d |
-| 11, 26 | 2D starve cycles src |
-| 11, 27 | 2D starve cycles SP |
-| 11, 28 | 2D starve cycles dst |
-| 11, 29 | 2D valid pixels |
+| 11, 0 | busy cycles | Cycles RB/ROP backend is active. |
+| 11, 1 | stall cycles CCU | Cycles stalled waiting on CCU (compression/GMEM interface). |
+| 11, 2 | stall cycles HLSQ | Cycles stalled waiting on HLSQ/SP to provide fragments/exports. |
+| 11, 3 | stall cycles fifo0 full | Cycles stalled because RB FIFO0 is full (backpressure). |
+| 11, 4 | stall cycles fifo1 full | Cycles stalled because RB FIFO1 is full. |
+| 11, 5 | stall cycles fifo2 full | Cycles stalled because RB FIFO2 is full. |
+| 11, 6 | starve cycles SP | Cycles starved waiting for SP exports (no incoming fragments). |
+| 11, 7 | starve cycles LRZ tile | Cycles starved waiting for LRZ/tile visibility results. |
+| 11, 8 | starve cycles CCU | Cycles starved waiting for CCU/GMEM interface availability. |
+| 11, 9 | starve cycles Z plane | Cycles starved waiting for Z-plane data (depth plane). |
+| 11, 10 | starve cycles bary plane | Cycles starved waiting for barycentric plane data (coverage/interp planes). |
+| 11, 11 | Z workload | Depth test workload metric (event count; often pixels/samples processed for Z). |
+| 11, 12 | HLSQ active | Cycles where RB sees HLSQ actively feeding it (front-to-backend active correlation). |
+| 11, 13 | Z read | Depth buffer read traffic (bytes or beats; implementation-defined). |
+| 11, 14 | Z write | Depth buffer write traffic (bytes or beats). |
+| 11, 15 | C read | Color buffer read traffic (bytes or beats; for blending/ROP reads). |
+| 11, 16 | C write | Color buffer write traffic (bytes or beats). |
+| 11, 17 | total pass | Total fragments/pixels passing through RB (pixels/samples processed). |
+| 11, 18 | Z pass | Pixels/samples passing depth test. |
+| 11, 19 | Z fail | Pixels/samples failing depth test. |
+| 11, 20 | S fail | Pixels/samples failing stencil test. |
+| 11, 21 | blended fxp components | Components blended in fixed-point formats (count of blended components). |
+| 11, 22 | blended fp16 components | Components blended in FP16 formats (count of blended components). |
+| 11, 23 | reserved | Reserved/unused counter slot. |
+| 11, 24 | 2D alive cycles | Cycles 2D backend path active. |
+| 11, 25 | 2D stall cycles a2d | Cycles stalled in 2D path due to A2D (2D accelerator) dependency/backpressure. |
+| 11, 26 | 2D starve cycles src | Cycles starved waiting for 2D source reads. |
+| 11, 27 | 2D starve cycles SP | Cycles starved waiting for SP/producer in 2D flow. |
+| 11, 28 | 2D starve cycles dst | Cycles starved waiting for 2D destination availability/writes. |
+| 11, 29 | 2D valid pixels | Number of valid pixels processed in 2D path. |
 | - | **VBIF** | - |
-| 13, 0 | axi read requests ID 0 |
-| 13, 1 | axi read requests ID 1 |
-| 13, 2 | axi read requests ID 2 |
-| 13, 3 | axi read requests ID 3 |
-| 13, 4 | axi read requests ID 4 |
-| 13, 5 | axi read requests ID 5 |
-| 13, 6 | axi read requests ID 6 |
-| 13, 7 | axi read requests ID 7 |
-| 13, 8 | axi read requests ID 8 |
-| 13, 9 | axi read requests ID 9 |
-| 13, 10 | axi read requests ID 10 |
-| 13, 11 | axi read requests ID 11 |
-| 13, 12 | axi read requests ID 12 |
-| 13, 13 | axi read requests ID 13 |
-| 13, 14 | axi read requests ID 14 |
-| 13, 15 | axi read requests ID 15 |
-| 13, 16 | axi0 read requests total |
-| 13, 17 | axi1 read requests total |
-| 13, 18 | axi2 read requests total |
-| 13, 19 | axi3 read requests total |
-| 13, 20 | axi read requests total |
-| 13, 21 | axi write requests ID 0 |
-| 13, 22 | axi write requests ID 1 |
-| 13, 23 | axi write requests ID 2 |
-| 13, 24 | axi write requests ID 3 |
-| 13, 25 | axi write requests ID 4 |
-| 13, 26 | axi write requests ID 5 |
-| 13, 27 | axi write requests ID 6 |
-| 13, 28 | axi write requests ID 7 |
-| 13, 29 | axi write requests ID 8 |
-| 13, 30 | axi write requests ID 9 |
-| 13, 31 | axi write requests ID 10 |
-| 13, 32 | axi write requests ID 11 |
-| 13, 33 | axi write requests ID 12 |
-| 13, 34 | axi write requests ID 13 |
-| 13, 35 | axi write requests ID 14 |
-| 13, 36 | axi write requests ID 15 |
-| 13, 37 | axi0 write requests total |
-| 13, 38 | axi1 write requests total |
-| 13, 39 | axi2 write requests total |
-| 13, 40 | axi3 write requests total |
-| 13, 41 | axi write requests total |
-| 13, 42 | axi total requests |
-| 13, 43 | axi read data beats ID 0 |
-| 13, 44 | axi read data beats ID 1 |
-| 13, 45 | axi read data beats ID 2 |
-| 13, 46 | axi read data beats ID 3 |
-| 13, 47 | axi read data beats ID 4 |
-| 13, 48 | axi read data beats ID 5 |
-| 13, 49 | axi read data beats ID 6 |
-| 13, 50 | axi read data beats ID 7 |
-| 13, 51 | axi read data beats ID 8 |
-| 13, 52 | axi read data beats ID 9 |
-| 13, 53 | axi read data beats ID 10 |
-| 13, 54 | axi read data beats ID 11 |
-| 13, 55 | axi read data beats ID 12 |
-| 13, 56 | axi read data beats ID 13 |
-| 13, 57 | axi read data beats ID 14 |
-| 13, 58 | axi read data beats ID 15 |
-| 13, 59 | axi0 read data beats total |
-| 13, 60 | axi1 read data beats total |
-| 13, 61 | axi2 read data beats total |
-| 13, 62 | axi3 read data beats total |
-| 13, 63 | axi read data beats total |
-| 13, 64 | axi write data beats ID 0 |
-| 13, 65 | axi write data beats ID 1 |
-| 13, 66 | axi write data beats ID 2 |
-| 13, 67 | axi write data beats ID 3 |
-| 13, 68 | axi write data beats ID 4 |
-| 13, 69 | axi write data beats ID 5 |
-| 13, 70 | axi write data beats ID 6 |
-| 13, 71 | axi write data beats ID 7 |
-| 13, 72 | axi write data beats ID 8 |
-| 13, 73 | axi write data beats ID 9 |
-| 13, 74 | axi write data beats ID 10 |
-| 13, 75 | axi write data beats ID 11 |
-| 13, 76 | axi write data beats ID 12 |
-| 13, 77 | axi write data beats ID 13 |
-| 13, 78 | axi write data beats ID 14 |
-| 13, 79 | axi write data beats ID 15 |
-| 13, 80 | axi0 write data beats total |
-| 13, 81 | axi1 write data beats total |
-| 13, 82 | axi2 write data beats total |
-| 13, 83 | axi3 write data beats total |
-| 13, 84 | axi write data beats total |
-| 13, 85 | axi data beats total |
+| 13, 0 | axi read requests ID 0 | AXI read request count tagged with ID0. |
+| 13, 1 | axi read requests ID 1 | AXI read request count tagged with ID1. |
+| 13, 2 | axi read requests ID 2 | AXI read request count tagged with ID2. |
+| 13, 3 | axi read requests ID 3 | AXI read request count tagged with ID3. |
+| 13, 4 | axi read requests ID 4 | AXI read request count tagged with ID4. |
+| 13, 5 | axi read requests ID 5 | AXI read request count tagged with ID5. |
+| 13, 6 | axi read requests ID 6 | AXI read request count tagged with ID6. |
+| 13, 7 | axi read requests ID 7 | AXI read request count tagged with ID7. |
+| 13, 8 | axi read requests ID 8 | AXI read request count tagged with ID8. |
+| 13, 9 | axi read requests ID 9 | AXI read request count tagged with ID9. |
+| 13, 10 | axi read requests ID 10 | AXI read request count tagged with ID10. |
+| 13, 11 | axi read requests ID 11 | AXI read request count tagged with ID11. |
+| 13, 12 | axi read requests ID 12 | AXI read request count tagged with ID12. |
+| 13, 13 | axi read requests ID 13 | AXI read request count tagged with ID13. |
+| 13, 14 | axi read requests ID 14 | AXI read request count tagged with ID14. |
+| 13, 15 | axi read requests ID 15 | AXI read request count tagged with ID15. |
+| 13, 16 | axi0 read requests total | Total AXI read requests on AXI port/channel 0. |
+| 13, 17 | axi1 read requests total | Total AXI read requests on AXI port/channel 1. |
+| 13, 18 | axi2 read requests total | Total AXI read requests on AXI port/channel 2. |
+| 13, 19 | axi3 read requests total | Total AXI read requests on AXI port/channel 3. |
+| 13, 20 | axi read requests total | Total AXI read requests (all IDs/ports). |
+| 13, 21 | axi write requests ID 0 | AXI write request count tagged with ID0. |
+| 13, 22 | axi write requests ID 1 | AXI write request count tagged with ID1. |
+| 13, 23 | axi write requests ID 2 | AXI write request count tagged with ID2. |
+| 13, 24 | axi write requests ID 3 | AXI write request count tagged with ID3. |
+| 13, 25 | axi write requests ID 4 | AXI write request count tagged with ID4. |
+| 13, 26 | axi write requests ID 5 | AXI write request count tagged with ID5. |
+| 13, 27 | axi write requests ID 6 | AXI write request count tagged with ID6. |
+| 13, 28 | axi write requests ID 7 | AXI write request count tagged with ID7. |
+| 13, 29 | axi write requests ID 8 | AXI write request count tagged with ID8. |
+| 13, 30 | axi write requests ID 9 | AXI write request count tagged with ID9. |
+| 13, 31 | axi write requests ID 10 | AXI write request count tagged with ID10. |
+| 13, 32 | axi write requests ID 11 | AXI write request count tagged with ID11. |
+| 13, 33 | axi write requests ID 12 | AXI write request count tagged with ID12. |
+| 13, 34 | axi write requests ID 13 | AXI write request count tagged with ID13. |
+| 13, 35 | axi write requests ID 14 | AXI write request count tagged with ID14. |
+| 13, 36 | axi write requests ID 15 | AXI write request count tagged with ID15. |
+| 13, 37 | axi0 write requests total | Total AXI write requests on AXI port/channel 0. |
+| 13, 38 | axi1 write requests total | Total AXI write requests on AXI port/channel 1. |
+| 13, 39 | axi2 write requests total | Total AXI write requests on AXI port/channel 2. |
+| 13, 40 | axi3 write requests total | Total AXI write requests on AXI port/channel 3. |
+| 13, 41 | axi write requests total | Total AXI write requests (all IDs/ports). |
+| 13, 42 | axi total requests | Total AXI requests (reads + writes). |
+| 13, 43 | axi read data beats ID 0 | AXI read data beats returned with ID0. |
+| 13, 44 | axi read data beats ID 1 | AXI read data beats returned with ID1. |
+| 13, 45 | axi read data beats ID 2 | AXI read data beats returned with ID2. |
+| 13, 46 | axi read data beats ID 3 | AXI read data beats returned with ID3. |
+| 13, 47 | axi read data beats ID 4 | AXI read data beats returned with ID4. |
+| 13, 48 | axi read data beats ID 5 | AXI read data beats returned with ID5. |
+| 13, 49 | axi read data beats ID 6 | AXI read data beats returned with ID6. |
+| 13, 50 | axi read data beats ID 7 | AXI read data beats returned with ID7. |
+| 13, 51 | axi read data beats ID 8 | AXI read data beats returned with ID8. |
+| 13, 52 | axi read data beats ID 9 | AXI read data beats returned with ID9. |
+| 13, 53 | axi read data beats ID 10 | AXI read data beats returned with ID10. |
+| 13, 54 | axi read data beats ID 11 | AXI read data beats returned with ID11. |
+| 13, 55 | axi read data beats ID 12 | AXI read data beats returned with ID12. |
+| 13, 56 | axi read data beats ID 13 | AXI read data beats returned with ID13. |
+| 13, 57 | axi read data beats ID 14 | AXI read data beats returned with ID14. |
+| 13, 58 | axi read data beats ID 15 | AXI read data beats returned with ID15. |
+| 13, 59 | axi0 read data beats total | Total AXI read data beats on AXI port/channel 0. |
+| 13, 60 | axi1 read data beats total | Total AXI read data beats on AXI port/channel 1. |
+| 13, 61 | axi2 read data beats total | Total AXI read data beats on AXI port/channel 2. |
+| 13, 62 | axi3 read data beats total | Total AXI read data beats on AXI port/channel 3. |
+| 13, 63 | axi read data beats total | Total AXI read data beats (all ports). |
+| 13, 64 | axi write data beats ID 0 | AXI write data beats sent with ID0. |
+| 13, 65 | axi write data beats ID 1 | AXI write data beats sent with ID1. |
+| 13, 66 | axi write data beats ID 2 | AXI write data beats sent with ID2. |
+| 13, 67 | axi write data beats ID 3 | AXI write data beats sent with ID3. |
+| 13, 68 | axi write data beats ID 4 | AXI write data beats sent with ID4. |
+| 13, 69 | axi write data beats ID 5 | AXI write data beats sent with ID5. |
+| 13, 70 | axi write data beats ID 6 | AXI write data beats sent with ID6. |
+| 13, 71 | axi write data beats ID 7 | AXI write data beats sent with ID7. |
+| 13, 72 | axi write data beats ID 8 | AXI write data beats sent with ID8. |
+| 13, 73 | axi write data beats ID 9 | AXI write data beats sent with ID9. |
+| 13, 74 | axi write data beats ID 10 | AXI write data beats sent with ID10. |
+| 13, 75 | axi write data beats ID 11 | AXI write data beats sent with ID11. |
+| 13, 76 | axi write data beats ID 12 | AXI write data beats sent with ID12. |
+| 13, 77 | axi write data beats ID 13 | AXI write data beats sent with ID13. |
+| 13, 78 | axi write data beats ID 14 | AXI write data beats sent with ID14. |
+| 13, 79 | axi write data beats ID 15 | AXI write data beats sent with ID15. |
+| 13, 80 | axi0 write data beats total | Total AXI write data beats on AXI port/channel 0. |
+| 13, 81 | axi1 write data beats total | Total AXI write data beats on AXI port/channel 1. |
+| 13, 82 | axi2 write data beats total | Total AXI write data beats on AXI port/channel 2. |
+| 13, 83 | axi3 write data beats total | Total AXI write data beats on AXI port/channel 3. |
+| 13, 84 | axi write data beats total | Total AXI write data beats (all ports). |
+| 13, 85 | axi data beats total | Total AXI data beats (read + write). |
 | - | **Visibility Stream Compressor** | - |
-| 23, 0 | busy cycles |
-| 23, 1 | working cycles |
-| 23, 2 | stall cycles UCHE |
-| 23, 3 | eot num |
+| 23, 0 | busy cycles | Cycles VSC is active. |
+| 23, 1 | working cycles | Cycles VSC is doing useful work (not stalled). |
+| 23, 2 | stall cycles UCHE | Cycles VSC stalled waiting on UCHE/L2. |
+| 23, 3 | eot num | Number of end-of-tile (EOT) events/records produced. |
 | - | **Cache and Compression Unit** | - |
-| 24, 0 | busy cycles |
-| 24, 1 | stall cycles RB depth return |
-| 24, 2 | stall cycles RB color return |
-| 24, 3 | starve cycles flag return |
-| 24, 4 | depth blocks | number of 4x4 pixel blocks |
-| 24, 5 | color blocks | number of 4x4 pixel blocks |
-| 24, 6 | depth block hit |
-| 24, 7 | color block hit |
-| 24, 8 | partial block read |
-| 24, 9 | gmem read | bytes? |
-| 24, 10 | gmem write | bytes? |
-| 24, 11 | depth read flag0 count |
-| 24, 12 | depth read flag1 count |
-| 24, 13 | depth read flag2 count |
-| 24, 14 | depth read flag3 count |
-| 24, 15 | depth read flag4 count |
-| 24, 16 | color read flag0 count |
-| 24, 17 | color read flag1 count |
-| 24, 18 | color read flag2 count |
-| 24, 19 | color read flag3 count |
-| 24, 20 | color read flag4 count |
-| 24, 21 | 2D busy cycles |
-| 24, 22 | 2D RD req |
-| 24, 23 | 2D WR req |
-| 24, 24 | 2D reorder starve cycles |
-| 24, 25 | 2D pixels |
+| 24, 0 | busy cycles | Cycles CCU is active (GMEM + compression metadata handling). |
+| 24, 1 | stall cycles RB depth return | Cycles stalled waiting for RB depth data return/handshake. |
+| 24, 2 | stall cycles RB color return | Cycles stalled waiting for RB color data return/handshake. |
+| 24, 3 | starve cycles flag return | Cycles starved waiting for compression “flag” metadata returns. |
+| 24, 4 | depth blocks | Depth blocks processed (typically 4x4 blocks). |
+| 24, 5 | color blocks | Color blocks processed (typically 4x4 blocks). |
+| 24, 6 | depth block hit | Depth block cache hits (metadata/data reuse). |
+| 24, 7 | color block hit | Color block cache hits. |
+| 24, 8 | partial block read | Partial block reads (read-modify-write or partial coverage). |
+| 24, 9 | gmem read | GMEM read traffic (bytes/beats; implementation-defined). |
+| 24, 10 | gmem write | GMEM write traffic (bytes/beats). |
+| 24, 11 | depth read flag0 count | Count of depth reads with flag state 0 (compression state class 0). |
+| 24, 12 | depth read flag1 count | Count of depth reads with flag state 1. |
+| 24, 13 | depth read flag2 count | Count of depth reads with flag state 2. |
+| 24, 14 | depth read flag3 count | Count of depth reads with flag state 3. |
+| 24, 15 | depth read flag4 count | Count of depth reads with flag state 4. |
+| 24, 16 | color read flag0 count | Count of color reads with flag state 0. |
+| 24, 17 | color read flag1 count | Count of color reads with flag state 1. |
+| 24, 18 | color read flag2 count | Count of color reads with flag state 2. |
+| 24, 19 | color read flag3 count | Count of color reads with flag state 3. |
+| 24, 20 | color read flag4 count | Count of color reads with flag state 4. |
+| 24, 21 | 2D busy cycles | Cycles CCU 2D path is active. |
+| 24, 22 | 2D RD req | Number of 2D read requests. |
+| 24, 23 | 2D WR req | Number of 2D write requests. |
+| 24, 24 | 2D reorder starve cycles | Cycles starved due to 2D reorder queue (dependency / ordering). |
+| 24, 25 | 2D pixels | Number of pixels processed via 2D path. |
 | - | **Low Resolution Z pass** | - |
-| 25, 0 | busy cycles |
-| 25, 1 | starve cycles RAS |
-| 25, 2 | stall cycles RB |
-| 25, 3 | stall cycles VSC |
-| 25, 4 | stall cycles VPC |
-| 25, 5 | stall cycles flag prefetch |
-| 25, 6 | stall cycles UCHE |
-| 25, 7 | LRZ read |
-| 25, 8 | LRZ write |
-| 25, 9 | read latency |
-| 25, 10 | merge cache updating |
-| 25, 11 | prim killed BY maskgen |
-| 25, 12 | prim killed BY LRZ |
-| 25, 13 | visible prim after LRZ |
-| 25, 14 | full 8x8 tiles |
-| 25, 15 | partial 8x8 tiles |
-| 25, 16 | tile killed |
-| 25, 17 | total pixel |
-| 25, 18 | visible pixel after LRZ |
+| 25, 0 | busy cycles | Cycles LRZ block is active. |
+| 25, 1 | starve cycles RAS | Cycles LRZ starved waiting for rasterizer/tile input. |
+| 25, 2 | stall cycles RB | Cycles LRZ stalled due to RB dependency/backpressure. |
+| 25, 3 | stall cycles VSC | Cycles LRZ stalled due to VSC dependency/backpressure. |
+| 25, 4 | stall cycles VPC | Cycles LRZ stalled due to VPC dependency. |
+| 25, 5 | stall cycles flag prefetch | Cycles stalled while prefetching compression flags/metadata. |
+| 25, 6 | stall cycles UCHE | Cycles stalled waiting for UCHE/L2 transactions/returns. |
+| 25, 7 | LRZ read | LRZ buffer read operations/traffic (events or beats). |
+| 25, 8 | LRZ write | LRZ buffer write operations/traffic. |
+| 25, 9 | read latency | Accumulated latency for LRZ reads (cycles). |
+| 25, 10 | merge cache updating | Events/cycles updating LRZ merge cache (hierarchical Z merge). |
+| 25, 11 | prim killed BY maskgen | Primitives killed by mask generator (coverage/visibility mask). |
+| 25, 12 | prim killed BY LRZ | Primitives killed by LRZ early-Z reject. |
+| 25, 13 | visible prim after LRZ | Primitives remaining visible after LRZ culling. |
+| 25, 14 | full 8x8 tiles | Number of fully covered 8x8 tiles processed. |
+| 25, 15 | partial 8x8 tiles | Number of partially covered 8x8 tiles processed. |
+| 25, 16 | tile killed | Tiles rejected/killed by LRZ (no visible samples). |
+| 25, 17 | total pixel | Total pixels/samples considered by LRZ. |
+| 25, 18 | visible pixel after LRZ | Pixels/samples remaining visible after LRZ. |
 | - | **CMP** | - |
-| 26, 0 | cmpdecmp stall cycles VBIF |
-| 26, 1 | cmpdecmp VBIF latency cycles |
-| 26, 2 | cmpdecmp VBIF latency samples |
-| 26, 3 | cmpdecmp VBIF read data CCU |
-| 26, 4 | cmpdecmp VBIF write data CCU |
-| 26, 5 | cmpdecmp VBIF read request |
-| 26, 6 | cmpdecmp VBIF write request |
-| 26, 7 | cmpdecmp VBIF read data |
-| 26, 8 | cmpdecmp VBIF write data |
-| 26, 9 | cmpdecmp flag fetch cycles |
-| 26, 10 | cmpdecmp flag fetch samples |
-| 26, 11 | cmpdecmp depth write flag1 count |
-| 26, 12 | cmpdecmp depth write flag2 count |
-| 26, 13 | cmpdecmp depth write flag3 count |
-| 26, 14 | cmpdecmp depth write flag4 count |
-| 26, 15 | cmpdecmp color write flag1 count |
-| 26, 16 | cmpdecmp color write flag2 count |
-| 26, 17 | cmpdecmp color write flag3 count |
-| 26, 18 | cmpdecmp color write flag4 count |
-| 26, 19 | cmpdecmp 2D stall cycles VBIF req |
-| 26, 20 | cmpdecmp 2D stall cycles VBIF WR |
-| 26, 21 | cmpdecmp 2D stall cycles VBIF return |
-| 26, 22 | cmpdecmp 2D RD data |
-| 26, 23 | cmpdecmp 2D WR data |
+| 26, 0 | cmpdecmp stall cycles VBIF | Cycles compression/decompression unit stalled waiting on VBIF/memory. |
+| 26, 1 | cmpdecmp VBIF latency cycles | Accumulated VBIF latency cycles for cmp/decmp traffic. |
+| 26, 2 | cmpdecmp VBIF latency samples | Number of VBIF latency samples for cmp/decmp. |
+| 26, 3 | cmpdecmp VBIF read data CCU | Read data beats returned from VBIF into CCU via cmp/decmp path. |
+| 26, 4 | cmpdecmp VBIF write data CCU | Write data beats sent to VBIF from CCU via cmp/decmp path. |
+| 26, 5 | cmpdecmp VBIF read request | Number of VBIF read requests issued by cmp/decmp path. |
+| 26, 6 | cmpdecmp VBIF write request | Number of VBIF write requests issued by cmp/decmp path. |
+| 26, 7 | cmpdecmp VBIF read data | Total VBIF read data beats for cmp/decmp (all sinks). |
+| 26, 8 | cmpdecmp VBIF write data | Total VBIF write data beats for cmp/decmp (all sources). |
+| 26, 9 | cmpdecmp flag fetch cycles | Cycles spent fetching compression flags/metadata. |
+| 26, 10 | cmpdecmp flag fetch samples | Number of flag-fetch samples/transactions. |
+| 26, 11 | cmpdecmp depth write flag1 count | Count of depth writes with compression flag state 1. |
+| 26, 12 | cmpdecmp depth write flag2 count | Count of depth writes with compression flag state 2. |
+| 26, 13 | cmpdecmp depth write flag3 count | Count of depth writes with compression flag state 3. |
+| 26, 14 | cmpdecmp depth write flag4 count | Count of depth writes with compression flag state 4. |
+| 26, 15 | cmpdecmp color write flag1 count | Count of color writes with compression flag state 1. |
+| 26, 16 | cmpdecmp color write flag2 count | Count of color writes with compression flag state 2. |
+| 26, 17 | cmpdecmp color write flag3 count | Count of color writes with compression flag state 3. |
+| 26, 18 | cmpdecmp color write flag4 count | Count of color writes with compression flag state 4. |
+| 26, 19 | cmpdecmp 2D stall cycles VBIF req | 2D cmp/decmp cycles stalled on VBIF request issue. |
+| 26, 20 | cmpdecmp 2D stall cycles VBIF WR | 2D cmp/decmp cycles stalled on VBIF write path. |
+| 26, 21 | cmpdecmp 2D stall cycles VBIF return | 2D cmp/decmp cycles stalled waiting for VBIF return data/acks. |
+| 26, 22 | cmpdecmp 2D RD data | 2D cmp/decmp read data beats/transactions. |
+| 26, 23 | cmpdecmp 2D WR data | 2D cmp/decmp write data beats/transactions. |
+
 </details>
 
 ## A6xx
@@ -1720,731 +1725,576 @@ CMP: cmpdecmp 2D pixels
 </details>
 
 
-### Adreno 610
-
-<details>
-
-| group, counter | name | desc |
-|---|---|---|
-| - | **Command Parser** | - |
-| 0, 0 | always count |
-| 0, 1 | busy gfx core idle |
-| 0, 2 | busy cycles |
-| 0, 3 | num preemptions |
-| 0, 4 | preemption reaction delay |
-| 0, 5 | preemption switch out time |
-| 0, 6 | preemption switch IN time |
-| 0, 7 | dead draws IN bin render |
-| 0, 8 | predicated draws killed |
-| 0, 9 | mode switch |
-| 0, 10 | zpass done |
-| 0, 11 | context done |
-| 0, 12 | cache flush |
-| 0, 13 | long preemptions |
-| - | **RBBM** | - |
-| 1, 3 | RAS busy |
-| 1, 9 | vbif busy |
-| 1, 10 | VSC busy |
-| 1, 12 | UCHE busy |
-| - | **PC** | - |
-| 2, 17 | VPC primitives |
-| 2, 18 | dead prim |
-| 2, 19 | live prim |
-| 2, 21 | IA vertices |
-| 2, 22 | IA primitives |
-| 2, 26 | VS invocations |
-| 2, 30 | 3D drawcalls |
-| 2, 31 | 2D drawcalls |
-| - | Vertex Fetch and Decode | - |
-| 3, 0 | busy cycles |
-| 3, 1 | stall cycles UCHE |
-| 3, 2 | stall cycles VPC alloc |
-| 3, 3 | stall cycles SP info |
-| 3, 4 | stall cycles SP attr |
-| 3, 5 | starve cycles UCHE |
-| 3, 6 | rbuffer full |
-| 3, 23 | ??? |
-| - | **High Level SeQuencer** | - |
-| 4, 0 | busy cycles |
-| 4, 1 | stall cycles UCHE |
-| 4, 2 | stall cycles SP state |
-| 4, 3 | stall cycles SP FS stage |
-| 4, 4 | UCHE latency cycles |
-| 4, 5 | UCHE latency count |
-| - | **Varying/Position Cache** | - |
-| 5, 0 | busy cycles |
-| 5, 1 | working cycles |
-| 5, 2 | stall cycles UCHE |
-| 5, 3 | stall cycles VFD wack |
-| 5, 4 | stall cycles HLSQ prim alloc |
-| 5, 5 | stall cycles PC |
-| - | **Triangle Setup Engine** | - |
-| 6, 0 | busy cycles |
-| 6, 1 | clipping cycles |
-| 6, 2 | stall cycles RAS |
-| 6, 3 | stall cycles LRZ baryplane |
-| - | **Rasterizer** | - |
-| 7, 4 | super tiles |
-| 7, 5 | 8x4 tiles |
-| 7, 6 | maskgen active |
-| 7, 7 | fully covered super tiles |
-| - | **Unified L2 Cache** | - |
-| 8, 0 | busy cycles |
-| 8, 1 | stall cycles arbiter |
-| 8, 2 | vbif latency cycles |
-| 8, 3 | vbif latency samples |
-| 8, 4 | vbif read beats TP |
-| 8, 5 | vbif read beats VFD |
-| 8, 6 | vbif read beats HLSQ |
-| 8, 7 | vbif read beats LRZ |
-| 8, 8 | vbif read beats SP |
-| 8, 9 | read requests TP |
-| 8, 10 | read requests VFD |
-| 8, 11 | read requests HLSQ |
-| - | **Texture Processor** | - |
-| 9, 0 | busy cycles |
-| 9, 1 | stall cycles UCHE |
-| 9, 2 | latency cycles |
-| 9, 3 | latency trans |
-| 9, 4 | flag cache request samples |
-| 9, 5 | flag cache request latency |
-| 9, 6 | L1 cacheline requests |
-| 9, 7 | L1 cacheline misses |
-| 9, 8 | SP TP trans |
-| 9, 9 | TP SP trans |
-| 9, 10 | output pixels |
-| 9, 11 | filter workload 16bit |
-| - | **Shader/Streaming Processor** | - |
-| 10, 0 | busy cycles |
-| 10, 1 | ALU working cycles |
-| 10, 2 | EFU working cycles |
-| 10, 3 | stall cycles VPC |
-| 10, 4 | stall cycles TP |
-| 10, 5 | stall cycles UCHE |
-| 10, 6 | stall cycles RB |
-| 10, 7 | non execution cycles |
-| 10, 8 | wave contexts |
-| 10, 9 | wave context cycles |
-| 10, 10 | FS stage wave cycles |
-| 10, 11 | FS stage wave samples |
-| 10, 12 | VS stage wave cycles |
-| 10, 13 | VS stage wave samples |
-| 10, 14 | FS stage duration cycles |
-| 10, 15 | VS stage duration cycles |
-| 10, 16 | wave ctrl cycles |
-| 10, 17 | wave load cycles |
-| 10, 18 | wave emit cycles |
-| 10, 19 | wave nop cycles |
-| 10, 20 | wave wait cycles |
-| 10, 21 | wave fetch cycles |
-| 10, 22 | wave idle cycles |
-| 10, 23 | wave end cycles |
-| - | **Render backend** | - |
-| 11, 13 | Z write |
-| 11, 14 | C read |
-| 11, 15 | C write |
-| 11, 16 | total pass |
-| 11, 18 | Z fail |
-| 11, 19 | S fail |
-| 11, 20 | blended fxp components |
-| 11, 24 | 2D stall cycles a2d |
-| - | **VBIF** | - |
-| 13, 34 | ??? |
-| 13, 35 | ??? |
-| 13, 46 | ??? |
-| 13, 47 | ??? |
-| - | **Visibility Stream Compressor** | - |
-| 23, 0 | busy cycles |
-| 23, 1 | working cycles |
-| - | **Cache and Compression Unit** | - |
-| 24, 4 | depth blocks |
-| 24, 5 | color blocks |
-| 24, 8 | partial block read |
-| 24, 9 | gmem read |
-| 24, 10 | gmem write |
-| - | **Low Resolution Z pass** | - |
-| 25, 7 | LRZ read |
-| 25, 8 | LRZ write |
-| 25, 11 | prim killed BY maskgen |
-| 25, 12 | prim killed BY LRZ |
-| - | **CMP** | - |
-| 26, 0 | cmpdecmp stall cycles arb |
-| 26, 1 | cmpdecmp vbif latency cycles |
-| 26, 2 | cmpdecmp vbif latency samples |
-| 26, 3 | cmpdecmp vbif read data CCU |
-
-</details>
-
-
 ### Adreno 660
 
 <details>
 
+*description from LLM*
 | group, counter | name | desc |
 |---|---|---|
 | - | **Command Parser** | - |
-| 0, 0 | always count |
-| 0, 1 | busy gfx core idle |
-| 0, 2 | busy cycles |
-| 0, 3 | num preemptions |
-| 0, 4 | preemption reaction delay |
-| 0, 5 | preemption switch out time |
-| 0, 6 | preemption switch IN time |
-| 0, 7 | dead draws IN bin render |
-| 0, 8 | predicated draws killed |
-| 0, 9 | mode switch |
-| 0, 10 | zpass done |
-| 0, 11 | context done |
-| 0, 12 | cache flush |
-| 0, 13 | long preemptions |
-| 0, 14 | sqe I cache starve |
-| 0, 15 | sqe idle |
-| 0, 16 | sqe pm4 starve RB IB |
-| 0, 17 | sqe pm4 starve sds |
-| 0, 18 | sqe mrb starve |
-| 0, 19 | sqe rrb starve |
-| 0, 20 | sqe vsd starve |
-| 0, 21 | vsd decode starve |
-| 0, 22 | sqe pipe out stall |
-| 0, 23 | sqe sync stall |
-| 0, 24 | sqe pm4 wfi stall |
-| 0, 25 | sqe sys wfi stall |
-| 0, 26 | sqe T4 exec |
-| 0, 27 | sqe load state exec |
-| 0, 28 | sqe save sds state |
-| 0, 29 | sqe draw exec |
-| 0, 30 | sqe ctxt reg bunch exec |
-| 0, 31 | sqe exec profiled |
-| 0, 32 | memory pool empty |
-| 0, 33 | memory pool sync stall |
-| 0, 34 | memory pool above thresh |
-| 0, 35 | ahb WR stall pre draws |
-| 0, 36 | ahb stall sqe gmu |
-| 0, 37 | ahb stall sqe WR other |
-| 0, 38 | ahb stall sqe RD other |
-| 0, 39 | cluster0 empty |
-| 0, 40 | cluster1 empty |
-| 0, 41 | cluster2 empty |
-| 0, 42 | cluster3 empty |
-| 0, 43 | cluster4 empty |
-| 0, 44 | cluster5 empty |
-| 0, 45 | pm4 data |
-| 0, 46 | pm4 headers |
-| 0, 47 | vbif read beats |
-| 0, 48 | vbif write beats |
-| 0, 49 | sqe instr counter |
+| 0, 0 | always count | Constant 1s counter (sanity/normalization reference). |
+| 0, 1 | busy gfx core idle | Cycles CP/SQE is “busy” while graphics core is otherwise idle (front-end occupied, back-end not progressing). |
+| 0, 2 | busy cycles | Cycles command processor/queue engine is busy processing commands. |
+| 0, 3 | num preemptions | Number of GPU preemption events (context switches triggered by scheduler). |
+| 0, 4 | preemption reaction delay | Cycles from preempt request to when GPU begins reacting (latency to acknowledge). |
+| 0, 5 | preemption switch out time | Cycles spent saving state and switching out the preempted context. |
+| 0, 6 | preemption switch IN time | Cycles spent restoring state and switching in the new context. |
+| 0, 7 | dead draws IN bin render | Draws that were binned but later discarded before/during render pass (killed work). |
+| 0, 8 | predicated draws killed | Draws suppressed by predication/conditional rendering (predicate evaluated false). |
+| 0, 9 | mode switch | Number of pipeline mode switches (e.g., switching between 3D/compute/2D or binning/render modes). |
+| 0, 10 | zpass done | Count of completed Z-pass / depth-only style passes signaled done. |
+| 0, 11 | context done | Number of completed contexts/ringbuffer submissions (end-of-context events). |
+| 0, 12 | cache flush | Number of cache flush events initiated by CP (coherency/visibility maintenance). |
+| 0, 13 | long preemptions | Number of “long” preemptions (preemptions exceeding an internal threshold). |
+| 0, 14 | sqe I cache starve | Cycles SQE starved waiting on its instruction cache (I-cache miss/latency). |
+| 0, 15 | sqe idle | Cycles SQE has no work to execute (front-end idle). |
+| 0, 16 | sqe pm4 starve RB IB | Cycles SQE stalled waiting for PM4 stream due to ringbuffer/indirect-buffer fetch starvation. |
+| 0, 17 | sqe pm4 starve sds | Cycles SQE stalled because PM4 stream is waiting on SDS (state/data store) availability. |
+| 0, 18 | sqe mrb starve | Cycles SQE stalled waiting for “MRB” (micro/ring buffer) input. |
+| 0, 19 | sqe rrb starve | Cycles SQE stalled waiting for “RRB” (ring/raster related buffer) input. |
+| 0, 20 | sqe vsd starve | Cycles SQE stalled waiting for VSD (VSC/VSD decode/path) related input. |
+| 0, 21 | vsd decode starve | Cycles VSD decode stage is starved (no input / blocked upstream). |
+| 0, 22 | sqe pipe out stall | Cycles SQE cannot push work downstream due to pipe-out backpressure. |
+| 0, 23 | sqe sync stall | Cycles SQE stalled on synchronization primitives (barriers, waits). |
+| 0, 24 | sqe pm4 wfi stall | Cycles SQE stalled due to PM4 WFI (wait-for-idle) command. |
+| 0, 25 | sqe sys wfi stall | Cycles SQE stalled due to system-level WFI/wait condition. |
+| 0, 26 | sqe T4 exec | Number of executed T4 packets/operations (internal CP micro-op class). |
+| 0, 27 | sqe load state exec | Number of executed “load state” operations (register/state restore). |
+| 0, 28 | sqe save sds state | Number of times SQE saved SDS-related state (typically for preempt/context save). |
+| 0, 29 | sqe draw exec | Number of executed draw dispatch operations (draw packet execution count). |
+| 0, 30 | sqe ctxt reg bunch exec | Number of executed context-register “bunch” loads/writes (bulk state programming). |
+| 0, 31 | sqe exec profiled | Cycles/occurrences where SQE execution is within a profiled window (internal profiling gate). |
+| 0, 32 | memory pool empty | Times/cycles CP memory pool ran empty (no space/allocations available). |
+| 0, 33 | memory pool sync stall | Cycles stalled due to synchronization around CP memory pool management. |
+| 0, 34 | memory pool above thresh | Time/cycles memory pool usage above a threshold (pressure indicator). |
+| 0, 35 | ahb WR stall pre draws | Cycles stalled on AHB writes before issuing draws (bus write congestion). |
+| 0, 36 | ahb stall sqe gmu | Cycles SQE stalled due to AHB transactions with GMU (power/management interface). |
+| 0, 37 | ahb stall sqe WR other | Cycles SQE stalled due to other AHB write traffic. |
+| 0, 38 | ahb stall sqe RD other | Cycles SQE stalled due to other AHB read traffic. |
+| 0, 39 | cluster0 empty | Cycles/occurrences where cluster 0 work queue is empty (no work). |
+| 0, 40 | cluster1 empty | Cycles/occurrences where cluster 1 work queue is empty. |
+| 0, 41 | cluster2 empty | Cycles/occurrences where cluster 2 work queue is empty. |
+| 0, 42 | cluster3 empty | Cycles/occurrences where cluster 3 work queue is empty. |
+| 0, 43 | cluster4 empty | Cycles/occurrences where cluster 4 work queue is empty. |
+| 0, 44 | cluster5 empty | Cycles/occurrences where cluster 5 work queue is empty. |
+| 0, 45 | pm4 data | Number of PM4 data DWORDs processed (payload words). |
+| 0, 46 | pm4 headers | Number of PM4 packet headers processed. |
+| 0, 47 | vbif read beats | Total read data beats observed at VBIF interface (bandwidth in beats). |
+| 0, 48 | vbif write beats | Total write data beats observed at VBIF interface. |
+| 0, 49 | sqe instr counter | Number of SQE micro-instructions executed (front-end instruction count). |
 | - | **RBBM** | - |
-| 1, 0 | always count |
-| 1, 1 | always ON |
-| 1, 2 | TSE busy |
-| 1, 3 | RAS busy |
-| 1, 4 | PC dcall busy |
-| 1, 5 | PC vsd busy |
-| 1, 6 | status masked |
-| 1, 7 | com busy |
-| 1, 8 | dcom busy |
-| 1, 9 | vbif busy |
-| 1, 10 | VSC busy |
-| 1, 11 | tess busy |
-| 1, 12 | UCHE busy |
-| 1, 13 | HLSQ busy |
+| 1, 0 | always count | Constant 1s counter (sanity/normalization reference). |
+| 1, 1 | always ON | Cycles RBBM domain is powered/clocked on. |
+| 1, 2 | TSE busy | Cycles Triangle Setup Engine is busy. |
+| 1, 3 | RAS busy | Cycles Rasterizer is busy. |
+| 1, 4 | PC dcall busy | Cycles Primitive/Parameter (PC) busy doing draw-call related work. |
+| 1, 5 | PC vsd busy | Cycles PC busy with VSD-related work (visibility stream/decode path). |
+| 1, 6 | status masked | Cycles status/busy reporting is masked (power/clock gating or debug mask active). |
+| 1, 7 | com busy | Cycles “COM” block busy (command/compute orchestrator domain; internal). |
+| 1, 8 | dcom busy | Cycles “DCOM” block busy (data/dispatch command domain; internal). |
+| 1, 9 | vbif busy | Cycles VBIF is busy (actively servicing memory transactions). |
+| 1, 10 | VSC busy | Cycles Visibility Stream Compressor is busy. |
+| 1, 11 | tess busy | Cycles tessellation front-end is busy. |
+| 1, 12 | UCHE busy | Cycles Unified Cache (UCHE) is busy. |
+| 1, 13 | HLSQ busy | Cycles High Level Sequencer (HLSQ) is busy. |
 | - | **PC** | - |
-| 2, 0 | busy cycles |
-| 2, 1 | working cycles |
-| 2, 2 | stall cycles VFD |
-| 2, 3 | stall cycles TSE |
-| 2, 4 | stall cycles VPC |
-| 2, 5 | stall cycles UCHE |
-| 2, 6 | stall cycles tess |
-| 2, 7 | stall cycles TSE only |
-| 2, 8 | stall cycles VPC only |
-| 2, 9 | pass1 TF stall cycles |
-| 2, 10 | starve cycles for index |
-| 2, 11 | starve cycles for tess factor |
-| 2, 12 | starve cycles for viz stream |
-| 2, 13 | starve cycles for position |
-| 2, 14 | starve cycles DI |
-| 2, 15 | vis streams loaded |
-| 2, 16 | instances |
-| 2, 17 | VPC primitives |
-| 2, 18 | dead prim |
-| 2, 19 | live prim |
-| 2, 20 | vertex hits |
-| 2, 21 | IA vertices |
-| 2, 22 | IA primitives |
-| 2, 23 | GS primitives |
-| 2, 24 | HS invocations |
-| 2, 25 | DS invocations |
-| 2, 26 | VS invocations |
-| 2, 27 | GS invocations |
-| 2, 28 | DS primitives |
-| 2, 29 | VPC pos data transaction |
-| 2, 30 | 3D drawcalls |
-| 2, 31 | 2D drawcalls |
-| 2, 32 | non drawcall global events |
-| 2, 33 | tess busy cycles |
-| 2, 34 | tess working cycles |
-| 2, 35 | tess stall cycles PC |
-| 2, 36 | tess starve cycles PC |
-| 2, 37 | TSE transaction |
-| 2, 38 | TSE vertex |
-| 2, 39 | tess PC UV trans |
-| 2, 40 | tess PC UV patches |
-| 2, 41 | tess factor trans |
+| 2, 0 | busy cycles | Cycles PC block is busy (active). |
+| 2, 1 | working cycles | Cycles PC is doing useful work (not stalled). |
+| 2, 2 | stall cycles VFD | Cycles PC stalled waiting for Vertex Fetch/Decode. |
+| 2, 3 | stall cycles TSE | Cycles PC stalled waiting for Triangle Setup Engine. |
+| 2, 4 | stall cycles VPC | Cycles PC stalled waiting for Varying/Position Cache. |
+| 2, 5 | stall cycles UCHE | Cycles PC stalled due to UCHE/cache effects (requests/returns). |
+| 2, 6 | stall cycles tess | Cycles PC stalled due to tessellation stage/backpressure. |
+| 2, 7 | stall cycles TSE only | Stall cycles attributable only to TSE (no other simultaneous stall reason). |
+| 2, 8 | stall cycles VPC only | Stall cycles attributable only to VPC. |
+| 2, 9 | pass1 TF stall cycles | Cycles pass-1 tess-factor path stalled (tess-factor generation/consumption). |
+| 2, 10 | starve cycles for index | Cycles PC starved waiting for index data. |
+| 2, 11 | starve cycles for tess factor | Cycles PC starved waiting for tessellation factor data. |
+| 2, 12 | starve cycles for viz stream | Cycles PC starved waiting for visibility stream input. |
+| 2, 13 | starve cycles for position | Cycles PC starved waiting for position stream data. |
+| 2, 14 | starve cycles DI | Cycles PC starved waiting for DI (draw/dispatch input) stream. |
+| 2, 15 | vis streams loaded | Number of visibility streams loaded/consumed by PC. |
+| 2, 16 | instances | Number of instances processed (instanced draws). |
+| 2, 17 | VPC primitives | Number of primitives emitted toward VPC. |
+| 2, 18 | dead prim | Primitives killed/culled before becoming “live” (backface/clip/degenerate/etc.). |
+| 2, 19 | live prim | Primitives that survive and proceed down the pipeline. |
+| 2, 20 | vertex hits | Vertex reuse “hits” (cache hits / reused vertices depending on mode). |
+| 2, 21 | IA vertices | Input Assembler vertices consumed. |
+| 2, 22 | IA primitives | Input Assembler primitives assembled. |
+| 2, 23 | GS primitives | Geometry shader primitives output/processed. |
+| 2, 24 | HS invocations | Hull shader (tess control) invocations. |
+| 2, 25 | DS invocations | Domain shader (tess eval) invocations. |
+| 2, 26 | VS invocations | Vertex shader invocations. |
+| 2, 27 | GS invocations | Geometry shader invocations. |
+| 2, 28 | DS primitives | Domain-shader generated primitives. |
+| 2, 29 | VPC pos data transaction | Transactions sending position data to VPC. |
+| 2, 30 | 3D drawcalls | Number of 3D draw calls processed. |
+| 2, 31 | 2D drawcalls | Number of 2D/blit draw calls processed. |
+| 2, 32 | non drawcall global events | Non-draw global events (state changes, barriers, flushes) seen by PC. |
+| 2, 33 | tess busy cycles | Cycles tessellation unit is busy (as viewed from PC). |
+| 2, 34 | tess working cycles | Cycles tessellation unit doing useful work (not stalled). |
+| 2, 35 | tess stall cycles PC | Tessellation stalled due to PC backpressure/dependency. |
+| 2, 36 | tess starve cycles PC | Tessellation starved waiting for PC input. |
+| 2, 37 | TSE transaction | Transactions between PC and TSE (primitive/setup handoff). |
+| 2, 38 | TSE vertex | Vertices delivered toward TSE. |
+| 2, 39 | tess PC UV trans | Tessellation-related UV transactions through PC. |
+| 2, 40 | tess PC UV patches | Number of tessellation UV patches processed. |
+| 2, 41 | tess factor trans | Tess factor transactions (reads/writes/hand-offs). |
 | - | **Vertex Fetch and Decode** | - |
-| 3, 0 | busy cycles |
-| 3, 1 | stall cycles UCHE |
-| 3, 2 | stall cycles VPC alloc |
-| 3, 3 | stall cycles SP info |
-| 3, 4 | stall cycles SP attr |
-| 3, 5 | starve cycles UCHE |
-| 3, 6 | rbuffer full |
-| 3, 7 | attr info fifo full |
-| 3, 8 | decoded attribute bytes |
-| 3, 9 | num attributes |
-| 3, 10 | upper shader fibers |
-| 3, 11 | lower shader fibers |
-| 3, 12 | mode 0 fibers |
-| 3, 13 | mode 1 fibers |
-| 3, 14 | mode 2 fibers |
-| 3, 15 | mode 3 fibers |
-| 3, 16 | mode 4 fibers |
-| 3, 17 | total vertices |
-| 3, 18 | vfdp stall cycles VFD |
-| 3, 19 | vfdp stall cycles VFD index |
-| 3, 20 | vfdp stall cycles VFD prog |
-| 3, 21 | vfdp starve cycles PC |
-| 3, 22 | vfdp VS stage waves |
+| 3, 0 | busy cycles | Cycles VFD is busy. |
+| 3, 1 | stall cycles UCHE | Cycles VFD stalled waiting on UCHE/memory for vertex fetches. |
+| 3, 2 | stall cycles VPC alloc | Cycles VFD stalled waiting for VPC allocation/space. |
+| 3, 3 | stall cycles SP info | Cycles VFD stalled waiting for SP-provided info/state. |
+| 3, 4 | stall cycles SP attr | Cycles VFD stalled waiting for SP attribute consumption/readiness. |
+| 3, 5 | starve cycles UCHE | Cycles VFD starved due to UCHE not providing data/credits. |
+| 3, 6 | rbuffer full | Cycles/occurrences where VFD ring/return buffer is full (backpressure). |
+| 3, 7 | attr info fifo full | Cycles/occurrences attribute-info FIFO is full (cannot enqueue). |
+| 3, 8 | decoded attribute bytes | Total bytes of vertex attributes decoded/unpacked. |
+| 3, 9 | num attributes | Total number of attributes processed/decoded. |
+| 3, 10 | upper shader fibers | Number of “upper” shader fibers generated (micro-batches/lanes groupings). |
+| 3, 11 | lower shader fibers | Number of “lower” shader fibers generated. |
+| 3, 12 | mode 0 fibers | Fibers generated in mode 0 (vertex fetch/format mode variant). |
+| 3, 13 | mode 1 fibers | Fibers generated in mode 1. |
+| 3, 14 | mode 2 fibers | Fibers generated in mode 2. |
+| 3, 15 | mode 3 fibers | Fibers generated in mode 3. |
+| 3, 16 | mode 4 fibers | Fibers generated in mode 4. |
+| 3, 17 | total vertices | Total vertices fetched/decoded. |
+| 3, 18 | vfdp stall cycles VFD | VFD prefetch (VFDP) stalled due to VFD internal backpressure. |
+| 3, 19 | vfdp stall cycles VFD index | VFDP stalled waiting specifically for index-related path. |
+| 3, 20 | vfdp stall cycles VFD prog | VFDP stalled due to programmable/format/program path constraints. |
+| 3, 21 | vfdp starve cycles PC | VFDP starved waiting for PC to provide work/requests. |
+| 3, 22 | vfdp VS stage waves | Waves launched attributable to VFD prefetch feeding VS stage. |
 | - | **High Level SeQuencer** | - |
-| 4, 0 | busy cycles |
-| 4, 1 | stall cycles UCHE |
-| 4, 2 | stall cycles SP state |
-| 4, 3 | stall cycles SP FS stage |
-| 4, 4 | UCHE latency cycles |
-| 4, 5 | UCHE latency count |
-| 4, 6 | FS stage 1X waves |
-| 4, 7 | FS stage 2X waves |
-| 4, 8 | quads |
-| 4, 9 | CS invocations |
-| 4, 10 | compute drawcalls |
-| 4, 11 | FS data wait programming |
-| 4, 12 | dual FS prog active |
-| 4, 13 | dual VS prog active |
-| 4, 14 | FS batch count zero |
-| 4, 15 | VS batch count zero |
-| 4, 16 | wave pending NO quad |
-| 4, 17 | wave pending NO prim base |
-| 4, 18 | stall cycles VPC |
-| 4, 19 | pixels |
-| 4, 20 | draw mode switch vsfs sync |
+| 4, 0 | busy cycles | Cycles HLSQ is busy (front-end sequencing active). |
+| 4, 1 | stall cycles UCHE | Cycles HLSQ stalled waiting on UCHE/cache/memory. |
+| 4, 2 | stall cycles SP state | Cycles HLSQ stalled waiting on SP state/availability. |
+| 4, 3 | stall cycles SP FS stage | Cycles HLSQ stalled due to fragment-shader stage backpressure/availability. |
+| 4, 4 | UCHE latency cycles | Accumulated cycles waiting on UCHE (latency sum). |
+| 4, 5 | UCHE latency count | Number of UCHE latency samples/transactions counted. |
+| 4, 6 | FS stage 1X waves | Number of FS waves launched in 1X rate mode. |
+| 4, 7 | FS stage 2X waves | Number of FS waves launched in 2X rate mode. |
+| 4, 8 | quads | Number of pixel quads generated/issued toward FS/TP. |
+| 4, 9 | CS invocations | Compute shader invocations (threads/workitems) issued. |
+| 4, 10 | compute drawcalls | Compute dispatches/drawcalls issued. |
+| 4, 11 | FS data wait programming | Cycles/occurrences programming FS “data wait” (waiting on inputs/exports). |
+| 4, 12 | dual FS prog active | Cycles dual-issue/dual-program fragment mode active. |
+| 4, 13 | dual VS prog active | Cycles dual-issue/dual-program vertex mode active. |
+| 4, 14 | FS batch count zero | Occurrences where FS batch count is zero (no FS work in batch). |
+| 4, 15 | VS batch count zero | Occurrences where VS batch count is zero. |
+| 4, 16 | wave pending NO quad | Waves pending because no quads are available yet. |
+| 4, 17 | wave pending NO prim base | Waves pending because primitive base/metadata not ready. |
+| 4, 18 | stall cycles VPC | Cycles HLSQ stalled waiting on VPC outputs/credits. |
+| 4, 19 | pixels | Number of pixels generated/processed at HLSQ level (pre-RB). |
+| 4, 20 | draw mode switch vsfs sync | Occurrences/cycles of draw-mode switch requiring VS/FS synchronization. |
 | - | **Varying/Position Cache** | - |
-| 5, 0 | busy cycles |
-| 5, 1 | working cycles |
-| 5, 2 | stall cycles UCHE |
-| 5, 3 | stall cycles VFD wack |
-| 5, 4 | stall cycles HLSQ prim alloc |
-| 5, 5 | stall cycles PC |
-| 5, 6 | stall cycles SP LM |
-| 5, 7 | starve cycles SP |
-| 5, 8 | starve cycles LRZ |
-| 5, 9 | PC primitives |
-| 5, 10 | SP components |
-| 5, 11 | stall cycles vpcram pos |
-| 5, 12 | LRZ assign primitives |
-| 5, 13 | RB visible primitives |
-| 5, 14 | LM transaction |
-| 5, 15 | streamout transaction |
-| 5, 16 | VS busy cycles |
-| 5, 17 | PS busy cycles |
-| 5, 18 | VS working cycles |
-| 5, 19 | PS working cycles |
-| 5, 20 | starve cycles RB |
-| 5, 21 | num vpcram read pos |
-| 5, 22 | wit full cycles |
-| 5, 23 | vpcram full cycles |
-| 5, 24 | LM full wait for intp end |
-| 5, 25 | num vpcram write |
-| 5, 26 | num vpcram read SO |
-| 5, 27 | num attr req LM |
+| 5, 0 | busy cycles | Cycles VPC is busy. |
+| 5, 1 | working cycles | Cycles VPC is making forward progress (not stalled). |
+| 5, 2 | stall cycles UCHE | Cycles VPC stalled waiting on UCHE/memory. |
+| 5, 3 | stall cycles VFD wack | Cycles stalled due to VFD “WACK”/ack/handshake backpressure. |
+| 5, 4 | stall cycles HLSQ prim alloc | Cycles stalled waiting for HLSQ primitive allocation/credits. |
+| 5, 5 | stall cycles PC | Cycles stalled due to PC dependency/backpressure. |
+| 5, 6 | stall cycles SP LM | Cycles stalled due to SP local memory (LM) interactions. |
+| 5, 7 | starve cycles SP | Cycles VPC starved waiting for SP consumption/requests. |
+| 5, 8 | starve cycles LRZ | Cycles starved due to LRZ path (mask/visibility) dependencies. |
+| 5, 9 | PC primitives | Primitives received from PC into VPC. |
+| 5, 10 | SP components | Varying components delivered toward SP (interpolants/components). |
+| 5, 11 | stall cycles vpcram pos | Cycles stalled due to VPC RAM position storage access/contension. |
+| 5, 12 | LRZ assign primitives | Primitives assigned for LRZ evaluation. |
+| 5, 13 | RB visible primitives | Primitives marked visible and sent toward RB. |
+| 5, 14 | LM transaction | Transactions with local memory / parameter memory. |
+| 5, 15 | streamout transaction | Stream-out (transform feedback) transactions. |
+| 5, 16 | VS busy cycles | Cycles VPC busy in VS-related activity. |
+| 5, 17 | PS busy cycles | Cycles VPC busy in PS/FS-related activity. |
+| 5, 18 | VS working cycles | Useful VS-related cycles in VPC. |
+| 5, 19 | PS working cycles | Useful PS-related cycles in VPC. |
+| 5, 20 | starve cycles RB | Cycles VPC starved because RB cannot accept data (downstream backpressure). |
+| 5, 21 | num vpcram read pos | Number of VPC RAM reads of position data. |
+| 5, 22 | wit full cycles | Cycles “WIT” (work/item table) is full (cannot allocate). |
+| 5, 23 | vpcram full cycles | Cycles VPC RAM is full (allocation/backpressure). |
+| 5, 24 | LM full wait for intp end | Cycles waiting because LM full until interpolation/end condition. |
+| 5, 25 | num vpcram write | Number of VPC RAM write operations. |
+| 5, 26 | num vpcram read SO | Number of VPC RAM reads for stream-out. |
+| 5, 27 | num attr req LM | Number of attribute requests to local memory. |
 | - | **Triangle Setup Engine** | - |
-| 6, 0 | busy cycles |
-| 6, 1 | clipping cycles |
-| 6, 2 | stall cycles RAS |
-| 6, 3 | stall cycles LRZ baryplane |
-| 6, 4 | stall cycles LRZ zplane |
-| 6, 5 | starve cycles PC |
-| 6, 6 | input prim |
-| 6, 7 | input null prim |
-| 6, 8 | trival rej prim |
-| 6, 9 | clipped prim |
-| 6, 10 | zero area prim |
-| 6, 11 | faceness culled prim |
-| 6, 12 | zero pixel prim |
-| 6, 13 | output null prim |
-| 6, 14 | output visible prim |
-| 6, 15 | cinvocation |
-| 6, 16 | cprimitives |
-| 6, 17 | 2D input prim |
-| 6, 18 | 2D alive cycles |
-| 6, 19 | clip planes |
+| 6, 0 | busy cycles | Cycles TSE is busy. |
+| 6, 1 | clipping cycles | Cycles spent performing clipping (clipper active). |
+| 6, 2 | stall cycles RAS | Cycles TSE stalled due to rasterizer backpressure. |
+| 6, 3 | stall cycles LRZ baryplane | Cycles stalled waiting on LRZ barycentric plane setup. |
+| 6, 4 | stall cycles LRZ zplane | Cycles stalled waiting on LRZ Z-plane setup. |
+| 6, 5 | starve cycles PC | Cycles TSE starved waiting for PC primitives. |
+| 6, 6 | input prim | Number of input primitives accepted by TSE. |
+| 6, 7 | input null prim | Number of “null” input primitives (degenerate/no-op markers). |
+| 6, 8 | trival rej prim | Primitives trivially rejected (fast reject). |
+| 6, 9 | clipped prim | Primitives that required/underwent clipping. |
+| 6, 10 | zero area prim | Degenerate primitives with zero area. |
+| 6, 11 | faceness culled prim | Primitives culled by face direction (backface/frontface culling). |
+| 6, 12 | zero pixel prim | Primitives producing zero covered pixels (after setup/raster rules). |
+| 6, 13 | output null prim | Null primitives output downstream (markers/degenerate). |
+| 6, 14 | output visible prim | Visible primitives output to rasterization. |
+| 6, 15 | cinvocation | Clipper invocations (number of clip operations launched). |
+| 6, 16 | cprimitives | Primitives processed by clipper. |
+| 6, 17 | 2D input prim | 2D primitives fed to TSE/2D path. |
+| 6, 18 | 2D alive cycles | Cycles 2D path is active in TSE. |
+| 6, 19 | clip planes | Number of clip planes processed/evaluated. |
 | - | **Rasterizer** | - |
-| 7, 0 | busy cycles |
-| 7, 1 | supertile active cycles |
-| 7, 2 | stall cycles LRZ |
-| 7, 3 | starve cycles TSE |
-| 7, 4 | super tiles |
-| 7, 5 | 8x4 tiles |
-| 7, 6 | maskgen active |
-| 7, 7 | fully covered super tiles |
-| 7, 8 | fully covered 8x4 tiles |
-| 7, 9 | prim killed invisible |
-| 7, 10 | supertile gen active cycles |
-| 7, 11 | LRZ intf working cycles |
-| 7, 12 | blocks |
+| 7, 0 | busy cycles | Cycles rasterizer is busy. |
+| 7, 1 | supertile active cycles | Cycles supertile rasterization/processing is active. |
+| 7, 2 | stall cycles LRZ | Cycles rasterizer stalled due to LRZ backpressure/dependency. |
+| 7, 3 | starve cycles TSE | Cycles rasterizer starved waiting for TSE output. |
+| 7, 4 | super tiles | Number of supertiles generated/processed. |
+| 7, 5 | 8x4 tiles | Number of 8x4 tiles generated/processed. |
+| 7, 6 | maskgen active | Cycles mask generator is active (coverage masks). |
+| 7, 7 | fully covered super tiles | Supertiles fully covered by primitives (no partial coverage). |
+| 7, 8 | fully covered 8x4 tiles | 8x4 tiles fully covered. |
+| 7, 9 | prim killed invisible | Primitives killed because determined invisible (cull/coverage/LRZ). |
+| 7, 10 | supertile gen active cycles | Cycles spent generating supertiles. |
+| 7, 11 | LRZ intf working cycles | Cycles LRZ interface is working (handshake/transactions). |
+| 7, 12 | blocks | Number of raster blocks (block-level work units) produced/processed. |
 | - | **Unified L2 Cache** | - |
-| 8, 0 | busy cycles |
-| 8, 1 | stall cycles arbiter |
-| 8, 2 | vbif latency cycles |
-| 8, 3 | vbif latency samples |
-| 8, 4 | vbif read beats TP |
-| 8, 5 | vbif read beats VFD |
-| 8, 6 | vbif read beats HLSQ |
-| 8, 7 | vbif read beats LRZ |
-| 8, 8 | vbif read beats SP |
-| 8, 9 | read requests TP |
-| 8, 10 | read requests VFD |
-| 8, 11 | read requests HLSQ |
-| 8, 12 | read requests LRZ |
-| 8, 13 | read requests SP |
-| 8, 14 | write requests LRZ |
-| 8, 15 | write requests SP |
-| 8, 16 | write requests VPC |
-| 8, 17 | write requests VSC |
-| 8, 18 | evicts |
-| 8, 19 | bank req0 |
-| 8, 20 | bank req1 |
-| 8, 21 | bank req2 |
-| 8, 22 | bank req3 |
-| 8, 23 | bank req4 |
-| 8, 24 | bank req5 |
-| 8, 25 | bank req6 |
-| 8, 26 | bank req7 |
-| 8, 27 | vbif read beats ch0 |
-| 8, 28 | vbif read beats ch1 |
-| 8, 29 | gmem read beats |
-| 8, 30 | tph ref full |
-| 8, 31 | tph victim full |
-| 8, 32 | tph ext full |
-| 8, 33 | vbif stall write data |
-| 8, 34 | dcmp latency samples |
-| 8, 35 | dcmp latency cycles |
-| 8, 36 | vbif read beats PC |
-| 8, 37 | read requests PC |
-| 8, 38 | ram read req |
-| 8, 39 | ram write req |
+| 8, 0 | busy cycles | Cycles UCHE/L2 is busy. |
+| 8, 1 | stall cycles arbiter | Cycles stalled due to UCHE arbiter contention (request arbitration). |
+| 8, 2 | vbif latency cycles | Total cycles waiting on VBIF (external memory) returns. |
+| 8, 3 | vbif latency samples | Number of VBIF latency samples taken. |
+| 8, 4 | vbif read beats TP | Read data beats for texture processor clients. |
+| 8, 5 | vbif read beats VFD | Read data beats for vertex fetch/decode clients. |
+| 8, 6 | vbif read beats HLSQ | Read data beats for HLSQ clients. |
+| 8, 7 | vbif read beats LRZ | Read data beats for LRZ clients. |
+| 8, 8 | vbif read beats SP | Read data beats for shader processor clients. |
+| 8, 9 | read requests TP | Read requests issued on behalf of TP. |
+| 8, 10 | read requests VFD | Read requests issued on behalf of VFD. |
+| 8, 11 | read requests HLSQ | Read requests issued on behalf of HLSQ. |
+| 8, 12 | read requests LRZ | Read requests issued on behalf of LRZ. |
+| 8, 13 | read requests SP | Read requests issued on behalf of SP. |
+| 8, 14 | write requests LRZ | Write requests issued on behalf of LRZ. |
+| 8, 15 | write requests SP | Write requests issued on behalf of SP. |
+| 8, 16 | write requests VPC | Write requests issued on behalf of VPC. |
+| 8, 17 | write requests VSC | Write requests issued on behalf of VSC. |
+| 8, 18 | evicts | Number of UCHE cache line evictions. |
+| 8, 19 | bank req0 | Requests to UCHE bank 0 (bank-level pressure). |
+| 8, 20 | bank req1 | Requests to UCHE bank 1. |
+| 8, 21 | bank req2 | Requests to UCHE bank 2. |
+| 8, 22 | bank req3 | Requests to UCHE bank 3. |
+| 8, 23 | bank req4 | Requests to UCHE bank 4. |
+| 8, 24 | bank req5 | Requests to UCHE bank 5. |
+| 8, 25 | bank req6 | Requests to UCHE bank 6. |
+| 8, 26 | bank req7 | Requests to UCHE bank 7. |
+| 8, 27 | vbif read beats ch0 | Read beats returned on memory channel 0. |
+| 8, 28 | vbif read beats ch1 | Read beats returned on memory channel 1. |
+| 8, 29 | gmem read beats | Read beats from GMEM (tile memory) path. |
+| 8, 30 | tph ref full | Cycles/occurrences texture page handler “ref” queue full. |
+| 8, 31 | tph victim full | Cycles/occurrences TPH victim queue full. |
+| 8, 32 | tph ext full | Cycles/occurrences TPH external queue full. |
+| 8, 33 | vbif stall write data | Cycles stalled because VBIF cannot accept write data (write-data backpressure). |
+| 8, 34 | dcmp latency samples | Number of decompression latency samples (dcmp path). |
+| 8, 35 | dcmp latency cycles | Total decompression latency cycles accumulated. |
+| 8, 36 | vbif read beats PC | Read beats for PC client. |
+| 8, 37 | read requests PC | Read requests issued on behalf of PC. |
+| 8, 38 | ram read req | UCHE internal RAM read requests. |
+| 8, 39 | ram write req | UCHE internal RAM write requests. |
 | - | **Texture Processor** | - |
-| 9, 0 | busy cycles |
-| 9, 1 | stall cycles UCHE |
-| 9, 2 | latency cycles |
-| 9, 3 | latency trans |
-| 9, 4 | flag cache request samples |
-| 9, 5 | flag cache request latency |
-| 9, 6 | L1 cacheline requests |
-| 9, 7 | L1 cacheline misses |
-| 9, 8 | SP TP trans |
-| 9, 9 | TP SP trans |
-| 9, 10 | output pixels |
-| 9, 11 | filter workload 16bit |
-| 9, 12 | filter workload 32bit |
-| 9, 13 | quads received |
-| 9, 14 | quads offset |
-| 9, 15 | quads shadow |
-| 9, 16 | quads array |
-| 9, 17 | quads gradient |
-| 9, 18 | quads 1D |
-| 9, 19 | quads 2D |
-| 9, 20 | quads buffer |
-| 9, 21 | quads 3D |
-| 9, 22 | quads cube |
-| 9, 23 | divergent quads received |
-| 9, 24 | prt non resident events |
-| 9, 25 | output pixels point |
-| 9, 26 | output pixels bilinear |
-| 9, 27 | output pixels mip |
-| 9, 28 | output pixels aniso |
-| 9, 29 | output pixels zero lod |
-| 9, 30 | flag cache requests |
-| 9, 31 | flag cache misses |
-| 9, 32 | L1 5 L2 requests |
-| 9, 33 | 2D output pixels |
-| 9, 34 | 2D output pixels point |
-| 9, 35 | 2D output pixels bilinear |
-| 9, 36 | 2D filter workload 16bit |
-| 9, 37 | 2D filter workload 32bit |
-| 9, 38 | tpa2tpc trans |
-| 9, 39 | L1 misses astc 1tile |
-| 9, 40 | L1 misses astc 2tile |
-| 9, 41 | L1 misses astc 4tile |
-| 9, 42 | L1 5 L2 compress reqs |
-| 9, 43 | L1 5 L2 compress miss |
-| 9, 44 | L1 bank conflict |
-| 9, 45 | L1 5 miss latency cycles |
-| 9, 46 | L1 5 miss latency trans |
-| 9, 47 | quads constant multiplied |
-| 9, 48 | frontend working cycles |
-| 9, 49 | L1 tag working cycles |
-| 9, 50 | L1 data write working cycles |
-| 9, 51 | pre L1 decom working cycles |
-| 9, 52 | backend working cycles |
-| 9, 53 | flag cache working cycles |
-| 9, 54 | L1 5 cache working cycles |
-| 9, 55 | starve cycles SP |
-| 9, 56 | starve cycles UCHE |
+| 9, 0 | busy cycles | Cycles texture processor is busy. |
+| 9, 1 | stall cycles UCHE | Cycles TP stalled waiting on UCHE/L2. |
+| 9, 2 | latency cycles | Total cycles spent waiting on texture memory responses (latency sum). |
+| 9, 3 | latency trans | Number of texture transactions sampled for latency accounting. |
+| 9, 4 | flag cache request samples | Number of samples/transactions involving TP flag cache requests. |
+| 9, 5 | flag cache request latency | Accumulated latency for TP flag cache requests. |
+| 9, 6 | L1 cacheline requests | Texture L1 cache line fetch requests. |
+| 9, 7 | L1 cacheline misses | Texture L1 cache misses (cacheline not present). |
+| 9, 8 | SP TP trans | Transactions from SP to TP (texture/sampler requests). |
+| 9, 9 | TP SP trans | Transactions from TP back to SP (returned texels/data). |
+| 9, 10 | output pixels | Number of pixels/texels output by TP to consumers (typically FS). |
+| 9, 11 | filter workload 16bit | Filtering work units for 16-bit formats (weighted cost). |
+| 9, 12 | filter workload 32bit | Filtering work units for 32-bit formats. |
+| 9, 13 | quads received | Number of quads received for texturing. |
+| 9, 14 | quads offset | Quads using offset addressing mode. |
+| 9, 15 | quads shadow | Quads using shadow compare sampling. |
+| 9, 16 | quads array | Quads sampling array textures. |
+| 9, 17 | quads gradient | Quads using explicit gradients (ddx/ddy). |
+| 9, 18 | quads 1D | Quads sampling 1D textures. |
+| 9, 19 | quads 2D | Quads sampling 2D textures. |
+| 9, 20 | quads buffer | Quads sampling buffer textures. |
+| 9, 21 | quads 3D | Quads sampling 3D textures. |
+| 9, 22 | quads cube | Quads sampling cube maps. |
+| 9, 23 | divergent quads received | Quads where lanes diverge in texture coordinates/control (less coherent). |
+| 9, 24 | prt non resident events | Partially Resident Texture events where requested page is non-resident. |
+| 9, 25 | output pixels point | Output pixels sampled with point filtering. |
+| 9, 26 | output pixels bilinear | Output pixels sampled with bilinear filtering. |
+| 9, 27 | output pixels mip | Output pixels involving mipmapping. |
+| 9, 28 | output pixels aniso | Output pixels involving anisotropic filtering. |
+| 9, 29 | output pixels zero lod | Output pixels forced to LOD 0 (base level). |
+| 9, 30 | flag cache requests | Number of TP flag cache requests. |
+| 9, 31 | flag cache misses | TP flag cache misses. |
+| 9, 32 | L1 5 L2 requests | Requests from L1 to L2/UCHE. |
+| 9, 33 | 2D output pixels | Output pixels for 2D textures specifically. |
+| 9, 34 | 2D output pixels point | 2D point-filtered output pixels. |
+| 9, 35 | 2D output pixels bilinear | 2D bilinear-filtered output pixels. |
+| 9, 36 | 2D filter workload 16bit | 2D filtering workload for 16-bit formats. |
+| 9, 37 | 2D filter workload 32bit | 2D filtering workload for 32-bit formats. |
+| 9, 38 | tpa2tpc trans | Transactions between texture prefetch/address (TPA) and texture pipe/cache (TPC). |
+| 9, 39 | L1 misses astc 1tile | L1 misses for ASTC requests of 1 tile. |
+| 9, 40 | L1 misses astc 2tile | L1 misses for ASTC requests of 2 tiles. |
+| 9, 41 | L1 misses astc 4tile | L1 misses for ASTC requests of 4 tiles. |
+| 9, 42 | L1 5 L2 compress reqs | L1→L2 requests for compressed blocks. |
+| 9, 43 | L1 5 L2 compress miss | Misses when requesting compressed blocks from L2. |
+| 9, 44 | L1 bank conflict | Cycles/occurrences of L1 bank conflicts (structural hazard). |
+| 9, 45 | L1 5 miss latency cycles | Total latency cycles for L1 misses. |
+| 9, 46 | L1 5 miss latency trans | Number of L1-miss transactions sampled. |
+| 9, 47 | quads constant multiplied | Quads using constant-multiply optimization/step (implementation-specific). |
+| 9, 48 | frontend working cycles | Useful cycles in TP front-end (request/issue). |
+| 9, 49 | L1 tag working cycles | Useful cycles in L1 tag pipeline. |
+| 9, 50 | L1 data write working cycles | Useful cycles writing L1 data arrays. |
+| 9, 51 | pre L1 decom working cycles | Useful cycles in pre-L1 decompression stage. |
+| 9, 52 | backend working cycles | Useful cycles in TP back-end (filter/return). |
+| 9, 53 | flag cache working cycles | Useful cycles in flag cache logic. |
+| 9, 54 | L1 5 cache working cycles | Useful cycles in L1 cache pipeline overall. |
+| 9, 55 | starve cycles SP | Cycles TP starved because SP isn’t issuing/feeding requests. |
+| 9, 56 | starve cycles UCHE | Cycles TP starved because UCHE cannot accept/serve requests (credits/returns). |
 | - | **Shader/Streaming Processor** | - |
-| 10, 0 | busy cycles |
-| 10, 1 | ALU working cycles |
-| 10, 2 | EFU working cycles |
-| 10, 3 | stall cycles VPC |
-| 10, 4 | stall cycles TP |
-| 10, 5 | stall cycles UCHE |
-| 10, 6 | stall cycles RB |
-| 10, 7 | non execution cycles |
-| 10, 8 | wave contexts |
-| 10, 9 | wave context cycles |
-| 10, 10 | FS stage wave cycles |
-| 10, 11 | FS stage wave samples |
-| 10, 12 | VS stage wave cycles |
-| 10, 13 | VS stage wave samples |
-| 10, 14 | FS stage duration cycles |
-| 10, 15 | VS stage duration cycles |
-| 10, 16 | wave ctrl cycles |
-| 10, 17 | wave load cycles |
-| 10, 18 | wave emit cycles |
-| 10, 19 | wave nop cycles |
-| 10, 20 | wave wait cycles |
-| 10, 21 | wave fetch cycles |
-| 10, 22 | wave idle cycles |
-| 10, 23 | wave end cycles |
-| 10, 24 | wave long sync cycles |
-| 10, 25 | wave short sync cycles |
-| 10, 26 | wave join cycles |
-| 10, 27 | LM load instructions |
-| 10, 28 | LM store instructions |
-| 10, 29 | LM atomics |
-| 10, 30 | GM load instructions |
-| 10, 31 | GM store instructions |
-| 10, 32 | GM atomics |
-| 10, 33 | VS stage tex instructions |
-| 10, 34 | VS stage EFU instructions |
-| 10, 35 | VS stage full ALU instructions |
-| 10, 36 | VS stage half ALU instructions |
-| 10, 37 | FS stage tex instructions |
-| 10, 38 | FS stage cflow instructions |
-| 10, 39 | FS stage EFU instructions |
-| 10, 40 | FS stage full ALU instructions |
-| 10, 41 | FS stage half ALU instructions |
-| 10, 42 | FS stage bary instructions |
-| 10, 43 | VS instructions |
-| 10, 44 | FS instructions |
-| 10, 45 | addr lock count |
-| 10, 46 | UCHE read trans |
-| 10, 47 | UCHE write trans |
-| 10, 48 | export VPC trans |
-| 10, 49 | export RB trans |
-| 10, 50 | pixels killed |
-| 10, 51 | icl1 requests |
-| 10, 52 | icl1 misses |
-| 10, 53 | HS instructions |
-| 10, 54 | DS instructions |
-| 10, 55 | GS instructions |
-| 10, 56 | CS instructions |
-| 10, 57 | GPR read |
-| 10, 58 | GPR write |
-| 10, 59 | FS stage half EFU instructions |
-| 10, 60 | VS stage half EFU instructions |
-| 10, 61 | LM bank conflicts |
-| 10, 62 | tex control working cycles |
-| 10, 63 | load control working cycles |
-| 10, 64 | flow control working cycles |
-| 10, 65 | LM working cycles |
-| 10, 66 | dispatcher working cycles |
-| 10, 67 | sequencer working cycles |
-| 10, 68 | low efficiency starved BY TP |
-| 10, 69 | starve cycles HLSQ |
-| 10, 70 | non execution LS cycles |
-| 10, 71 | working EU |
-| 10, 72 | any EU working |
-| 10, 73 | working EU FS stage |
-| 10, 74 | any EU working FS stage |
-| 10, 75 | working EU VS stage |
-| 10, 76 | any EU working VS stage |
-| 10, 77 | working EU CS stage |
-| 10, 78 | any EU working CS stage |
-| 10, 79 | GPR read prefetch |
-| 10, 80 | GPR read conflict |
-| 10, 81 | GPR write conflict |
-| 10, 82 | GM load latency cycles |
-| 10, 83 | GM load latency samples |
-| 10, 84 | executable waves |
+| 10, 0 | busy cycles | Cycles SP is busy (any stage). |
+| 10, 1 | ALU working cycles | Cycles ALU pipelines are executing ALU instructions. |
+| 10, 2 | EFU working cycles | Cycles EFU (special function/extended function) units are executing. |
+| 10, 3 | stall cycles VPC | Cycles SP stalled waiting for VPC inputs (varyings/params). |
+| 10, 4 | stall cycles TP | Cycles SP stalled waiting for texture results. |
+| 10, 5 | stall cycles UCHE | Cycles SP stalled waiting for UCHE/memory (loads/stores). |
+| 10, 6 | stall cycles RB | Cycles SP stalled due to render backend backpressure (exports/targets). |
+| 10, 7 | non execution cycles | Cycles SP not executing instructions (overhead, stalls, bubbles). |
+| 10, 8 | wave contexts | Number of wave contexts created/active (waves resident). |
+| 10, 9 | wave context cycles | Sum of cycles waves are resident (context occupancy). |
+| 10, 10 | FS stage wave cycles | Cycles waves are in fragment stage. |
+| 10, 11 | FS stage wave samples | Samples/occurrences of fragment-stage wave activity. |
+| 10, 12 | VS stage wave cycles | Cycles waves are in vertex stage. |
+| 10, 13 | VS stage wave samples | Samples/occurrences of vertex-stage wave activity. |
+| 10, 14 | FS stage duration cycles | Total duration cycles for FS waves (lifetime sum). |
+| 10, 15 | VS stage duration cycles | Total duration cycles for VS waves. |
+| 10, 16 | wave ctrl cycles | Cycles spent in wave control (bookkeeping/control-flow handling). |
+| 10, 17 | wave load cycles | Cycles loading waves (state/context load). |
+| 10, 18 | wave emit cycles | Cycles emitting/launching waves. |
+| 10, 19 | wave nop cycles | Cycles executing NOPs (bubbles). |
+| 10, 20 | wave wait cycles | Cycles waves are waiting (dependencies/barriers). |
+| 10, 21 | wave fetch cycles | Cycles fetching instructions (I-fetch). |
+| 10, 22 | wave idle cycles | Cycles wave slots are idle (no wave scheduled). |
+| 10, 23 | wave end cycles | Cycles spent ending/retiring waves. |
+| 10, 24 | wave long sync cycles | Cycles stalled on long-latency sync events. |
+| 10, 25 | wave short sync cycles | Cycles stalled on short-latency sync events. |
+| 10, 26 | wave join cycles | Cycles spent on join/reconvergence operations. |
+| 10, 27 | LM load instructions | Number of local-memory (shared/LMEM) load instructions. |
+| 10, 28 | LM store instructions | Number of local-memory store instructions. |
+| 10, 29 | LM atomics | Number of local-memory atomic operations. |
+| 10, 30 | GM load instructions | Number of global-memory load instructions. |
+| 10, 31 | GM store instructions | Number of global-memory store instructions. |
+| 10, 32 | GM atomics | Number of global-memory atomic operations. |
+| 10, 33 | VS stage tex instructions | Texture/sampler instructions executed in VS stage. |
+| 10, 34 | VS stage EFU instructions | EFU instructions executed in VS stage. |
+| 10, 35 | VS stage full ALU instructions | Full-precision ALU instructions executed in VS stage. |
+| 10, 36 | VS stage half ALU instructions | Half-precision ALU instructions executed in VS stage. |
+| 10, 37 | FS stage tex instructions | Texture/sampler instructions executed in FS stage. |
+| 10, 38 | FS stage cflow instructions | Control-flow instructions executed in FS stage. |
+| 10, 39 | FS stage EFU instructions | EFU instructions executed in FS stage. |
+| 10, 40 | FS stage full ALU instructions | Full-precision ALU instructions executed in FS stage. |
+| 10, 41 | FS stage half ALU instructions | Half-precision ALU instructions executed in FS stage. |
+| 10, 42 | FS stage bary instructions | Barycentric/interpolation-related instructions in FS stage. |
+| 10, 43 | VS instructions | Total VS instructions executed (all types). |
+| 10, 44 | FS instructions | Total FS instructions executed (all types). |
+| 10, 45 | addr lock count | Number of address lock/contention events (addressing/resource hazard). |
+| 10, 46 | UCHE read trans | UCHE read transactions issued by SP. |
+| 10, 47 | UCHE write trans | UCHE write transactions issued by SP. |
+| 10, 48 | export VPC trans | Export transactions from SP to VPC (varying/pos outputs). |
+| 10, 49 | export RB trans | Export transactions from SP to RB (color/depth outputs). |
+| 10, 50 | pixels killed | Pixels killed/discarded in shader (discard/kill). |
+| 10, 51 | icl1 requests | Instruction cache L1 requests. |
+| 10, 52 | icl1 misses | Instruction cache L1 misses. |
+| 10, 53 | HS instructions | Hull shader instructions executed. |
+| 10, 54 | DS instructions | Domain shader instructions executed. |
+| 10, 55 | GS instructions | Geometry shader instructions executed. |
+| 10, 56 | CS instructions | Compute shader instructions executed. |
+| 10, 57 | GPR read | General-purpose register file reads. |
+| 10, 58 | GPR write | General-purpose register file writes. |
+| 10, 59 | FS stage half EFU instructions | Half-precision EFU instructions in FS stage. |
+| 10, 60 | VS stage half EFU instructions | Half-precision EFU instructions in VS stage. |
+| 10, 61 | LM bank conflicts | Local-memory bank conflicts (shared memory structural hazard). |
+| 10, 62 | tex control working cycles | Useful cycles in texture control pipeline within SP. |
+| 10, 63 | load control working cycles | Useful cycles in load/store control pipeline. |
+| 10, 64 | flow control working cycles | Useful cycles in flow-control (branch/reconvergence) pipeline. |
+| 10, 65 | LM working cycles | Useful cycles in local-memory pipeline. |
+| 10, 66 | dispatcher working cycles | Useful cycles in wave/warp dispatcher. |
+| 10, 67 | sequencer working cycles | Useful cycles in instruction sequencer. |
+| 10, 68 | low efficiency starved BY TP | Cycles of low efficiency caused by being starved on texture results. |
+| 10, 69 | starve cycles HLSQ | Cycles SP starved because HLSQ didn’t provide work (no waves to run). |
+| 10, 70 | non execution LS cycles | Non-execution cycles specifically in load/store subsystem. |
+| 10, 71 | working EU | Cycles where at least one execution unit is working (active). |
+| 10, 72 | any EU working | Samples/cycles indicating any EU active (often similar to 71 but different gating). |
+| 10, 73 | working EU FS stage | Cycles EUs working on FS stage. |
+| 10, 74 | any EU working FS stage | Samples/cycles of any EU active in FS stage. |
+| 10, 75 | working EU VS stage | Cycles EUs working on VS stage. |
+| 10, 76 | any EU working VS stage | Samples/cycles of any EU active in VS stage. |
+| 10, 77 | working EU CS stage | Cycles EUs working on CS stage. |
+| 10, 78 | any EU working CS stage | Samples/cycles of any EU active in CS stage. |
+| 10, 79 | GPR read prefetch | GPR prefetch reads (speculative/early reads). |
+| 10, 80 | GPR read conflict | Conflicts/hazards on GPR reads (port/bank conflict). |
+| 10, 81 | GPR write conflict | Conflicts/hazards on GPR writes. |
+| 10, 82 | GM load latency cycles | Total latency cycles waiting on global-memory loads. |
+| 10, 83 | GM load latency samples | Number of global-memory load latency samples. |
+| 10, 84 | executable waves | Number of waves eligible to execute (ready/runnable). |
 | - | **Render backend** | - |
-| 11, 0 | busy cycles |
-| 11, 1 | stall cycles HLSQ |
-| 11, 2 | stall cycles fifo0 full |
-| 11, 3 | stall cycles fifo1 full |
-| 11, 4 | stall cycles fifo2 full |
-| 11, 5 | starve cycles SP |
-| 11, 6 | starve cycles LRZ tile |
-| 11, 7 | starve cycles CCU |
-| 11, 8 | starve cycles Z plane |
-| 11, 9 | starve cycles bary plane |
-| 11, 10 | Z workload |
-| 11, 11 | HLSQ active |
-| 11, 12 | Z read |
-| 11, 13 | Z write |
-| 11, 14 | C read |
-| 11, 15 | C write |
-| 11, 16 | total pass |
-| 11, 17 | Z pass |
-| 11, 18 | Z fail |
-| 11, 19 | S fail |
-| 11, 20 | blended fxp components |
-| 11, 21 | blended fp16 components |
-| 11, 22 | PS invocations |
-| 11, 23 | 2D alive cycles |
-| 11, 24 | 2D stall cycles a2d |
-| 11, 25 | 2D starve cycles src |
-| 11, 26 | 2D starve cycles SP |
-| 11, 27 | 2D starve cycles dst |
-| 11, 28 | 2D valid pixels |
-| 11, 29 | 3D pixels |
-| 11, 30 | blender working cycles |
-| 11, 31 | zproc working cycles |
-| 11, 32 | cproc working cycles |
-| 11, 33 | sampler working cycles |
-| 11, 34 | stall cycles CCU color read |
-| 11, 35 | stall cycles CCU color write |
-| 11, 36 | stall cycles CCU depth read |
-| 11, 37 | stall cycles CCU depth write |
-| 11, 38 | stall cycles VPC |
-| 11, 39 | 2D input trans |
-| 11, 40 | 2D output RB dst trans |
-| 11, 41 | 2D output RB src trans |
-| 11, 42 | blended fp32 components |
-| 11, 43 | color pix tiles |
-| 11, 44 | stall cycles CCU |
-| 11, 45 | early Z arb3 grant |
-| 11, 46 | late Z arb3 grant |
-| 11, 47 | early Z skip grant |
+| 11, 0 | busy cycles | Cycles RB is busy. |
+| 11, 1 | stall cycles HLSQ | Cycles RB stalled waiting for HLSQ/inputs. |
+| 11, 2 | stall cycles fifo0 full | Cycles stalled because RB FIFO0 is full. |
+| 11, 3 | stall cycles fifo1 full | Cycles stalled because RB FIFO1 is full. |
+| 11, 4 | stall cycles fifo2 full | Cycles stalled because RB FIFO2 is full. |
+| 11, 5 | starve cycles SP | Cycles RB starved waiting for SP exports (color/depth data). |
+| 11, 6 | starve cycles LRZ tile | Cycles RB starved waiting for LRZ tile/mask info. |
+| 11, 7 | starve cycles CCU | Cycles RB starved waiting for CCU returns/availability. |
+| 11, 8 | starve cycles Z plane | Cycles RB starved on Z-plane data/dependency. |
+| 11, 9 | starve cycles bary plane | Cycles RB starved on barycentric plane/interp dependency. |
+| 11, 10 | Z workload | Depth (Z) processing workload units (implementation-defined). |
+| 11, 11 | HLSQ active | Cycles/occurrences where HLSQ is actively feeding RB. |
+| 11, 12 | Z read | Depth buffer read operations. |
+| 11, 13 | Z write | Depth buffer write operations. |
+| 11, 14 | C read | Color buffer read operations (blending/ROPs reading dest). |
+| 11, 15 | C write | Color buffer write operations. |
+| 11, 16 | total pass | Total depth/stencil tests passed (combined). |
+| 11, 17 | Z pass | Z test passed count. |
+| 11, 18 | Z fail | Z test failed count. |
+| 11, 19 | S fail | Stencil test failed count. |
+| 11, 20 | blended fxp components | Number of blended fixed-point components processed. |
+| 11, 21 | blended fp16 components | Number of blended FP16 components processed. |
+| 11, 22 | PS invocations | Pixel shader invocations reaching RB (fragments processed). |
+| 11, 23 | 2D alive cycles | Cycles RB 2D/blit path is active. |
+| 11, 24 | 2D stall cycles a2d | 2D path stall cycles due to a2d (2D accelerator interface) backpressure. |
+| 11, 25 | 2D starve cycles src | 2D path starved waiting for source reads. |
+| 11, 26 | 2D starve cycles SP | 2D path starved waiting for SP (if shader-assisted blits). |
+| 11, 27 | 2D starve cycles dst | 2D path starved waiting for destination availability/returns. |
+| 11, 28 | 2D valid pixels | Number of valid pixels processed by 2D path. |
+| 11, 29 | 3D pixels | Number of 3D pixels/fragments processed by RB. |
+| 11, 30 | blender working cycles | Useful cycles of blending hardware. |
+| 11, 31 | zproc working cycles | Useful cycles of Z/stencil processing hardware. |
+| 11, 32 | cproc working cycles | Useful cycles of color processing hardware. |
+| 11, 33 | sampler working cycles | Useful cycles of RB sampler/resolve path (implementation-specific). |
+| 11, 34 | stall cycles CCU color read | Cycles stalled waiting for CCU on color read returns. |
+| 11, 35 | stall cycles CCU color write | Cycles stalled waiting for CCU on color write path. |
+| 11, 36 | stall cycles CCU depth read | Cycles stalled waiting for CCU on depth read returns. |
+| 11, 37 | stall cycles CCU depth write | Cycles stalled waiting for CCU on depth write path. |
+| 11, 38 | stall cycles VPC | Cycles RB stalled due to VPC dependency/backpressure. |
+| 11, 39 | 2D input trans | 2D path input transactions into RB. |
+| 11, 40 | 2D output RB dst trans | 2D output transactions writing destination via RB. |
+| 11, 41 | 2D output RB src trans | 2D output transactions reading source via RB. |
+| 11, 42 | blended fp32 components | Number of blended FP32 components processed. |
+| 11, 43 | color pix tiles | Number of color pixel tiles processed (tile-level color ops). |
+| 11, 44 | stall cycles CCU | Cycles RB stalled due to CCU (generic, any reason). |
+| 11, 45 | early Z arb3 grant | Grants from early-Z arbiter (channel 3) (depth-path scheduling). |
+| 11, 46 | late Z arb3 grant | Grants from late-Z arbiter (channel 3). |
+| 11, 47 | early Z skip grant | Early-Z “skip” grants (work skipped due to early-z optimization). |
 | - | **VBIF** | - |
-| 13, 34 | ??? |
-| 13, 35 | ??? |
-| 13, 46 | ??? |
-| 13, 47 | ??? |
+| 13, 34 | ??? | Undocumented VBIF counter (SoC/firmware dependent); typically related to external memory read/write/latency or QoS arbitration. |
+| 13, 35 | ??? | Undocumented VBIF counter (SoC/firmware dependent); likely a traffic/credit/stall metric. |
+| 13, 46 | ??? | Undocumented VBIF counter (SoC/firmware dependent); possibly read channel beats/requests by client class. |
+| 13, 47 | ??? | Undocumented VBIF counter (SoC/firmware dependent); possibly write channel beats/requests by client class. |
 | - | **Visibility Stream Compressor** | - |
-| 23, 0 | busy cycles |
-| 23, 1 | working cycles |
-| 23, 2 | stall cycles UCHE |
-| 23, 3 | eot num |
-| 23, 4 | input tiles |
+| 23, 0 | busy cycles | Cycles VSC is busy. |
+| 23, 1 | working cycles | Cycles VSC doing useful work (not stalled). |
+| 23, 2 | stall cycles UCHE | Cycles VSC stalled waiting for UCHE/memory. |
+| 23, 3 | eot num | Number of end-of-tile/end-of-transmission (EOT) events. |
+| 23, 4 | input tiles | Number of input tiles processed by VSC. |
 | - | **Cache and Compression Unit** | - |
-| 24, 0 | busy cycles |
-| 24, 1 | stall cycles RB depth return |
-| 24, 2 | stall cycles RB color return |
-| 24, 3 | starve cycles flag return |
-| 24, 4 | depth blocks |
-| 24, 5 | color blocks |
-| 24, 6 | depth block hit |
-| 24, 7 | color block hit |
-| 24, 8 | partial block read |
-| 24, 9 | gmem read |
-| 24, 10 | gmem write |
-| 24, 11 | depth read flag0 count |
-| 24, 12 | depth read flag1 count |
-| 24, 13 | depth read flag2 count |
-| 24, 14 | depth read flag3 count |
-| 24, 15 | depth read flag4 count |
-| 24, 16 | depth read flag5 count |
-| 24, 17 | depth read flag6 count |
-| 24, 18 | depth read flag8 count |
-| 24, 19 | color read flag0 count |
-| 24, 20 | color read flag1 count |
-| 24, 21 | color read flag2 count |
-| 24, 22 | color read flag3 count |
-| 24, 23 | color read flag4 count |
-| 24, 24 | color read flag5 count |
-| 24, 25 | color read flag6 count |
-| 24, 26 | color read flag8 count |
-| 24, 27 | 2D RD req |
-| 24, 28 | 2D WR req |
+| 24, 0 | busy cycles | Cycles CCU is busy. |
+| 24, 1 | stall cycles RB depth return | Cycles CCU stalled returning depth data to RB (return path blocked). |
+| 24, 2 | stall cycles RB color return | Cycles CCU stalled returning color data to RB. |
+| 24, 3 | starve cycles flag return | Cycles CCU starved waiting for compression flag return data. |
+| 24, 4 | depth blocks | Number of depth blocks processed (compressed block units). |
+| 24, 5 | color blocks | Number of color blocks processed. |
+| 24, 6 | depth block hit | Depth block cache hits in CCU. |
+| 24, 7 | color block hit | Color block cache hits in CCU. |
+| 24, 8 | partial block read | Partial block reads (sub-block accesses, read-modify-write scenarios). |
+| 24, 9 | gmem read | GMEM reads performed by CCU. |
+| 24, 10 | gmem write | GMEM writes performed by CCU. |
+| 24, 11 | depth read flag0 count | Depth reads with compression flag state 0. |
+| 24, 12 | depth read flag1 count | Depth reads with compression flag state 1. |
+| 24, 13 | depth read flag2 count | Depth reads with compression flag state 2. |
+| 24, 14 | depth read flag3 count | Depth reads with compression flag state 3. |
+| 24, 15 | depth read flag4 count | Depth reads with compression flag state 4. |
+| 24, 16 | depth read flag5 count | Depth reads with compression flag state 5. |
+| 24, 17 | depth read flag6 count | Depth reads with compression flag state 6. |
+| 24, 18 | depth read flag8 count | Depth reads with compression flag state 8 (often “uncompressed/clear/invalid” encoding). |
+| 24, 19 | color read flag0 count | Color reads with compression flag state 0. |
+| 24, 20 | color read flag1 count | Color reads with compression flag state 1. |
+| 24, 21 | color read flag2 count | Color reads with compression flag state 2. |
+| 24, 22 | color read flag3 count | Color reads with compression flag state 3. |
+| 24, 23 | color read flag4 count | Color reads with compression flag state 4. |
+| 24, 24 | color read flag5 count | Color reads with compression flag state 5. |
+| 24, 25 | color read flag6 count | Color reads with compression flag state 6. |
+| 24, 26 | color read flag8 count | Color reads with compression flag state 8. |
+| 24, 27 | 2D RD req | 2D path read requests handled by CCU. |
+| 24, 28 | 2D WR req | 2D path write requests handled by CCU. |
 | - | **Low Resolution Z pass** | - |
-| 25, 0 | busy cycles |
-| 25, 1 | starve cycles RAS |
-| 25, 2 | stall cycles RB |
-| 25, 3 | stall cycles VSC |
-| 25, 4 | stall cycles VPC |
-| 25, 5 | stall cycles flag prefetch |
-| 25, 6 | stall cycles UCHE |
-| 25, 7 | LRZ read |
-| 25, 8 | LRZ write |
-| 25, 9 | read latency |
-| 25, 10 | merge cache updating |
-| 25, 11 | prim killed BY maskgen |
-| 25, 12 | prim killed BY LRZ |
-| 25, 13 | visible prim after LRZ |
-| 25, 14 | full 8x8 tiles |
-| 25, 15 | partial 8x8 tiles |
-| 25, 16 | tile killed |
-| 25, 17 | total pixel |
-| 25, 18 | visible pixel after LRZ |
-| 25, 19 | fully covered tiles |
-| 25, 20 | partial covered tiles |
-| 25, 21 | feedback accept |
-| 25, 22 | feedback discard |
-| 25, 23 | feedback stall |
-| 25, 24 | stall cycles RB zplane |
-| 25, 25 | stall cycles RB bplane |
-| 25, 26 | stall cycles VC |
-| 25, 27 | RAS mask trans |
+| 25, 0 | busy cycles | Cycles LRZ unit is busy. |
+| 25, 1 | starve cycles RAS | Cycles LRZ starved waiting for rasterizer input. |
+| 25, 2 | stall cycles RB | Cycles LRZ stalled due to RB backpressure/dependency. |
+| 25, 3 | stall cycles VSC | Cycles LRZ stalled due to VSC dependency/backpressure. |
+| 25, 4 | stall cycles VPC | Cycles LRZ stalled due to VPC dependency/backpressure. |
+| 25, 5 | stall cycles flag prefetch | Cycles stalled waiting for LRZ/CCU flag prefetch. |
+| 25, 6 | stall cycles UCHE | Cycles stalled waiting on UCHE/memory. |
+| 25, 7 | LRZ read | Number of LRZ buffer reads. |
+| 25, 8 | LRZ write | Number of LRZ buffer writes/updates. |
+| 25, 9 | read latency | Accumulated LRZ read latency (cycles). |
+| 25, 10 | merge cache updating | Occurrences/cycles merge cache is updating (combining updates). |
+| 25, 11 | prim killed BY maskgen | Primitives killed by mask generator (coverage/visibility). |
+| 25, 12 | prim killed BY LRZ | Primitives killed by LRZ (occluded by low-res Z). |
+| 25, 13 | visible prim after LRZ | Primitives deemed visible after LRZ test. |
+| 25, 14 | full 8x8 tiles | Fully covered 8x8 tiles processed. |
+| 25, 15 | partial 8x8 tiles | Partially covered 8x8 tiles processed. |
+| 25, 16 | tile killed | Tiles rejected/killed by LRZ. |
+| 25, 17 | total pixel | Total pixels considered in LRZ stage. |
+| 25, 18 | visible pixel after LRZ | Pixels that remain visible after LRZ. |
+| 25, 19 | fully covered tiles | Count of tiles fully covered by primitives. |
+| 25, 20 | partial covered tiles | Count of partially covered tiles. |
+| 25, 21 | feedback accept | LRZ feedback events accepted (feedback path success). |
+| 25, 22 | feedback discard | LRZ feedback events discarded. |
+| 25, 23 | feedback stall | Cycles stalled due to LRZ feedback path backpressure. |
+| 25, 24 | stall cycles RB zplane | Cycles stalled waiting for RB on Z-plane related ops. |
+| 25, 25 | stall cycles RB bplane | Cycles stalled waiting for RB on bary-plane related ops. |
+| 25, 26 | stall cycles VC | Cycles stalled due to VC (visibility cache/collector) dependency (implementation-specific). |
+| 25, 27 | RAS mask trans | Transactions of raster mask data between RAS and LRZ. |
 | - | **CMP** | - |
-| 26, 0 | cmpdecmp stall cycles arb |
-| 26, 1 | cmpdecmp vbif latency cycles |
-| 26, 2 | cmpdecmp vbif latency samples |
-| 26, 3 | cmpdecmp vbif read data CCU |
-| 26, 4 | cmpdecmp vbif write data CCU |
-| 26, 5 | cmpdecmp vbif read request |
-| 26, 6 | cmpdecmp vbif write request |
-| 26, 7 | cmpdecmp vbif read data |
-| 26, 8 | cmpdecmp vbif write data |
-| 26, 9 | cmpdecmp flag fetch cycles |
-| 26, 10 | cmpdecmp flag fetch samples |
-| 26, 11 | cmpdecmp depth write flag1 count |
-| 26, 12 | cmpdecmp depth write flag2 count |
-| 26, 13 | cmpdecmp depth write flag3 count |
-| 26, 14 | cmpdecmp depth write flag4 count |
-| 26, 15 | cmpdecmp depth write flag5 count |
-| 26, 16 | cmpdecmp depth write flag6 count |
-| 26, 17 | cmpdecmp depth write flag8 count |
-| 26, 18 | cmpdecmp color write flag1 count |
-| 26, 19 | cmpdecmp color write flag2 count |
-| 26, 20 | cmpdecmp color write flag3 count |
-| 26, 21 | cmpdecmp color write flag4 count |
-| 26, 22 | cmpdecmp color write flag5 count |
-| 26, 23 | cmpdecmp color write flag6 count |
-| 26, 24 | cmpdecmp color write flag8 count |
-| 26, 25 | cmpdecmp 2D stall cycles vbif req |
-| 26, 26 | cmpdecmp 2D stall cycles vbif WR |
-| 26, 27 | cmpdecmp 2D stall cycles vbif return |
-| 26, 28 | cmpdecmp 2D RD data |
-| 26, 29 | cmpdecmp 2D WR data |
-| 26, 30 | cmpdecmp vbif read data UCHE ch0 |
-| 26, 31 | cmpdecmp vbif read data UCHE ch1 |
-| 26, 32 | cmpdecmp 2D output trans |
-| 26, 33 | cmpdecmp vbif write data UCHE |
-| 26, 34 | cmpdecmp depth write flag0 count |
-| 26, 35 | cmpdecmp color write flag0 count |
-| 26, 36 | cmpdecmp color write flagalpha count |
-| 26, 37 | cmpdecmp 2D busy cycles |
-| 26, 38 | cmpdecmp 2D reorder starve cycles |
-| 26, 39 | cmpdecmp 2D pixels |
+| 26, 0 | cmpdecmp stall cycles arb | Cycles compress/decompress engine stalled due to arbiter contention. |
+| 26, 1 | cmpdecmp vbif latency cycles | Total VBIF latency cycles seen by compress/decompress path. |
+| 26, 2 | cmpdecmp vbif latency samples | Number of VBIF latency samples for compress/decompress path. |
+| 26, 3 | cmpdecmp vbif read data CCU | VBIF read data beats/units for CCU via cmp/decmp path. |
+| 26, 4 | cmpdecmp vbif write data CCU | VBIF write data beats/units for CCU via cmp/decmp path. |
+| 26, 5 | cmpdecmp vbif read request | VBIF read requests issued by cmp/decmp block. |
+| 26, 6 | cmpdecmp vbif write request | VBIF write requests issued by cmp/decmp block. |
+| 26, 7 | cmpdecmp vbif read data | Total VBIF read data beats/units for cmp/decmp. |
+| 26, 8 | cmpdecmp vbif write data | Total VBIF write data beats/units for cmp/decmp. |
+| 26, 9 | cmpdecmp flag fetch cycles | Cycles spent fetching compression flags/metadata. |
+| 26, 10 | cmpdecmp flag fetch samples | Number of flag fetch transactions sampled. |
+| 26, 11 | cmpdecmp depth write flag1 count | Depth writes with compression flag state 1. |
+| 26, 12 | cmpdecmp depth write flag2 count | Depth writes with compression flag state 2. |
+| 26, 13 | cmpdecmp depth write flag3 count | Depth writes with compression flag state 3. |
+| 26, 14 | cmpdecmp depth write flag4 count | Depth writes with compression flag state 4. |
+| 26, 15 | cmpdecmp depth write flag5 count | Depth writes with compression flag state 5. |
+| 26, 16 | cmpdecmp depth write flag6 count | Depth writes with compression flag state 6. |
+| 26, 17 | cmpdecmp depth write flag8 count | Depth writes with compression flag state 8. |
+| 26, 18 | cmpdecmp color write flag1 count | Color writes with compression flag state 1. |
+| 26, 19 | cmpdecmp color write flag2 count | Color writes with compression flag state 2. |
+| 26, 20 | cmpdecmp color write flag3 count | Color writes with compression flag state 3. |
+| 26, 21 | cmpdecmp color write flag4 count | Color writes with compression flag state 4. |
+| 26, 22 | cmpdecmp color write flag5 count | Color writes with compression flag state 5. |
+| 26, 23 | cmpdecmp color write flag6 count | Color writes with compression flag state 6. |
+| 26, 24 | cmpdecmp color write flag8 count | Color writes with compression flag state 8. |
+| 26, 25 | cmpdecmp 2D stall cycles vbif req | 2D path stall cycles waiting to issue VBIF requests in cmp/decmp. |
+| 26, 26 | cmpdecmp 2D stall cycles vbif WR | 2D path stall cycles on VBIF write path in cmp/decmp. |
+| 26, 27 | cmpdecmp 2D stall cycles vbif return | 2D path stall cycles waiting for VBIF returns in cmp/decmp. |
+| 26, 28 | cmpdecmp 2D RD data | 2D path read data beats/units through cmp/decmp. |
+| 26, 29 | cmpdecmp 2D WR data | 2D path write data beats/units through cmp/decmp. |
+| 26, 30 | cmpdecmp vbif read data UCHE ch0 | VBIF read data for UCHE channel 0 through cmp/decmp. |
+| 26, 31 | cmpdecmp vbif read data UCHE ch1 | VBIF read data for UCHE channel 1 through cmp/decmp. |
+| 26, 32 | cmpdecmp 2D output trans | 2D output transactions produced by cmp/decmp path. |
+| 26, 33 | cmpdecmp vbif write data UCHE | VBIF write data for UCHE through cmp/decmp. |
+| 26, 34 | cmpdecmp depth write flag0 count | Depth writes with compression flag state 0. |
+| 26, 35 | cmpdecmp color write flag0 count | Color writes with compression flag state 0. |
+| 26, 36 | cmpdecmp color write flagalpha count | Color writes for alpha plane/alpha flags (alpha-specific compression metadata). |
+| 26, 37 | cmpdecmp 2D busy cycles | Cycles cmp/decmp hardware is busy on 2D operations. |
+| 26, 38 | cmpdecmp 2D reorder starve cycles | Cycles 2D path starved due to reorder queue/engine constraints. |
+| 26, 39 | cmpdecmp 2D pixels | Number of 2D pixels processed through cmp/decmp path. |
 
 </details>

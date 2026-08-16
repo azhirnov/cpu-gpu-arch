@@ -84,7 +84,7 @@ Architecture: Xe2-LPG (low power graphics)
 
 ## References
 
-2.1. [Intel Unveils Lunar Lake Architecture: New P and E cores, Xe2-LPG Graphics, New NPU 4 Brings More AI Performance](https://www.anandtech.com/show/21425/intel-lunar-lake-architecture-deep-dive-lion-cove-xe2-and-npu4/6)<br/>
+2.1. [Intel Unveils Lunar Lake Architecture: New P and E cores, Xe2-LPG Graphics, New NPU 4 Brings More AI Performance](https://web.archive.org/web/20240604032237/https://www.anandtech.com/show/21425/intel-lunar-lake-architecture-deep-dive-lion-cove-xe2-and-npu4)<br/>
 2.2. [Lunar Lake’s iGPU: Debut of Intel’s Xe2 Architecture](https://chipsandcheese.com/p/lunar-lakes-igpu-debut-of-intels)<br/>
 2.3. [Vulkan features for Arc 130V](https://vulkan.gpuinfo.org/listreports.php?devicename=Intel(R)%20Arc(TM)%20130V%20GPU%20(16GB)), [140V](https://vulkan.gpuinfo.org/listreports.php?devicename=Intel(R)%20Arc(TM)%20140V%20GPU%20(16GB))<br/>
 

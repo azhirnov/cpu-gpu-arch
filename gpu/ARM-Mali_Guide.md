@@ -27,8 +27,8 @@
 2.4. [Texturing Guide](https://developer.arm.com/documentation/102449/0200/Overview)<br/>
 
 **Wiki/Specs**<br/>
-3.1. [Wikipedia](https://en.wikipedia.org/wiki/Mali_(processor))
-3.2. [Namu wiki](https://en.namu.wiki/w/ARM%20Mali%20GPU)
+3.1. [Wikipedia](https://en.wikipedia.org/wiki/Mali_(processor))<br/>
+3.2. [Namu wiki](https://en.namu.wiki/w/ARM%20Mali%20GPU)<br/>
 
 
 ## Notes

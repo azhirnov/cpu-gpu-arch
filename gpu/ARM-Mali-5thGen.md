@@ -96,20 +96,35 @@ Content:
 
 ## References
 
-3.1. [Overview](https://www.arm.com/products/silicon-ip-multimedia/gpu/mali-g1-premium)
-3.2. [Arm Mali G1 Performance Counters Reference Guide](https://developer.arm.com/documentation/111042/0100/?lang=en), [[backup](../pdf/arm-mali_g1_performance_counters_reference_guide_111042_0100_en.pdf)]
+3.1. [Overview](https://www.arm.com/products/silicon-ip-multimedia/gpu/mali-g1-premium)<br/>
+3.2. [Arm Mali G1 Performance Counters Reference Guide](https://developer.arm.com/documentation/111042/0100/?lang=en), [[backup](../pdf/arm-mali_g1_performance_counters_reference_guide_111042_0100_en.pdf)]<br/>
+3.2. [Vulkan features for G1-Ultra MC12](https://vulkan.gpuinfo.org/listreports.php?property=devicename&value=Mali-G1-Ultra%20MC12&platform=all)<br/>
 
 ## Features
 
 * Image Region Dependencies
 * tile-based hardware counters.
 * BVH traversal in HW.
-* Cooperative matrix (?)
+* Cooperative matrix [3.2]
+* Opacity micromap. [3.2]
 
 ## Notes
 
 * Image Region Dependencies (IRD)
 	- a smarter scheduling feature that enables the GPU to process different parts of the screen simultaneously.
+
+* L2 cache: 512KB - 4MB
+
+* G1 GPU with 10 or more cores with ray-tracing consistency is a G1-Ultra, 6 to 9 cores is a G1-Premium, and a G1-Pro with 1 to 5 cores is a small configuration you’ll likely find in budget chipsets.
+* Two 4.1GHz C1-Ultra cores paired with six 3.5GHz C1-Pro cores, with two SME2 units and a 16MB L3 cache, make for a powerhouse setup that doesn’t use any little cores. Combined with a 14-core Mali-G1 Ultra with 4MB of L2 cache and 16MB of system-level cache, all built on 3nm, t
+
+* G1U-MC12 VK_ARM_shader_core_builtins, VK_ARM_shader_core_properties: [3.2]
+	- shaderCoreCount: 12
+	- shaderCoreMask: 4095
+	- shaderWarpsPerCore: 64
+	- fmaRate: 128
+	- pixelRate: 4
+	- texelRate: 8
 
 
 # All gens

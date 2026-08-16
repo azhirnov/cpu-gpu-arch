@@ -8,8 +8,8 @@
 5. [GDC2014: Achieving the Best Performance with IA Graphics, Tips, Tricks, and Clever Bits](https://gdcvault.com/play/1020223/Achieving-the-Best-Performance-with)
 
 **Wiki/Specs**<br/>
-1.1. [List of Intel graphics processing units](https://en.wikipedia.org/wiki/List_of_Intel_graphics_processing_units)
-1.2. [Namu wiki](https://en.namu.wiki/w/%EC%9D%B8%ED%85%94/GPU)
+1.1. [List of Intel graphics processing units](https://en.wikipedia.org/wiki/List_of_Intel_graphics_processing_units)<br/>
+1.2. [Namu wiki](https://en.namu.wiki/w/%EC%9D%B8%ED%85%94/GPU)<br/>
 
 ## Notes
 

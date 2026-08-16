@@ -8,7 +8,7 @@ Albiorix architecture.
 
 ## References
 
-1. [Imagination Announces A-Series GPU Architecture](https://www.anandtech.com/show/15156/imagination-announces-a-series-gpu-architecture)
+1. [Imagination Announces A-Series GPU Architecture](https://web.archive.org/web/20191203021251/https://www.anandtech.com/show/15156/imagination-announces-a-series-gpu-architecture)
 
 
 ## Notes

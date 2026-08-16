@@ -21,7 +21,7 @@ Architecture: Xe-HPG (high performance graphics)<br/>
 
 1.1. [Raytracing on Meteor Lake’s iGPU](https://chipsandcheese.com/2024/04/15/raytracing-on-meteor-lakes-igpu/)<br/>
 1.2. [Intel’s Ambitious Meteor Lake iGPU](https://chipsandcheese.com/2024/04/08/intels-ambitious-meteor-lake-igpu/)<br/>
-1.3. [Vulkan features for Arc A380](https://vulkan.gpuinfo.org/listreports.php?devicename=Intel(R)%20Arc(TM)%20A380%20Graphics), [A310 LP](https://vulkan.gpuinfo.org/listreports.php?property=devicename&value=Intel(R)%20Arc(TM)%20A310%20LP%20Graphics], [A380 (Mesa driver)](https://vulkan.gpuinfo.org/listreports.php?property=devicename&value=Intel(R)%20Arc(tm)%20A380%20Graphics%20(DG2)&platform=linux)<br/>
+1.3. [Vulkan features for Arc A380](https://vulkan.gpuinfo.org/listreports.php?devicename=Intel(R)%20Arc(TM)%20A380%20Graphics), [A310 LP](https://vulkan.gpuinfo.org/listreports.php?property=devicename&value=Intel(R)%20Arc(TM)%20A310%20LP%20Graphics), [A380 (Mesa driver)](https://vulkan.gpuinfo.org/listreports.php?property=devicename&value=Intel(R)%20Arc(tm)%20A380%20Graphics%20(DG2)&platform=linux)<br/>
 1.4. [Intel’s Battlemage Architecture](https://chipsandcheese.com/p/intels-battlemage-architecture) - compared with Arc<br/>
 1.5. [Xe-HPG Architecture White Paper](https://cdrdv2-public.intel.com/758302/introduction-to-the-xe-hpg-architecture-white-paper.pdf)<br/>
 

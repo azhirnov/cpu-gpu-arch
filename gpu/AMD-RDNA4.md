@@ -7,7 +7,7 @@
 
 ## References
 
-1. [Examining AMD’s RDNA 4 Changes in LLVM](https://chipsandcheese.com/2024/01/28/examining-amds-rdna-4-changes-in-llvm/)
+1. [Examining AMD’s RDNA 4 Changes in LLVM](https://chipsandcheese.com/p/examining-amds-rdna-4-changes-in-llvm/)
 2. [Instruction Set Architecture](https://www.amd.com/content/dam/amd/en/documents/radeon-tech-docs/instruction-set-architectures/rdna4-instruction-set-architecture.pdf)
 3. [AMD RDNA 4 architecture deep dive](https://www.notebookcheck.net/AMD-RDNA-4-architecture-deep-dive-A-64-CU-monolithic-design-with-all-round-improvements-to-compute-media-encode-decode-ray-tracing-and-AI.969593.0.html)
 5. [RDNA 4's "Out-of-Order" Memory Accesses](https://chipsandcheese.com/p/rdna-4s-out-of-order-memory-accesses)

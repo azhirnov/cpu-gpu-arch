@@ -20,11 +20,11 @@
 
 1. [Vega Instruction Set Architecture](https://www.amd.com/content/dam/amd/en/documents/radeon-tech-docs/instruction-set-architectures/vega-shader-instruction-set-architecture.pdf), [[backup](../pdf/AMD-vega-shader-instruction-set-architecture.pdf)]
 2. Difference between GCN and RDNA: [RDNA Architecture](https://gpuopen.com/wp-content/uploads/2019/08/RDNA_Architecture_public.pdf), [[webarchive](https://web.archive.org/web/20240306074306/https://www.amd.com/system/files/documents/rdna-whitepaper.pdf)], [[backup](../pdf/AMD-rdna-whitepaper.pdf)]
-3. [The AMD Radeon VII Review](https://www.anandtech.com/show/13923/the-amd-radeon-vii-review)
+3. [The AMD Radeon VII Review](https://web.archive.org/web/20190207141625/https://www.anandtech.com/show/13923/the-amd-radeon-vii-review)
 4. [Vega Whitepaper](https://en.wikichip.org/w/images/a/a1/vega-whitepaper.pdf), [[backup](../pdf/AMD-vega-whitepaper.pdf)]
 5. [Vega 7nm ISA](https://www.amd.com/content/dam/amd/en/documents/radeon-tech-docs/instruction-set-architectures/vega-7nm-shader-instruction-set-architecture.pdf), [[backup](../pdf/AMD-vega-shader-instruction-set-architecture.pdf)]
 6. [Vulkan features for Radeon VII](https://vulkan.gpuinfo.org/listreports.php?devicename=AMD%20Radeon%20VII), [RX Vega](https://vulkan.gpuinfo.org/listreports.php?devicename=Radeon%20RX%20Vega), [RX Vega 10](https://vulkan.gpuinfo.org/listreports.php?property=devicename&value=AMD%20Radeon(TM)%20RX%20Vega%2010%20Graphics)
-7. [The AMD Vega GPU Architecture Teaser: Higher IPC, Tiling, & More, Coming in H1’2017](https://www.anandtech.com/show/11002/the-amd-vega-gpu-architecture-teaser/3)
+7. [The AMD Vega GPU Architecture Teaser: Higher IPC, Tiling, & More, Coming in H1’2017](https://web.archive.org/web/20170107164914/https://www.anandtech.com/show/11002/the-amd-vega-gpu-architecture-teaser)
 
 ## Notes
 

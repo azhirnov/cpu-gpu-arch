@@ -88,3 +88,6 @@ Codename: GB100 (datacenter), GB20x (consumer)
 	- Memory Bandwidth: 1792 GB/s
 	- Pixel Fill-rate: 423.6 GigaPixels/s
 	- Texel Fill-rate: 1636.8 GigaTexels/s
+	- L2 cache: 96MB
+	- L1 cache: 128KB per SM (21.2MB)
+

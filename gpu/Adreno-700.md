@@ -16,9 +16,10 @@
 3. [Inside Snapdragon 8+ Gen 1’s iGPU: Adreno Gets Big](https://chipsandcheese.com/2024/03/05/inside-snapdragon-8-gen-1s-igpu-adreno-gets-big/)
 4. [Freedreno wiki: A7xx ray tracing](https://gitlab.freedesktop.org/freedreno/freedreno/-/wikis/a7xx-ray-tracing)
 5. [Freedreno wiki: AQE](https://gitlab.freedesktop.org/freedreno/freedreno/-/wikis/AQE)
-6. [Vulkan features for Adreno 740](https://vulkan.gpuinfo.org/listreports.php?devicename=Adreno%20(TM)%20740), [X1-85](https://vulkan.gpuinfo.org/listreports.php?devicename=Qualcomm(R)%20Adreno(TM)%20X1-85%20GPU)
+6. [Vulkan features for Adreno 740](https://vulkan.gpuinfo.org/listreports.php?devicename=Adreno%20(TM)%20740), [X1-85](https://vulkan.gpuinfo.org/listreports.php?devicename=Qualcomm(R)%20Adreno(TM)%20X1-85%20GPU). [Quest3](https://vulkan.gpuinfo.org/listreports.php?displayname=Oculus%20Quest%203), [Pcio4U](https://vulkan.gpuinfo.org/listreports.php?displayname=Pico%20A9210), [X1 (Mesa)](https://vulkan.gpuinfo.org/listreports.php?devicename=Adreno%20X1-85)
 7. [Correction on Qualcomm iGPUs](https://chipsandcheese.com/2024/05/06/correction-on-qualcomm-igpus/)
-
+8. [SNAPDRAGON® XR2 GEN 2 PLATFORM](https://docs.qualcomm.com/doc/87-73689-1/87-73689-1_REV_A_Snapdragon_XR2_Gen_2_Platform_Product_Brief.pdf)
+9. [The Qualcomm Snapdragon X Architecture Deep Dive](https://web.archive.org/web/20240613141711/https://www.anandtech.com/show/21445/qualcomm-snapdragon-x-architecture-deep-dive)
 
 ## Features
 
@@ -41,6 +42,23 @@
 * Cluster cache (between L1 and L2)
 	- 128KB for each cluster of 2x SP or 4x uSPTP.
 
+* separate set of 256 FP16 ALUs, meaning that Adreno X1 doesn’t have to share resources when processing FP16 and FP32 data, unlike architectures which execute FP16 operations on FP32 ALUs. [9]
+* Vertex (and compute?) shader runs with wave64 mode, fragment shader - with wave128. [9]
+
+* Binned Direct Mode: [9]
+	- Run visibility pass in parallel with previous rendering task, before switching to direct rendering
+	- Offers a free depth pre-pass to reduce workload
+	- Removes all back facing primitives prior to direct rendering
+	- Combines benefits of direct and binned modes
+
+* GMEM: [9]
+	- 3MB (X1 GPU)
+	- 2.3 TB/s
+
+* Cooperative matrix size on Adreno 750: [[ref](https://allenkuo.medium.com/building-a-high-performance-ai-frame-interpolation-pipeline-on-android-with-vulkan-ncnn-rife-8f279cef51cd)]
+	- Tile size: 16x16x16 fp16
+	- Subgroup: 32
+
 
 ## Specs
 
@@ -49,10 +67,13 @@
 	- CPU heavy: 490MHz GPU, 2.0GHz CPU
 	- Adreno 740:
 		* 256 SIMD, 1536 threads
-		* 3.1 TFLOPS
+		* 1.8 TFLOPS fp32 (600MHz)
+		* 1.5 TFLOPS fp32 (490MHz)
 		* GMem: 3 MB
 	- 4x Cortex A78C 2.36GHz, 2x Cortex A78C 2.05GHz
-	- LPDDR5X quad-channel, 64bit, 76.8 GB/s
+	- Available for apps: 1P + 2E
+	- 8 MB system cache
+	- LPDDR5X quad-channel, 64bit, 63 GB/s (?)
 
 * X1:
 	- X1-45 TFLOPS: 1.7 - 2.1
@@ -60,3 +81,11 @@
 	- X1-85 TFLOPS: 3.8 - 4.6
 	- X1-85 MegaTris/s: 2.5
 	- RAM: LPDDR5X-8448, 128-bit, 135 GB/s
+
+* Adreno 750
+	- 256 SIMD
+	- 1536 threads, 1 GHz
+	- 3.07 TFLOPS fp32
+	- 6.14 TFLOPS fp16
+	- GMem: 3 MB
+	- LPDDR5X-9600, 64bit, 77 GB/s

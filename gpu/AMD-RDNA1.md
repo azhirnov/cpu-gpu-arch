@@ -12,7 +12,7 @@
 3. [Instruction Set Architecture](https://www.amd.com/content/dam/amd/en/documents/radeon-tech-docs/instruction-set-architectures/rdna-shader-instruction-set-architecture.pdf), [[backup](../pdf/AMD-rdna_isa.pdf)]
 4. [Optimization](https://gpuopen.com/wp-content/uploads/slides/GPUOpen_Let%E2%80%99sBuild2020_Optimizing%20for%20the%20Radeon%20RDNA%20Architecture.pdf), [[backup](../pdf/AMD-GPUOpen_LetsBuild2020_Optimizing_for_the_Radeon_RDNA_Architecture.pdf)]
 5. [(video) Optimizing for the Radeon RDNA Architecture](https://www.youtube.com/watch?v=7eEKLUhoTQs)
-6. [AMD Announces Radeon RX 5700 XT & RX 5700](https://www.anandtech.com/show/14528/amd-announces-radeon-rx-5700-xt-rx-5700-series)
+6. [AMD Announces Radeon RX 5700 XT & RX 5700](https://web.archive.org/web/20190611002052/https://www.anandtech.com/show/14528/amd-announces-radeon-rx-5700-xt-rx-5700-series)
 7. [Vulkan features for RX 5700 XT](https://vulkan.gpuinfo.org/listreports.php?devicename=AMD%20Radeon%20RX%205700%20XT)
 
 ## Features

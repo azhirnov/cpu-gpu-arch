@@ -22,3 +22,6 @@
 	| 1 | 1GB   | 64GB  | 4TB   |
 	| 2 | 2MB   | 32MB  | 512MB |
 	| 3 | 4KB   | 16KB  | 64kb  |
+
+* System-level Cache
+	- Used to share data between GPU, NPU, camera and CPU without touching RAM.

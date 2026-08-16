@@ -19,7 +19,7 @@ Content:
 
 ## References
 
-1.1. [ARM Unveils Next Generation Bifrost GPU Architecture & Mali-G71](https://www.anandtech.com/show/10375/arm-unveils-bifrost-and-mali-g71)<br/>
+1.1. [ARM Unveils Next Generation Bifrost GPU Architecture & Mali-G71](https://web.archive.org/web/20160531112711/https://www.anandtech.com/show/10375/arm-unveils-bifrost-and-mali-g71)<br/>
 1.2. [Arm Mali-G71 Performance Counters Reference Guide](https://developer.arm.com/documentation/102641/0106), [[backup](../pdf/arm-mali-g71_performance_counters_reference_guide_102641_0105_en.pdf)]<br/>
 1.3. [Vulkan features for Mali-G71](https://vulkan.gpuinfo.org/listreports.php?devicename=Mali-G71)<br/>
 
@@ -45,7 +45,7 @@ Content:
 
 ## References
 
-2.1. [ARM Announces Mali-G72](https://www.anandtech.com/show/11459/arm-announces-malig72-bifrost-refined-for-the-highend-soc)<br/>
+2.1. [ARM Announces Mali-G72](https://web.archive.org/web/20170529144018/https://www.anandtech.com/show/11459/arm-announces-malig72-bifrost-refined-for-the-highend-soc)<br/>
 2.2. [Arm Mali-G72 Performance Counters Reference Guide](https://developer.arm.com/documentation/102642/0106/), [[backup](../pdf/arm-mali-g72_performance_counters_reference_guide_102642_0106_en.pdf)]<br/>
 2.3. [Mali-G52](https://developer.arm.com/Processors/Mali-G52)<br/>
 2.4. [Vulkan features for Mali-G52](https://vulkan.gpuinfo.org/listreports.php?devicename=Mali-G52)<br/>

@@ -12,11 +12,11 @@
 ## References
 
 1. [Mesa driver details](https://docs.mesa3d.org/drivers/freedreno.html)
-2. [Qualcomm Details The Snapdragon 888](https://www.anandtech.com/show/16271/qualcomm-snapdragon-888-deep-dive)
+2. [Qualcomm Details The Snapdragon 888](https://web.archive.org/web/20201202155501/https://www.anandtech.com/show/16271/qualcomm-snapdragon-888-deep-dive)
 3. [Inside the Snapdragon 855’s iGPU](https://chipsandcheese.com/2024/05/01/inside-the-snapdragon-855s-igpu/)
 4. [Correction on Qualcomm iGPUs](https://chipsandcheese.com/2024/05/06/correction-on-qualcomm-igpus/)
 5. [Vulkan features for Adreno 660](https://vulkan.gpuinfo.org/listreports.php?devicename=Adreno%20(TM)%20660), [Turnip Adreno 650](https://vulkan.gpuinfo.org/listreports.php?devicename=Turnip%20Adreno%20(TM)%20650)
-6. [Qualcomm Announces Snapdragon 865 and 765(G)](https://www.anandtech.com/show/15178/qualcomm-announces-snapdragon-865-and-765-5g-for-all-in-2020-all-the-details)
+6. [Qualcomm Announces Snapdragon 865 and 765(G)](https://web.archive.org/web/20191204195837/https://www.anandtech.com/show/15178/qualcomm-announces-snapdragon-865-and-765-5g-for-all-in-2020-all-the-details)
 7. [Adreno 660 Benchmarks](https://github.com/azhirnov/as-en/blob/dev/AE/docs/papers/bench-gpu/Adreno_660.md)
 
 
@@ -35,13 +35,15 @@
 	- tested: RGBA8, RGBA16_UNorm [7]
 	- not supported: RGBA32F [7]
 
+## Specs
+
 * Adreno 660 core config:
 	- 384 ALU
 	- 900 MHz
 	-  384 fp64 / clock,  345.6 gflops, 1/4x fp32
 	- 1536 fp32 / clock, 1382.4 gflops
 	- 3072 fp16 / clock, 2764.8 gflops, 2x fp32
-
+	- GMem: 2MB
 
 * Adreno 640 core config:
 	- freq: 585 MHz
@@ -56,16 +58,16 @@
 
 * Adreno 640 config: [3,4]
 	- 2MB system level cache (between L2 and RAM).
-	- 128KB L2 cache.
+	- 128KB L2 cache (UCHE ?).
 	- 1MB gmem
 	- 2x Shader Processors.
 	- per Shader Processor:
-		* 32 KB local memory
+		* 32 KB local memory (LDS, L1?)
 		* 16 KB instruction cache
 		* 3x Micro Shader Processor Texture Processor (uSPTP).
-		* ROPs (2x 64 KB *part of gmem?*)
+		* ROPs (per color and depth tags, 2x 64 KB coverage)
 	- per uSPTP:
-		* 1KB texture cache (L1)
+		* 1KB texture cache (L0?)
 		* 4x texture units
 		* 16 KB instruction cache
 		* 2x scheduler partitions
@@ -77,7 +79,7 @@
 		* 32x INT32
 		* 8x IMUL
 		* 8x SFU
-	- 6x uSPTPs.
+	- 6x uSPTP.
 	- 12x uSPTP scheduler partitions.
 	- 768x FP32 units.
 

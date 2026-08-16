@@ -39,6 +39,7 @@ With RTX:
 * DLSS
 * Tensor core (NPU) with FP16, INT8, INT4 formats. [3]
 * Async compute queue.
+* Opacity micromap. [9]
 
 
 ## Notes
@@ -119,7 +120,7 @@ With RTX:
 	- use a physical register file of 16 384, 32-bit elements in each processing block [4]
 	- 64 uniform registers per thread [7]
 	- 64 KiB registers, 16 KiB L0 instruction cache - per SM [4]
-* L1 data cache: [4]
+* L1 data cache (L1TEX): [4]
 	- 96 KiB L1 data cache / shared memory - per SM
 	- 32B line
 	- 32 cycles hit latency

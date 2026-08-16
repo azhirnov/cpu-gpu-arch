@@ -17,7 +17,7 @@ Content:
 
 ## References
 
-1.1. [Arm's New Mali-G77 & Valhall GPU Architecture](https://www.anandtech.com/show/14385/arm-announces-malig77-gpu)<br/>
+1.1. [Arm's New Mali-G77 & Valhall GPU Architecture](https://web.archive.org/web/20190527062048/https://www.anandtech.com/show/14385/arm-announces-malig77-gpu)<br/>
 1.2. [Arm Mali-G77 Performance Counters Reference Guide](https://developer.arm.com/documentation/102730/latest/), [[backup](../pdf/arm-mali-g77_performance_counters_reference_guide_102730_0106_en.pdf)]<br/>
 1.3. [Vulkan features for Mali-G57](https://vulkan.gpuinfo.org/listreports.php?devicename=Mali-G57)<br/>
 1.4. [Mali-G57 Benchmarks](https://github.com/azhirnov/as-en/blob/dev/AE/docs/papers/bench-gpu/ARM_Mali_G57.md)<br/>
@@ -59,7 +59,7 @@ Content:
 
 ## References
 
-2.1. [Arm Announces The Mali-G78 GPU](https://www.anandtech.com/show/15816/arm-announces-the-malig78-evolution-to-24-cores)<br/>
+2.1. [Arm Announces The Mali-G78 GPU](https://web.archive.org/web/20200526201717/https://www.anandtech.com/show/15816/arm-announces-the-malig78-evolution-to-24-cores)<br/>
 2.2. [Mali-G78 Performance Counters Reference Guide](https://developer.arm.com/documentation/102626/0100), [[backup](../pdf/arm-mali-g78_performance_counters_reference_guide_102626_0106_en.pdf)]<br/>
 2.3. [Vulkan features for Mali-G78](https://vulkan.gpuinfo.org/listreports.php?devicename=Mali-G78)<br/>
 2.4. [Reverse-engineering the Mali G78](https://www.collabora.com/news-and-blog/news-and-events/reverse-engineering-the-mali-g78.html)<br/>
@@ -99,7 +99,7 @@ Content:
 ## References
 
 3.1. [Arm Mali-G610 Performance Counters Reference Guide](https://developer.arm.com/documentation/102812/0108/), [[backup](../pdf/arm-mali-g610_performance_counters_reference_guide_102812_0107_en.pdf)]<br/>
-3.2. [Arm Announces New Mali-G710, G610, G510 & G310 Mobile GPU Families](https://www.anandtech.com/show/16694/arm-announces-new-malig710-g610-g510-g310-mobile-gpu-families)<br/>
+3.2. [Arm Announces New Mali-G710, G610, G510 & G310 Mobile GPU Families](https://web.archive.org/web/20210525141854/https://www.anandtech.com/show/16694/arm-announces-new-malig710-g610-g510-g310-mobile-gpu-families)<br/>
 3.3. [Mali-G510](https://developer.arm.com/Processors/Mali-G510)<br/>
 3.4. [Vulkan features for Mali-G710](https://vulkan.gpuinfo.org/listreports.php?devicename=Mali-G710), [G710 MC10](https://vulkan.gpuinfo.org/listreports.php?devicename=Mali-G710%20MC10), [G610](https://vulkan.gpuinfo.org/listreports.php?devicename=Mali-G610), [G610 MC6](https://vulkan.gpuinfo.org/listreports.php?devicename=Mali-G610%20MC6)<br/>
 3.5. [Vulkan subpasses: the good, the bad, and the ugly](https://developer.arm.com/community/arm-community-blogs/b/mobile-graphics-and-gaming-blog/posts/vulkan-subpasses-the-good-the-bad-and-the-ugly)<br/>

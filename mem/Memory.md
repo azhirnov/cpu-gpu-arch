@@ -6,8 +6,14 @@
 
 ## Notes
 
-* latency: [ref](https://www.crucial.com/articles/about-memory/difference-between-speed-and-latency)
-	- CAS latency - he total number of clock cycles the data must go through.
+* Full DRAM latency include:
+	- tRP: precharge (close a row)
+	- tRCD: activate/open the new row before reading
+	- tCL: CAS latency
+	- transfer time
+
+* CAS latency (tCL): [ref](https://www.crucial.com/articles/about-memory/difference-between-speed-and-latency)
+	- CAS latency - the total number of clock cycles the data must go through.
 	- latency (ns) = clock cycle time (ns) x number of clock cycles
 	- Latency is best measured in nanoseconds, which is a combination of speed and CAS latency.
 	- Example: because the latency in nanoseconds for DDR4-2400 CL17 and DDR4-2666 CL19 is roughly the same, the higher speed DDR4-2666 RAM will provide better performance.
@@ -15,6 +21,10 @@
 	DDR4-2400 CL17: l=2/2.400 * 17 = 14.16 ns
 	DDR4-2666 CL19: l=2/2.666 * 19 = 14.25 ns
 	```
+
+* Latency per GHz:
+	- 100ns at 1GHz = 100 cycles
+	- 100ns at 4GHz = 400 cycles
 
 ## PCI-E Speed
 

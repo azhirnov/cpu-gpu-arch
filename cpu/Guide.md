@@ -11,6 +11,8 @@
 1.5. [Intel Optimization Reference Manual](https://www.intel.com/content/dam/www/public/us/en/documents/manuals/64-ia-32-architectures-optimization-manual.pdf)<br/>
 1.6. [Reading privileged memory with a side-channel](https://googleprojectzero.blogspot.com/2018/01/reading-privileged-memory-with-side.html), [Spectre Attacks: Exploiting Speculative Execution](https://spectreattack.com/spectre.pdf)<br/>
 1.7. [Notes on the mystery of hardware cache performance counters](https://sites.utexas.edu/jdm4372/2013/07/14/notes-on-the-mystery-of-hardware-cache-performance-counters/)<br/>
+1.8. cpuid database: [1](https://www.cpu-world.com/cgi-bin/CPUID.pl), [2](http://instlatx64.atw.hu/)<br/>
+1.9. [uops.info](https://uops.info/) - detailed latency, throughput, and port usage data for most instructions on many recent x86 microarchitectures.<br/>
 
 ## Notes
 

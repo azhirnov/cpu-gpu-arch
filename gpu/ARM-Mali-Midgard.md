@@ -72,7 +72,7 @@ Content:
 
 ## References
 
-4.1. [ARM Announces Mali 800 Series GPUs](https://www.anandtech.com/show/8649/arm-announces-mali-800-series-gpus-t860-t830-t820)<br/>
+4.1. [ARM Announces Mali 800 Series GPUs](https://web.archive.org/web/20200814225209/https://www.anandtech.com/show/8649/arm-announces-mali-800-series-gpus-t860-t830-t820)<br/>
 4.2. [Arm Mali-T820 and Arm Mali-T830 Performance Counters Reference Guide](https://developer.arm.com/documentation/108059/latest/), [[backup](../pdf/arm-mali-t820_and_arm_mali-t830_performance_counters_reference_guide_108059_0102_en.pdf)]<br/>
 4.3. [Arm Mali-T860 and Arm Mali-T880 Performance Counters Reference Guide](https://developer.arm.com/documentation/108061/0103)<br/>
 4.4. [Vulkan features for Mali-T880](https://vulkan.gpuinfo.org/listreports.php?devicename=Mali-T880), [T830](https://vulkan.gpuinfo.org/listreports.php?devicename=Mali-T830)<br/>
@@ -99,7 +99,7 @@ Content:
 ## References
 
 1. [Midgard Architecture](https://fileadmin.cs.lth.se/cs/Education/EDAN35/guestLectures/ARM-Mali.pdf), [[backup](../pdf/ARM-Mali-Midgard.pdf)]
-2. [ARM’s Mali Midgard Architecture Explored](https://www.anandtech.com/show/8234/arms-mali-midgard-architecture-explored)
+2. [ARM’s Mali Midgard Architecture Explored](https://web.archive.org/web/20200503075926/https://www.anandtech.com/show/8234/arms-mali-midgard-architecture-explored)
 3. [The Midgard Shader Core](https://developer.arm.com/documentation/102560/latest/Midgard-GPU-Architecture), [[backup](../pdf/ARM-learn_the_basics_-_the_midgard_shader_core_102560_0100_02_en.pdf)]
 4. [Mesa driver details](https://docs.mesa3d.org/drivers/panfrost.html)
 5. [Arm GPU Datasheet](https://developer.arm.com/documentation/102849/0700/), [[backup](../pdf/Arm-GPU_Datasheet_v3.pdf)]

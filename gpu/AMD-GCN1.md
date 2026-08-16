@@ -20,9 +20,10 @@
 2. [Architecture](https://web.archive.org/web/20140405160015/https://www.amd.com/Documents/GCN_Architecture_whitepaper.pdf), [[mirror](https://www.techpowerup.com/gpu-specs/docs/amd-gcn1-architecture.pdf)], [[backup](../pdf/AMD-GCN_Architecture_whitepaper.pdf)]
 3. [Vulkan features for HD 7700 series](https://vulkan.gpuinfo.org/listreports.php?devicename=AMD+Radeon+HD+7700+Series)
 4. [Instruction Set Architecture](https://www.x.org/docs/AMD/old/AMD_Southern_Islands_Instruction_Set_Architecture.pdf), [[backup](../pdf/AMD-Southern_Islands_Instruction_Set_Architecture.pdf)]
+5. [GCN Performance Tweets](https://web.archive.org/web/20140819130301/https://amd-dev.wpengine.netdna-cdn.com/wordpress/media/2013/05/GCNPerformanceTweets.pdf)
 
 
 ## Notes
 
 * Async compute engine (ACE)
-
+* Binding a depth buffer as a texture will decompress it, making subsequent Z ops more expensive. [5]

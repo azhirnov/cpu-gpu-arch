@@ -59,7 +59,7 @@
 * M1 8-core GPU:
 	- max clock: 1278 MHz
 	- 16 EU per core
-	- 8 fp32/fp16 ALU per EU
+	- 8 fp32/fp16 ALU per EU (simd8)
 	- 2 SFU per EU [4]
 	- 1024 total ALUs (FMA/cy)
 	- theoretical fp32/fp16 performance: 1278 MHz * 1024 ALUs = 1308*10^9^ FMA/s = 2.6 TFLOPS

@@ -10,10 +10,14 @@
 
 ## References
 
-1. [Imagination Announces B-Series GPU IP](https://www.anandtech.com/show/16155/imagination-announces-bseries-gpu-ip-scaling-up-with-multigpu)
+1. [Imagination Announces B-Series GPU IP](https://web.archive.org/web/20201013130812/https://www.anandtech.com/show/16155/imagination-announces-bseries-gpu-ip-scaling-up-with-multigpu)
 2. [Imagination Launches IMG B-Series](https://www.techpowerup.com/273334/imagination-launches-img-b-series-doing-more-with-multi-core-up-to-6-teraflops-of-compute)
-3. [Vulkan features for BXM-8-256](https://vulkan.gpuinfo.org/listreports.php?devicename=PowerVR%20BXM-8-256)
+3. Vulkan features for BXM-8-256: [vk 1.1](https://vulkan.gpuinfo.org/listreports.php?devicename=PowerVR%20BXM-8-256), [vk 1.3](https://vulkan.gpuinfo.org/listreports.php?devicename=PowerVR%20B-Series%20BXM-8-256)
 4. [BXM-8-256 Benchmarks](https://github.com/azhirnov/as-en/blob/dev/AE/docs/papers/bench-gpu/PowerVR_BXM.md)
+
+## Features
+
+* Lossy RT compression (with vk 1.3 driver)
 
 ## Notes
 

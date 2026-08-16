@@ -26,7 +26,7 @@
 1. [Wiki Chip](https://en.wikichip.org/wiki/Haswell)
 2. [Intel’s Haswell CPU Microarchitecture](https://www.realworldtech.com/haswell-cpu/)
 3. [7-Zip LZMA Benchmark](https://www.7-cpu.com/cpu/Haswell.html)
-4. [Intel's Haswell Architecture Analyzed: Building a New PC and a New Intel](https://www.anandtech.com/show/6355/intels-haswell-architecture/10)
+4. [Intel's Haswell Architecture Analyzed: Building a New PC and a New Intel](https://web.archive.org/web/20220507014644/https://www.anandtech.com/show/6355/intels-haswell-architecture)
 
 ## Notes
 
@@ -463,8 +463,8 @@
 
 ## References
 
-1. [Intel Core i9-14900KS Review](https://www.anandtech.com/show/21378/intel-core-i9-14900ks-review-the-swan-song-of-raptor-lake-with-a-super-fast-6-2-ghz-turbo)
-2. [Intel Core i9-14900K, Core i7-14700K and Core i5-14600K Review](https://www.anandtech.com/show/21084/intel-core-i9-14900k-core-i7-14700k-and-core-i5-14600k-review-raptor-lake-refreshed)
+1. [Intel Core i9-14900KS Review](https://web.archive.org/web/20240510144334/https://www.anandtech.com/show/21378/intel-core-i9-14900ks-review-the-swan-song-of-raptor-lake-with-a-super-fast-6-2-ghz-turbo)
+2. [Intel Core i9-14900K, Core i7-14700K and Core i5-14600K Review](https://web.archive.org/web/20231017134049/https://www.anandtech.com/show/21084/intel-core-i9-14900k-core-i7-14700k-and-core-i5-14600k-review-raptor-lake-refreshed)
 
 ## Notes
 
@@ -514,8 +514,8 @@ Core Ultra Series 1.
 
 ## References
 
-1. [The Intel Core Ultra 7 155H Review](https://www.anandtech.com/show/21282/intel-core-ultra-7-115h-review-meteor-lake-makes-makes-fresh-start-to-mobile-cpus)
-2. [Intel Releases Core Ultra H and U-Series Processors](https://www.anandtech.com/show/21185/intel-releases-core-ultra-h-and-u-series-processors-meteor-lake-brings-ai-and-arc-to-ultra-thin-notebooks)
+1. [The Intel Core Ultra 7 155H Review](https://web.archive.org/web/20240411164926/https://www.anandtech.com/show/21282/intel-core-ultra-7-115h-review-meteor-lake-makes-makes-fresh-start-to-mobile-cpus)
+2. [Intel Releases Core Ultra H and U-Series Processors](https://web.archive.org/web/20231214152400/https://www.anandtech.com/show/21185/intel-releases-core-ultra-h-and-u-series-processors-meteor-lake-brings-ai-and-arc-to-ultra-thin-notebooks)
 3. [Intel Meteor Lake Technical Deep Dive](https://www.techpowerup.com/review/intel-meteor-lake-technical-deep-dive/)
 4. [Intel Details Skymont](https://chipsandcheese.com/p/intel-details-skymont) - compared with Crestmont
 
@@ -707,7 +707,7 @@ Core Ultra 200V Series.
 
 ## References
 
-1. [Intel Unveils Lunar Lake Architecture: New P and E cores, Xe2-LPG Graphics, New NPU 4 Brings More AI Performance](https://www.anandtech.com/show/21425/intel-lunar-lake-architecture-deep-dive-lion-cove-xe2-and-npu4)
+1. [Intel Unveils Lunar Lake Architecture: New P and E cores, Xe2-LPG Graphics, New NPU 4 Brings More AI Performance](https://web.archive.org/web/20240604032237/https://www.anandtech.com/show/21425/intel-lunar-lake-architecture-deep-dive-lion-cove-xe2-and-npu4)
 
 ## Notes
 
@@ -743,6 +743,10 @@ Core Ultra 200V Series.
 
 # Panther Lake (2025)
 Core Ultra Series 3
+
+## Examples
+
+* Core Ultra 9 388H
 
 ## References
 
@@ -782,5 +786,5 @@ Core Ultra Series 3
 
 # Future
 
-* [Intel Unveils AVX10 and APX Instruction Sets: Unifying AVX-512 For Hybrid Architectures](https://www.anandtech.com/show/18975/intel-unveils-avx10-and-apx-isas-unifying-avx512-for-hybrid-architectures-)
+* [Intel Unveils AVX10 and APX Instruction Sets: Unifying AVX-512 For Hybrid Architectures](https://web.archive.org/web/20230725175415/https://www.anandtech.com/show/18975/intel-unveils-avx10-and-apx-isas-unifying-avx512-for-hybrid-architectures-)
 

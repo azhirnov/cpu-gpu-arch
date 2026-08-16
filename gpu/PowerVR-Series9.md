@@ -23,7 +23,7 @@ Furian architecture in Series9XTP.
 
 ## References
 
-1. [Imagination Announces PowerVR Series9XTP, Series9XMP, and Series9XEP GPU Cores](https://www.anandtech.com/show/13671/imagination-announces-powervr-series9x-p-gpus)
+1. [Imagination Announces PowerVR Series9XTP, Series9XMP, and Series9XEP GPU Cores](https://web.archive.org/web/20181204184738/https://www.anandtech.com/show/13671/imagination-announces-powervr-series9x-p-gpus)
 2. [Vulkan features for GM9446](https://vulkan.gpuinfo.org/listreports.php?devicename=PowerVR%20Rogue%20GM9446)
 
 ## Notes

@@ -2,8 +2,8 @@
 
 # M1
 
-1. [Brief notes on Apple M1 Firestorm microarchitecture](https://github.com/ocxtal/insn_bench_aarch64/blob/master/optimization_notes_apple_m1.md)
-2. [Augury: Using Data Memory-Dependent Prefetchers to Leak Data at Rest](https://www.prefetchers.info/augury.pdf)
+1.1. [Brief notes on Apple M1 Firestorm microarchitecture](https://github.com/ocxtal/insn_bench_aarch64/blob/master/optimization_notes_apple_m1.md)<br/>
+1.2. [Augury: Using Data Memory-Dependent Prefetchers to Leak Data at Rest](https://www.prefetchers.info/augury.pdf)<br/>
 
 ## Notes
 
@@ -13,17 +13,18 @@
 	- neon, neon_hpfp, neon_fp16
 	- FEAT_FP16
 
-* There are four execution ports in the SIMD/fp domain. All ports are capable of most of the arithmetic and logic instructions. [1]
+* There are four execution ports in the SIMD/fp domain. All ports are capable of most of the arithmetic and logic instructions. [1.1]
 	- All execution units, V0~V3, processes basic arithmetic and logical operations with a latency of two cycles and a throughput of four per clock cycle.
 	- Most others are three-cycle instructions, such as saturating and rounding arithmetic, horizontal, high-narrow form, and absolute difference operations. It is noticeable that integer multiplication and multiply-accumulate are processed in three cycles, too.
 
 * 8x fp32 FLOPS/cy on P-core (2cy latency 4/cy throughput)
 * 4x fp32 FLOPS/cy on E-core
+* RAM bandwidth 68 GB/s
 
 * Transfer between the scalar and SIMD/fp domains is intriguing. The forward transfer, scalar-to-SIMD/fp direction, uses a slot in the load units, and the reverse has dedicated paths. Latency appears to be six cycles in both directions. Throughput is three instructions every cycle for the forward and two for the opposite direction. [1]
-* Conversion from integer to floating point is executed on all units. [1]
+* Conversion from integer to floating point is executed on all units. [1.1]
 
-* Data memory-dependent prefetcher (DMP). [2]
+* Data memory-dependent prefetcher (DMP). [1.2]
 	- These prefetchers are designed to allow prefetching of irregular address patterns such as pointer chases.
 	- DMPs examine and use the contents of memory directly to determine which addresses to prefetch.
 	- Processors possess an Array-of-Pointers (AoP) prefetcher that recognizes streaming and striding reads and dereferences over an array of pointers, and then prefetches the result of dereferencing future pointers.
@@ -81,11 +82,12 @@
 
 ## References
 
-1. [Apple Announces M3 SoC Family](https://www.anandtech.com/show/21116/apple-announces-m3-soc-family-m3-m3-pro-and-m3-max-make-their-marks)
+3.1. [Apple Announces M3 SoC Family](https://web.archive.org/web/20231031124416/https://www.anandtech.com/show/21116/apple-announces-m3-soc-family-m3-m3-pro-and-m3-max-make-their-marks)<br/>
 
 ## Notes
 
 * Instruction set: ARMv8.7-A
+* RAM bandwidth 120 GB/s
 
 * Everest (A16 / A17 Pro / M3): [llm]
 	- fp32 FLOPS/cy:  48 (6 × 128-bit FMA)
@@ -111,7 +113,7 @@
 
 ## References
 
-1. [Apple Announces M4 SoC](https://www.anandtech.com/show/21387/apple-announces-m4-soc-latest-and-greatest-starts-on-ipad-pro)
+4.1. [Apple Announces M4 SoC](https://web.archive.org/web/20240507182846/https://www.anandtech.com/show/21387/apple-announces-m4-soc-latest-and-greatest-starts-on-ipad-pro)<br/>
 
 ## Notes
 
@@ -122,7 +124,11 @@
 
 # M5
 
+## References
+
+5.1. [Apple Unleashes M5, the Next Big Leap in AI Performance for Apple Silicon](https://www.techpowerup.com/341930/apple-unleashes-m5-the-next-big-leap-in-ai-performance-for-apple-silicon)<br/>
+5.2. [The Apple M5 Chip: A Deep Dive Into Apple's Most Revolutionary Silicon Yet](https://www.techbetweenthelines.com/the-apple-m5-chip-a-deep-dive-into-apples-most-revolutionary-silicon-yet/)<br/>
+
 ## Notes
 
-* RAM bandwidth 156 GB/s
-
+* RAM bandwidth 153 GB/s
